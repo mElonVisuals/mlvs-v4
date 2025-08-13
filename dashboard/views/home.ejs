@@ -18,15 +18,14 @@
           <span><%= brand.title %></span>
         </a>
         <nav class="nav-links">
-          <a class="pill small active" href="/">Home</a>
-          <a class="pill small" href="/dashboard">Dashboard</a>
-          <a class="pill small" href="/api/status" target="_blank" rel="noopener">API</a>
-          <% if (brand.inviteUrl) { %><a class="pill small" href="/invite">Invite</a><% } %>
+          <a class="nav-link active" href="/">Home</a>
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/api/status" target="_blank" rel="noopener">API</a>
+          <% if (brand.inviteUrl) { %><a class="nav-link" href="/invite">Invite</a><% } %>
         </nav>
         <div class="nav-actions">
-          <% if (brand.supportUrl) { %><a class="pill small" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
-          <a class="pill small" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
-          <button id="themeToggle" class="pill small" aria-label="Toggle theme">Theme</button>
+          <% if (brand.supportUrl) { %><a class="nav-link" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
+          <a class="nav-link" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
         </div>
         <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
       </div>
@@ -39,7 +38,6 @@
             <% if (brand.inviteUrl) { %><a class="pill" href="/invite">Invite</a><% } %>
             <% if (brand.supportUrl) { %><a class="pill" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
             <a class="pill" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
-            <button class="pill" id="themeToggleMobile" aria-label="Toggle theme">Theme</button>
           </div>
         </div>
       </div>

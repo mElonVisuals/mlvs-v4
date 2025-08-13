@@ -1,15 +1,6 @@
 // Lightweight client script: theme toggle, mobile menu, and command explorer filtering
 (function(){
-  const root = document.documentElement;
-  const THEME_KEY = 'mlvs-theme';
-  function applyTheme(t){ root.setAttribute('data-theme', t); localStorage.setItem(THEME_KEY, t); }
-  function toggleTheme(){ const t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; applyTheme(t); }
-  // init theme
-  const saved = localStorage.getItem(THEME_KEY); if (saved) applyTheme(saved);
-
-  // theme buttons
-  document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('themeToggleMobile')?.addEventListener('click', function(){ toggleTheme(); document.getElementById('mobileMenu').style.display='none'; });
+  // Single dark theme – no toggles
 
   // Mobile nav toggle
   const burger = document.getElementById('navBurger');

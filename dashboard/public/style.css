@@ -23,23 +23,7 @@
 	--elevate: 0 8px 24px rgba(0,0,0,.35);
 }
 
-/* Light theme variables */
-[data-theme="light"] {
-	/* High-contrast light variant with white text as requested */
-	--background: 222 30% 11%;
-	--foreground: 0 0% 100%;
-	--muted: 215 14% 80%;
-	--card: 222 32% 16%;
-	--card-foreground: 0 0% 100%;
-	--border: 220 12% 26%;
-	--primary: 239 84% 67%;
-	--primary-foreground: 0 0% 100%;
-	--success: 146 57% 46%;
-	--danger: 0 85% 62%;
-	--ring: 239 84% 67%;
-	--glass: rgba(255,255,255,.06);
-	--glass-strong: rgba(255,255,255,.12);
-}
+/* Light theme removed per request. We ship a single dark theme for now. */
 
 * { box-sizing: border-box }
 html, body { height: 100% }
@@ -80,35 +64,26 @@ body {
 .badge.red { color: hsl(var(--danger)); background: rgba(240,71,71,.12); border-color: rgba(240,71,71,.25) }
 
 /* Pills (used in navbar links) */
-.pill {
-	display: inline-flex; align-items: center; gap: 8px;
-	padding: 8px 12px; border-radius: 999px; text-decoration: none;
-	color: hsl(var(--foreground)); background: hsl(var(--card)/.6);
-	border: 1px solid hsl(var(--border)); transition: background .2s ease, border-color .2s ease, transform .1s ease;
-}
-.pill:hover { background: hsl(var(--glass-strong)); border-color: hsl(var(--border)) }
-.pill.active { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: transparent }
-.pill.small { padding: 6px 10px; font-size: 14px }
-.pill:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px }
+/* Generic pill (kept for chips and small UI) */
+.pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; text-decoration:none; color:hsl(var(--foreground)); background:hsl(var(--card)/.6); border:1px solid hsl(var(--border)); transition: background .2s ease, border-color .2s ease, transform .1s ease }
+.pill:hover { background:hsl(var(--glass-strong)); border-color:hsl(var(--border)) }
+.pill.active { background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); border-color:transparent }
+.pill.small { padding:6px 10px; font-size:14px }
+.pill:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:2px }
+
+/* shadcn-like navbar link */
+.nav-link { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; text-decoration:none; color:hsl(var(--foreground)); opacity:.9; transition:background .2s ease, opacity .2s ease }
+.nav-link:hover { background:hsl(var(--glass)); opacity:1 }
+.nav-link.active { background:hsl(var(--glass-strong)); opacity:1 }
 
 /* Navbar */
-.navbar {
-	position: sticky; top: 0; z-index: 50; padding: 8px 0;
-	background: linear-gradient(180deg, hsl(var(--background)/.65), hsl(var(--background)/.35));
-	backdrop-filter: blur(8px);
-}
-.navbar .inner {
-	display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 8px;
-	border: 1px solid hsl(var(--border)); border-radius: calc(var(--radius) + 6px);
-	background: linear-gradient(180deg, hsl(var(--card)/.82), hsl(var(--card)/.6));
-	box-shadow: 0 10px 30px rgba(0,0,0,.25);
-	margin: 6px auto;
-}
+.navbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); background: hsl(var(--background)/.6); border-bottom: 1px solid hsl(var(--border)) }
+.navbar .inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px 0 }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; justify-self: start }
 .brand img { width: 30px; height: 30px; border-radius: 8px }
-.nav-links { display: none; gap: 8px; justify-content: center }
+.nav-links { display: none; gap: 6px; justify-content: center }
 .nav-links a { text-decoration: none }
-.nav-actions { display: none; gap: 8px; justify-content: end; justify-self: end }
+.nav-actions { display: none; gap: 6px; justify-content: end; justify-self: end }
 .burger { display: inline-flex; width: 36px; height: 36px; align-items: center; justify-content: center; border-radius: 10px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); cursor: pointer }
 .burger span { width: 18px; height: 2px; background: hsl(var(--foreground)); position: relative }
 .burger span::before, .burger span::after { content: ""; position: absolute; left: 0; width: 18px; height: 2px; background: hsl(var(--foreground)) }
