@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - <%= brand?.short || 'mlvs.me' %></title>
+  <meta name="description" content="Complete documentation for <%= brand?.title || 'Discord Bot Dashboard' %> - Learn how to use all features and commands.">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/neon.css">
+  <link rel="stylesheet" href="/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/logo.png">
+</head>
+<body class="homepage">
+  <!-- Advanced Multi-Layer Background System -->
+  <div class="cosmic-bg" aria-hidden="true">
+    <canvas class="hp-bg"></canvas>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+    <div class="neural-network">
+      <div class="node node-1"></div>
+      <div class="node node-2"></div>
+      <div class="node node-3"></div>
+      <div class="node node-4"></div>
+      <div class="connection connection-1"></div>
+      <div class="connection connection-2"></div>
+      <div class="connection connection-3"></div>
+    </div>
+  </div>
+  
+  <header class="site-header glass-morphism" role="banner">
+    <a href="/" class="brand-link">
+      <span class="brand-icon">⚡</span>
+      <%= brand?.short || 'mlvs.me' %>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/docs" class="nav-link active">
+        <span class="nav-icon">📚</span>
+        Docs
+      </a>
+      <a href="/status" class="nav-link">
+        <span class="nav-icon">🟢</span>
+        Status
+      </a>
+      <a href="/support" class="nav-link">
+        <span class="nav-icon">💬</span>
+        Support
+      </a>
+      <a href="/dashboard" class="btn btn-dashboard">
+        <span class="btn-icon">📊</span>
+        Dashboard
+        <span class="btn-arrow">→</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="homepage-main" role="main">
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-inner">
+        <div class="hero-badge glass-morphism">
+          <div class="badge-dot"></div>
+          Documentation
+        </div>
+        <h1 class="hero-title">
+          <span class="title-word">Complete</span><br>
+          <span class="title-word">Documentation</span>
+        </h1>
+        <p class="hero-sub">
+          Learn everything about <strong><%= brand?.title || 'our Discord bot' %></strong>. 
+          From basic setup to advanced features, find all the information you need.
+        </p>
+        <div class="hero-actions">
+          <a href="#getting-started" class="btn btn-primary btn-large">
+            <span class="btn-icon">🚀</span>
+            Get Started
+            <span class="btn-arrow">→</span>
+          </a>
+          <a href="#commands" class="btn btn-secondary btn-large">
+            <span class="btn-icon">⚡</span>
+            View Commands
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="getting-started">
+      <div class="features-bg"></div>
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">🚀</span>
+            Getting Started
+          </div>
+          <h2 class="sec-title">
+            Quick <span class="highlight-text gradient-text">Setup Guide</span>
+          </h2>
+          <p class="sec-intro">
+            Get your Discord bot up and running in just a few simple steps.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>1️⃣</span>
+              </div>
+              <div class="feature-badge">Step 1</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Invite the Bot</h3>
+              <p class="feature-desc">
+                Click the invite link and select your Discord server. Make sure to grant the necessary permissions for optimal functionality.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Required Permissions</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Admin Recommended</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>2️⃣</span>
+              </div>
+              <div class="feature-badge">Step 2</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Configure Settings</h3>
+              <p class="feature-desc">
+                Access the dashboard to customize your bot settings, set up moderation rules, and configure automated features.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Web Dashboard</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Real-time Config</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>3️⃣</span>
+              </div>
+              <div class="feature-badge">Step 3</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Start Using Commands</h3>
+              <p class="feature-desc">
+                Begin using the bot with our comprehensive command set. Type <code>!help</code> to see all available commands.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">20+ Commands</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Easy to Use</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="commands">
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">⚡</span>
+            Commands Reference
+          </div>
+          <h2 class="sec-title">
+            Available <span class="highlight-text gradient-text">Commands</span>
+          </h2>
+          <p class="sec-intro">
+            Complete list of all bot commands organized by category.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <% if (commands && Object.keys(commands).length > 0) { %>
+            <% Object.keys(commands).forEach(category => { %>
+              <div class="feature-card glass-morphism">
+                <div class="feature-header">
+                  <div class="feature-icon gradient-bg">
+                    <span><%= category === 'general' ? '🔧' : category === 'moderation' ? '🛡️' : category === 'fun' ? '🎉' : category === 'music' ? '🎵' : category === 'admin' ? '👑' : '📝' %></span>
+                  </div>
+                  <div class="feature-badge"><%= commands[category].length %> commands</div>
+                </div>
+                <div class="feature-content">
+                  <h3 class="feature-title"><%= category.charAt(0).toUpperCase() + category.slice(1) %></h3>
+                  <p class="feature-desc">
+                    <% if (commands[category].length > 0) { %>
+                      <strong>!<%= commands[category][0].name %></strong><% if (commands[category].length > 1) { %>, <strong>!<%= commands[category][1].name %></strong><% } %><% if (commands[category].length > 2) { %>, and <%= commands[category].length - 2 %> more<% } %>
+                    <% } %>
+                  </p>
+                </div>
+                <div class="feature-footer">
+                  <div class="feature-metrics">
+                    <span class="metric">Category: <%= category %></span>
+                    <span class="metric-sep">•</span>
+                    <span class="metric"><%= commands[category].length %> total</span>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="feature-card glass-morphism">
+              <div class="feature-header">
+                <div class="feature-icon gradient-bg">
+                  <span>📝</span>
+                </div>
+                <div class="feature-badge">Coming Soon</div>
+              </div>
+              <div class="feature-content">
+                <h3 class="feature-title">Commands Loading</h3>
+                <p class="feature-desc">
+                  Commands are being loaded. Please check back in a moment.
+                </p>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">🎯</span>
+            Advanced Features
+          </div>
+          <h2 class="sec-title">
+            Pro <span class="highlight-text gradient-text">Features</span>
+          </h2>
+          <p class="sec-intro">
+            Advanced functionality for power users and server administrators.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🔧</span>
+              </div>
+              <div class="feature-badge">Advanced</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Custom Configurations</h3>
+              <p class="feature-desc">
+                Tailor the bot to your server's needs with custom prefixes, roles, channels, and automated responses.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Highly Customizable</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Server-Specific</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>📊</span>
+              </div>
+              <div class="feature-badge">Analytics</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Real-time Monitoring</h3>
+              <p class="feature-desc">
+                Monitor bot performance, track command usage, and view detailed analytics through the web dashboard.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Live Data</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Performance Metrics</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🔒</span>
+              </div>
+              <div class="feature-badge">Security</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Advanced Moderation</h3>
+              <p class="feature-desc">
+                Comprehensive moderation tools including auto-moderation, spam protection, and detailed logging systems.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Auto-Moderation</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Smart Detection</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass-morphism" role="contentinfo">
+    <div class="footer-glow"></div>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand-section">
+          <div class="footer-brand">
+            <span class="brand-icon">⚡</span>
+            <%= brand?.short || 'mlvs.me' %>
+          </div>
+          <p class="footer-desc"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="/terms" class="footer-link glass-morphism">Terms</a>
+          <a href="/privacy" class="footer-link glass-morphism">Privacy</a>
+          <a href="/support" class="footer-link glass-morphism">Support</a>
+          <a href="/docs" class="footer-link glass-morphism">Docs</a>
+          <a href="/status" class="footer-link glass-morphism">Status</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="legal">© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %>. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link glass-morphism" aria-label="Discord">
+            <span>💬</span>
+          </a>
+          <a href="#" class="social-link glass-morphism" aria-label="GitHub">
+            <span>⭐</span>
+          </a>
+          <a href="#" class="social-link glass-morphism" aria-label="Twitter">
+            <span>🐦</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

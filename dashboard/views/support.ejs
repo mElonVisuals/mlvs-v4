@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support - <%= brand?.short || 'mlvs.me' %></title>
+  <meta name="description" content="Get help and support for <%= brand?.title || 'Discord Bot Dashboard' %> - Contact us, find resources, and get assistance.">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/neon.css">
+  <link rel="stylesheet" href="/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/logo.png">
+</head>
+<body class="homepage">
+  <!-- Advanced Multi-Layer Background System -->
+  <div class="cosmic-bg" aria-hidden="true">
+    <canvas class="hp-bg"></canvas>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+    <div class="neural-network">
+      <div class="node node-1"></div>
+      <div class="node node-2"></div>
+      <div class="node node-3"></div>
+      <div class="node node-4"></div>
+      <div class="connection connection-1"></div>
+      <div class="connection connection-2"></div>
+      <div class="connection connection-3"></div>
+    </div>
+  </div>
+  
+  <header class="site-header glass-morphism" role="banner">
+    <a href="/" class="brand-link">
+      <span class="brand-icon">⚡</span>
+      <%= brand?.short || 'mlvs.me' %>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/docs" class="nav-link">
+        <span class="nav-icon">📚</span>
+        Docs
+      </a>
+      <a href="/status" class="nav-link">
+        <span class="nav-icon">🟢</span>
+        Status
+      </a>
+      <a href="/support" class="nav-link active">
+        <span class="nav-icon">💬</span>
+        Support
+      </a>
+      <a href="/dashboard" class="btn btn-dashboard">
+        <span class="btn-icon">📊</span>
+        Dashboard
+        <span class="btn-arrow">→</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="homepage-main" role="main">
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-inner">
+        <div class="hero-badge glass-morphism">
+          <div class="badge-dot online"></div>
+          24/7 Support
+        </div>
+        <h1 class="hero-title">
+          <span class="title-word">Get</span><br>
+          <span class="title-word">Help</span>
+        </h1>
+        <p class="hero-sub">
+          Need assistance? We're here to help! Find answers to common questions, 
+          contact our support team, or join our community for help.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">
+            <span class="btn-icon">💬</span>
+            Contact Support
+            <span class="btn-arrow">→</span>
+          </a>
+          <a href="#faq" class="btn btn-secondary">
+            <span class="btn-icon">❓</span>
+            View FAQ
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="faq">
+      <div class="features-bg"></div>
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">❓</span>
+            Frequently Asked
+          </div>
+          <h2 class="sec-title">
+            Common <span class="highlight-text gradient-text">Questions</span>
+          </h2>
+          <p class="sec-intro">
+            Find quick answers to the most commonly asked questions.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🚀</span>
+              </div>
+              <div class="feature-badge">Setup</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">How do I get started?</h3>
+              <p class="feature-desc">
+                Getting started is easy! Visit our <a href="/docs" class="inline-link">documentation page</a> 
+                for a complete setup guide. You'll need to invite the bot to your server and configure 
+                basic settings through the dashboard.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <a href="/docs" class="feature-link">View Setup Guide →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🔧</span>
+              </div>
+              <div class="feature-badge">Configuration</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">How do I configure commands?</h3>
+              <p class="feature-desc">
+                Command configuration is managed through the web dashboard. Log in with Discord, 
+                select your server, and customize commands, permissions, and settings with our 
+                intuitive interface.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <a href="/dashboard" class="feature-link">Open Dashboard →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🛡️</span>
+              </div>
+              <div class="feature-badge">Permissions</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">What permissions are needed?</h3>
+              <p class="feature-desc">
+                The bot requires specific permissions to function properly. These include reading 
+                messages, sending messages, and managing roles. All permissions are clearly 
+                explained during the invitation process.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <a href="/docs#permissions" class="feature-link">Permission Guide →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>💰</span>
+              </div>
+              <div class="feature-badge">Pricing</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Is the bot free to use?</h3>
+              <p class="feature-desc">
+                Yes! The core features are completely free. We also offer premium features 
+                for advanced users who need additional functionality and priority support.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <a href="#premium" class="feature-link">View Premium Features →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🔄</span>
+              </div>
+              <div class="feature-badge">Updates</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">How often is the bot updated?</h3>
+              <p class="feature-desc">
+                We regularly update the bot with new features, bug fixes, and improvements. 
+                Check our <a href="/status" class="inline-link">status page</a> for the latest 
+                system information and update notifications.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <a href="/status" class="feature-link">Check Status →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🐛</span>
+              </div>
+              <div class="feature-badge">Issues</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Found a bug or issue?</h3>
+              <p class="feature-desc">
+                If you encounter any bugs or issues, please report them through our support 
+                channels. Include details about the problem and steps to reproduce it for 
+                faster resolution.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <a href="#contact" class="feature-link">Report Issue →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="contact">
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">📞</span>
+            Contact Support
+          </div>
+          <h2 class="sec-title">
+            Get In <span class="highlight-text gradient-text">Touch</span>
+          </h2>
+          <p class="sec-intro">
+            Multiple ways to reach our support team and get the help you need.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>💬</span>
+              </div>
+              <div class="feature-badge">Primary</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Discord Support Server</h3>
+              <p class="feature-desc">
+                Join our official Discord server for real-time support, community help, 
+                and the latest updates. Our community and support team are active 24/7.
+              </p>
+              <a href="#" class="btn btn-primary btn-sm">
+                <span class="btn-icon">🚀</span>
+                Join Discord
+                <span class="btn-arrow">→</span>
+              </a>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Real-time Chat</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Community Help</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>📧</span>
+              </div>
+              <div class="feature-badge">Email</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Email Support</h3>
+              <p class="feature-desc">
+                For detailed technical issues or private inquiries, send us an email. 
+                We typically respond within 24 hours during business days.
+              </p>
+              <a href="mailto:support@mlvs.me" class="btn btn-secondary btn-sm">
+                <span class="btn-icon">✉️</span>
+                Send Email
+                <span class="btn-arrow">→</span>
+              </a>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">support@mlvs.me</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">24h Response</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>📋</span>
+              </div>
+              <div class="feature-badge">Tickets</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Support Tickets</h3>
+              <p class="feature-desc">
+                Create a support ticket for tracking complex issues or feature requests. 
+                Perfect for detailed technical support and account-related questions.
+              </p>
+              <a href="#" class="btn btn-secondary btn-sm">
+                <span class="btn-icon">🎫</span>
+                Create Ticket
+                <span class="btn-arrow">→</span>
+              </a>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Tracked Issues</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Priority Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" id="premium">
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">⭐</span>
+            Premium Support
+          </div>
+          <h2 class="sec-title">
+            Priority <span class="highlight-text gradient-text">Support</span>
+          </h2>
+          <p class="sec-intro">
+            Upgrade to premium for enhanced support options and priority assistance.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🚀</span>
+              </div>
+              <div class="feature-badge">Fast</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Priority Queue</h3>
+              <p class="feature-desc">
+                Premium users get priority in our support queue with faster response times 
+                and dedicated support channels for immediate assistance.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">< 2h Response</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Dedicated Channel</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>👥</span>
+              </div>
+              <div class="feature-badge">Personal</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Direct Support</h3>
+              <p class="feature-desc">
+                Get direct access to our development team for complex technical issues, 
+                custom configurations, and personalized assistance.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Developer Access</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Custom Solutions</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🛠️</span>
+              </div>
+              <div class="feature-badge">Setup</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Setup Assistance</h3>
+              <p class="feature-desc">
+                Premium users can request personalized setup assistance, configuration 
+                optimization, and guidance for advanced bot features.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Configuration Help</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Optimization Tips</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cta-section">
+          <div class="cta-card glass-morphism">
+            <div class="cta-content">
+              <h3 class="cta-title">Ready for Premium Support?</h3>
+              <p class="cta-desc">
+                Upgrade to premium for priority support, advanced features, and direct access to our team.
+              </p>
+            </div>
+            <div class="cta-actions">
+              <a href="/dashboard" class="btn btn-primary">
+                <span class="btn-icon">⭐</span>
+                Upgrade Now
+                <span class="btn-arrow">→</span>
+              </a>
+              <a href="#contact" class="btn btn-secondary">
+                <span class="btn-icon">💬</span>
+                Contact Sales
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass-morphism" role="contentinfo">
+    <div class="footer-glow"></div>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand-section">
+          <div class="footer-brand">
+            <span class="brand-icon">⚡</span>
+            <%= brand?.short || 'mlvs.me' %>
+          </div>
+          <p class="footer-desc"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="/terms" class="footer-link glass-morphism">Terms</a>
+          <a href="/privacy" class="footer-link glass-morphism">Privacy</a>
+          <a href="/support" class="footer-link glass-morphism">Support</a>
+          <a href="/docs" class="footer-link glass-morphism">Docs</a>
+          <a href="/status" class="footer-link glass-morphism">Status</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="legal">© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %>. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link glass-morphism" aria-label="Discord">
+            <span>💬</span>
+          </a>
+          <a href="#" class="social-link glass-morphism" aria-label="GitHub">
+            <span>⭐</span>
+          </a>
+          <a href="#" class="social-link glass-morphism" aria-label="Twitter">
+            <span>🐦</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

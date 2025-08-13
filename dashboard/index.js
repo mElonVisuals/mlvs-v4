@@ -197,6 +197,45 @@ app.get('/', (req, res) => {
   });
 });
 
+// Docs page
+app.get('/docs', (req, res) => {
+  const status = readStatus();
+  const commands = loadCommands();
+  res.render('docs', {
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
+    status: status?.online ? 'Online' : 'Offline',
+    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
+    commands,
+  });
+});
+
+// Status page  
+app.get('/status', (req, res) => {
+  const status = readStatus();
+  res.render('status', {
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
+    status: status?.online ? 'Online' : 'Offline',
+    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
+    guilds: status?.guilds || 0,
+    users: status?.users || 0,
+    uptime: Math.floor((Date.now() - SERVER_STARTED_AT) / 1000),
+    metrics: METRICS,
+  });
+});
+
+// Support page
+app.get('/support', (req, res) => {
+  const status = readStatus();
+  res.render('support', {
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
+    status: status?.online ? 'Online' : 'Offline',
+    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
+  });
+});
+
 // Dashboard redirect to health page (new multi-page layout)
 app.get('/dashboard', ensureAuth, (req, res) => res.redirect('/dashboard/health'));
 

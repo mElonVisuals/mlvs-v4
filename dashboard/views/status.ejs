@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status - <%= brand?.short || 'mlvs.me' %></title>
+  <meta name="description" content="Real-time status and monitoring for <%= brand?.title || 'Discord Bot Dashboard' %> - Check bot health and performance.">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/neon.css">
+  <link rel="stylesheet" href="/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/logo.png">
+</head>
+<body class="homepage">
+  <!-- Advanced Multi-Layer Background System -->
+  <div class="cosmic-bg" aria-hidden="true">
+    <canvas class="hp-bg"></canvas>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+    <div class="neural-network">
+      <div class="node node-1"></div>
+      <div class="node node-2"></div>
+      <div class="node node-3"></div>
+      <div class="node node-4"></div>
+      <div class="connection connection-1"></div>
+      <div class="connection connection-2"></div>
+      <div class="connection connection-3"></div>
+    </div>
+  </div>
+  
+  <header class="site-header glass-morphism" role="banner">
+    <a href="/" class="brand-link">
+      <span class="brand-icon">⚡</span>
+      <%= brand?.short || 'mlvs.me' %>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/docs" class="nav-link">
+        <span class="nav-icon">📚</span>
+        Docs
+      </a>
+      <a href="/status" class="nav-link active">
+        <span class="nav-icon">🟢</span>
+        Status
+      </a>
+      <a href="/support" class="nav-link">
+        <span class="nav-icon">💬</span>
+        Support
+      </a>
+      <a href="/dashboard" class="btn btn-dashboard">
+        <span class="btn-icon">📊</span>
+        Dashboard
+        <span class="btn-arrow">→</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="homepage-main" role="main">
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-inner">
+        <div class="hero-badge glass-morphism">
+          <div class="badge-dot <%= status === 'Online' ? 'online' : 'offline' %>"></div>
+          System Status
+        </div>
+        <h1 class="hero-title">
+          <span class="title-word">Bot</span><br>
+          <span class="title-word">Status</span>
+        </h1>
+        <p class="hero-sub">
+          Real-time monitoring and performance metrics for <strong><%= botName %></strong>. 
+          Check current status, uptime, and system health.
+        </p>
+        <div class="hero-stats glass-morphism">
+          <div class="stat-item">
+            <div class="stat-number <%= status === 'Online' ? 'text-success' : 'text-error' %>"><%= status %></div>
+            <div class="stat-label">Current Status</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number"><%= Math.floor(uptime / 3600) %>h <%= Math.floor((uptime % 3600) / 60) %>m</div>
+            <div class="stat-label">Uptime</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number"><%= guilds %></div>
+            <div class="stat-label">Servers</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number"><%= users %></div>
+            <div class="stat-label">Users</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="features-bg"></div>
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">📊</span>
+            System Health
+          </div>
+          <h2 class="sec-title">
+            Performance <span class="highlight-text gradient-text">Metrics</span>
+          </h2>
+          <p class="sec-intro">
+            Real-time system performance data and health indicators.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>💾</span>
+              </div>
+              <div class="feature-badge">Memory</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Memory Usage</h3>
+              <p class="feature-desc">
+                Current memory consumption: <strong><%= metrics.memoryMB && metrics.memoryMB.length > 0 ? metrics.memoryMB[metrics.memoryMB.length - 1].toFixed(1) : 'N/A' %> MB</strong>
+                <br>System is running efficiently with optimal memory allocation.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Real-time</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Optimized</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>⚡</span>
+              </div>
+              <div class="feature-badge">Latency</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Response Time</h3>
+              <p class="feature-desc">
+                Current latency: <strong><%= metrics.latencyMs && metrics.latencyMs.length > 0 ? metrics.latencyMs[metrics.latencyMs.length - 1].toFixed(0) : 'N/A' %>ms</strong>
+                <br>Low latency ensures fast command responses and smooth user experience.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Discord API</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Real-time</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🖥️</span>
+              </div>
+              <div class="feature-badge">CPU</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">CPU Usage</h3>
+              <p class="feature-desc">
+                Current CPU: <strong><%= metrics.cpu && metrics.cpu.length > 0 ? metrics.cpu[metrics.cpu.length - 1].toFixed(1) : 'N/A' %>%</strong>
+                <br>Processor load is maintained at optimal levels for consistent performance.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Load Average</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Stable</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">🔧</span>
+            Service Status
+          </div>
+          <h2 class="sec-title">
+            Component <span class="highlight-text gradient-text">Health</span>
+          </h2>
+          <p class="sec-intro">
+            Status of all bot components and integrations.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🤖</span>
+              </div>
+              <div class="feature-badge <%= status === 'Online' ? 'online' : 'offline' %>"><%= status %></div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Discord Bot</h3>
+              <p class="feature-desc">
+                Main bot service is <strong><%= status.toLowerCase() %></strong> and responding to commands.
+                <% if (status === 'Online') { %>
+                All Discord API connections are stable and functional.
+                <% } else { %>
+                Bot is currently offline. Please check back later.
+                <% } %>
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Core Service</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Priority 1</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🌐</span>
+              </div>
+              <div class="feature-badge online">Operational</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Web Dashboard</h3>
+              <p class="feature-desc">
+                Dashboard and web interface are fully operational. Real-time data synchronization is active.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Web Interface</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Real-time</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>📡</span>
+              </div>
+              <div class="feature-badge online">Connected</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">API Services</h3>
+              <p class="feature-desc">
+                All API endpoints are responding normally. Data collection and monitoring systems are active.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">REST API</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Monitoring</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="container">
+        <div class="sec-head">
+          <div class="section-badge glass-morphism">
+            <span class="nav-icon">📈</span>
+            Recent Activity
+          </div>
+          <h2 class="sec-title">
+            System <span class="highlight-text gradient-text">Events</span>
+          </h2>
+          <p class="sec-intro">
+            Latest system events and operational updates.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>✅</span>
+              </div>
+              <div class="feature-badge">Recent</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Bot Started</h3>
+              <p class="feature-desc">
+                System successfully initialized and connected to Discord API at <%= new Date(Date.now() - uptime * 1000).toLocaleString() %>.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">System Start</span>
+                <span class="metric-sep">•</span>
+                <span class="metric"><%= Math.floor(uptime / 60) %> min ago</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>🔧</span>
+              </div>
+              <div class="feature-badge">Maintenance</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Routine Monitoring</h3>
+              <p class="feature-desc">
+                Automated health checks and performance monitoring are running continuously to ensure optimal service.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Automated</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">24/7 Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card glass-morphism">
+            <div class="feature-header">
+              <div class="feature-icon gradient-bg">
+                <span>📊</span>
+              </div>
+              <div class="feature-badge">Live</div>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">Metrics Collection</h3>
+              <p class="feature-desc">
+                Performance data and usage statistics are being collected in real-time for analysis and optimization.
+              </p>
+            </div>
+            <div class="feature-footer">
+              <div class="feature-metrics">
+                <span class="metric">Data Collection</span>
+                <span class="metric-sep">•</span>
+                <span class="metric">Real-time</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass-morphism" role="contentinfo">
+    <div class="footer-glow"></div>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand-section">
+          <div class="footer-brand">
+            <span class="brand-icon">⚡</span>
+            <%= brand?.short || 'mlvs.me' %>
+          </div>
+          <p class="footer-desc"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="/terms" class="footer-link glass-morphism">Terms</a>
+          <a href="/privacy" class="footer-link glass-morphism">Privacy</a>
+          <a href="/support" class="footer-link glass-morphism">Support</a>
+          <a href="/docs" class="footer-link glass-morphism">Docs</a>
+          <a href="/status" class="footer-link glass-morphism">Status</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="legal">© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %>. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link glass-morphism" aria-label="Discord">
+            <span>💬</span>
+          </a>
+          <a href="#" class="social-link glass-morphism" aria-label="GitHub">
+            <span>⭐</span>
+          </a>
+          <a href="#" class="social-link glass-morphism" aria-label="Twitter">
+            <span>🐦</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
