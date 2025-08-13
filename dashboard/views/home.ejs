@@ -1,43 +1,177 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>mlvs.me — Advanced Discord Bot Platform</title>
+  <meta name="description" content="mlvs.me: next‑generation Discord bot platform with real-time analytics and glassmorphism UI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/home.css" />
+  <style>
+    body { overflow-x:hidden; }
+    .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:var(--space-10) var(--space-6); position:relative; }
+    .hero-inner { width:100%; max-width:1280px; display:grid; gap:clamp(40px,6vw,100px); grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); align-items:start; }
+    .hero-left { display:flex; flex-direction:column; gap:clamp(28px,4vw,48px); }
+    .badge { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border:1px solid hsl(var(--border)); background:hsl(var(--card)/.55); backdrop-filter:blur(10px); border-radius:999px; font-size:12px; letter-spacing:.07em; text-transform:uppercase; color:hsl(var(--muted)); font-weight:600; width:fit-content; }
+    .hero-title { font-size:clamp(2.8rem,6.5vw,4.9rem); line-height:1.05; font-weight:800; letter-spacing:-.02em; background:linear-gradient(90deg,#a5b4fc,#c084fc,#7dd3fc); -webkit-background-clip:text; color:transparent; margin:0; }
+    .hero-sub { font-size:clamp(1rem,1.4vw,1.2rem); max-width:640px; color:hsl(var(--muted)); line-height:1.55; }
+    .hero-actions { display:flex; gap:var(--space-4); flex-wrap:wrap; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:8px; }
+    .pill { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border:1px solid hsl(var(--border)); background:hsl(var(--card)/.6); backdrop-filter:blur(8px); border-radius:999px; font-size:12px; letter-spacing:.05em; text-transform:uppercase; color:hsl(var(--muted)); font-weight:600; }
+    .preview { background:hsl(var(--card)/.55); border:1px solid hsl(var(--border)); border-radius:28px; padding:30px; backdrop-filter:blur(18px) saturate(1.2); display:flex; flex-direction:column; gap:20px; position:relative; overflow:hidden; }
+    .preview-header { display:flex; align-items:center; justify-content:space-between; }
+    .preview-logo { display:inline-flex; align-items:center; gap:10px; font-weight:600; }
+    .preview-controls { display:flex; gap:6px; }
+    .control-dot { width:12px; height:12px; border-radius:50%; background:linear-gradient(180deg,#475569,#1e293b); box-shadow:0 0 0 1px rgba(255,255,255,.08) inset; }
+    .preview-grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+    .preview-card { background:hsl(var(--card)/.78); border:1px solid hsl(var(--border)); border-radius:18px; padding:16px 18px; display:flex; flex-direction:column; gap:4px; position:relative; overflow:hidden; }
+    .preview-card:after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.06),transparent); pointer-events:none; }
+    .pc-title { font-size:12px; letter-spacing:.07em; text-transform:uppercase; color:hsl(var(--muted)); font-weight:600; }
+    .pc-value { font-size:24px; font-weight:700; }
+    .floating-stats { display:flex; gap:12px; flex-wrap:wrap; }
+    .stat { padding:10px 16px; border:1px solid hsl(var(--border)); background:hsl(var(--card)/.5); backdrop-filter:blur(10px); border-radius:14px; display:flex; flex-direction:column; gap:2px; min-width:110px; }
+    .stat-num { font-size:18px; font-weight:700; }
+    .stat-lab { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:hsl(var(--muted)); }
+    .section { padding:var(--space-16) 0 var(--space-10); }
+    .sec-head { text-align:center; max-width:760px; margin:0 auto var(--space-10); }
+    .sec-title { font-size:clamp(2.2rem,5.2vw,3.2rem); margin:0 0 12px; font-weight:800; letter-spacing:-.02em; }
+    .feat-grid { display:grid; gap:28px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .feat { background:hsl(var(--card)/.65); border:1px solid hsl(var(--border)); border-radius:24px; padding:32px; display:flex; flex-direction:column; gap:14px; backdrop-filter:blur(12px); }
+    .feat-ico { width:54px; height:54px; border-radius:16px; background:linear-gradient(135deg,#6366f1,#0ea5e9); display:flex; align-items:center; justify-content:center; }
+    .feat-title { margin:0; font-size:20px; font-weight:600; }
+    .feat-desc { margin:0; line-height:1.55; color:hsl(var(--muted)); font-size:14px; }
+    .feat-badge { align-self:flex-start; padding:4px 10px; font-size:11px; border:1px solid hsl(var(--border)); border-radius:999px; background:hsl(var(--card)/.6); letter-spacing:.06em; text-transform:uppercase; }
+    .cta { padding:var(--space-16) 0 var(--space-16); }
+    .cta-card { background:linear-gradient(160deg,hsl(var(--card)/.85),hsl(var(--card)/.55)); border:1px solid hsl(var(--border)); border-radius:32px; padding:56px clamp(24px,4vw,72px); backdrop-filter:blur(20px); display:flex; flex-direction:column; gap:34px; align-items:center; text-align:center; }
+    .cta-title { margin:0; font-size:clamp(2rem,4.8vw,3rem); font-weight:800; letter-spacing:-.02em; }
+    .cta-sub { margin:0; max-width:720px; line-height:1.6; color:hsl(var(--muted)); }
+    .cta-actions { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+    .btn { position:relative; display:inline-flex; align-items:center; gap:10px; padding:14px 22px; border-radius:14px; font-weight:600; text-decoration:none; font-size:14px; letter-spacing:.02em; }
+    .btn-primary { background:linear-gradient(90deg,#6366f1,#8b5cf6,#0ea5e9); color:#fff; border:1px solid rgba(255,255,255,.13); }
+    .btn-secondary { background:hsl(var(--card)); color:hsl(var(--foreground)); border:1px solid hsl(var(--border)); }
+    .btn-ghost { background:transparent; border:1px solid hsl(var(--border)); color:hsl(var(--foreground)); }
+    .btn:hover { filter:brightness(1.1); }
+    .footer { padding:var(--space-16) 0 var(--space-12); text-align:center; }
+    .footer-brand { font-size:24px; font-weight:700; margin-bottom:4px; }
+    .footer-desc { max-width:600px; margin:0 auto var(--space-6); color:hsl(var(--muted)); }
+    .footer-links { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin-bottom:var(--space-6); }
+    .footer-link { font-size:13px; color:hsl(var(--muted)); text-decoration:none; }
+    .footer-link:hover { color:hsl(var(--foreground)); }
+    @media (max-width:780px){ .hero-inner{grid-template-columns:1fr;} .hero-actions{justify-content:flex-start;} }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <span class="badge">Next‑Generation Discord Bot Platform</span>
+            <h1 class="hero-title">Revolutionize Your Discord</h1>
+            <p class="hero-sub">Advanced automation, real‑time observability, secure controls and a refined glass interface—crafted for ambitious communities.</p>
+          </div>
+          <div class="hero-actions">
+            <a href="/dashboard" class="btn btn-primary">Launch Dashboard</a>
+            <a href="/invite" class="btn btn-secondary">Invite Bot</a>
+            <a href="#features" class="btn btn-ghost">Explore Features</a>
+          </div>
+          <div class="pill-row">
+            <span class="pill">⚡ Real-time</span>
+            <span class="pill">🛡️ Secure</span>
+            <span class="pill">🚀 Fast</span>
+            <span class="pill">🎯 AI</span>
+            <span class="pill">🔧 No-Code</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:40px;">
+          <div class="preview">
+            <div class="preview-header">
+              <div class="preview-logo">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c5.514 0 10 3.589 10 8.012 0 2.928-2.037 5.485-5.086 6.923-.396.187-.66.558-.66.977v1.337a1 1 0 0 1-1.447.894L12 18.882l-2.807 1.263A1 1 0 0 1 7.746 19.26v-1.349c0-.414-.252-.781-.64-.97C4.081 15.5 2 12.94 2 10.012 2 5.59 6.486 2 12 2Z"/></svg>
+                <span>mlvs.me</span>
+              </div>
+              <div class="preview-controls"><div class="control-dot"></div><div class="control-dot"></div><div class="control-dot"></div></div>
+            </div>
+            <div class="preview-grid">
+              <div class="preview-card"><div class="pc-title">Active Users</div><div class="pc-value">24,847</div></div>
+              <div class="preview-card"><div class="pc-title">Commands/Hour</div><div class="pc-value">15,293</div></div>
+              <div class="preview-card"><div class="pc-title">Servers</div><div class="pc-value">1,245</div></div>
+              <div class="preview-card"><div class="pc-title">Response Time</div><div class="pc-value">23ms</div></div>
+            </div>
+          </div>
+          <div class="floating-stats">
+            <div class="stat"><span class="stat-num">99.9%</span><span class="stat-lab">Uptime</span></div>
+            <div class="stat"><span class="stat-num">24/7</span><span class="stat-lab">Support</span></div>
+            <div class="stat"><span class="stat-num">500K+</span><span class="stat-lab">Users</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="sec-head">
+        <h2 class="sec-title">Powerful Features</h2>
+        <p class="feat-desc" style="margin:0 auto;max-width:660px;">Everything you need to operate, observe and evolve a large Discord community with confidence and speed.</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="feat-ico"><svg width="32" height="32" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z"/></svg></div>
+          <h3 class="feat-title">Lightning Performance</h3>
+          <p class="feat-desc">Sub-50ms responses and optimized dispatch keep interactions instant—even at scale.</p>
+          <span class="feat-badge">Fast</span>
+        </div>
+        <div class="feat">
+          <div class="feat-ico"><svg width="32" height="32" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <h3 class="feat-title">Real-Time Analytics</h3>
+          <p class="feat-desc">Live telemetry surfaces usage, latency & capacity trends for proactive scaling.</p>
+          <span class="feat-badge">Live</span>
+        </div>
+        <div class="feat">
+          <div class="feat-ico"><svg width="32" height="32" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M5 12l5 5L20 7"/></svg></div>
+          <h3 class="feat-title">Enterprise Security</h3>
+          <p class="feat-desc">OAuth2, scoped roles and hardened endpoints keep data & actions locked down.</p>
+          <span class="feat-badge">Secure</span>
+        </div>
+        <div class="feat">
+          <div class="feat-ico"><svg width="32" height="32" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg></div>
+          <h3 class="feat-title">Modular Architecture</h3>
+          <p class="feat-desc">Composable systems let you extend commands, telemetry & workflows rapidly.</p>
+          <span class="feat-badge">Modular</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-card">
+        <div>
+          <h2 class="cta-title">Ready to Transform Your Discord?</h2>
+          <p class="cta-sub">Join thousands of server owners using mlvs.me to streamline automation, insight and engagement.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="/dashboard" class="btn btn-primary">Get Started</a>
+          <a href="/invite" class="btn btn-secondary">Invite mlvs.me</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand">mlvs.me</div>
+    <p class="footer-desc">The next generation Discord bot platform designed for modern communities.</p>
+    <nav class="footer-links">
+      <a href="/terms" class="footer-link">Terms</a>
+      <a href="/privacy" class="footer-link">Privacy</a>
+      <a href="/support" class="footer-link">Support</a>
+      <a href="/docs" class="footer-link">Docs</a>
+      <a href="/status" class="footer-link">Status</a>
+    </nav>
+    <p style="font-size:12px;color:hsl(var(--muted));margin:0">© 2024 mlvs.me. All rights reserved.</p>
   </footer>
-  <!-- Page end: cleaned -->
 </body>
 </html>
-<!-- (Reversion note: prior extended sections may need manual reintegration if desired) -->
-      --primary-700: #0369a1;
-      --primary-800: #075985;
-      --primary-900: #0c4a6e;
-      --primary-950: #082f49;
-      
-      --purple-400: #c084fc;
-      --purple-500: #a855f7;
-      --purple-600: #9333ea;
-      --purple-700: #7c3aed;
-      
-      --emerald-400: #34d399;
-      --emerald-500: #10b981;
-      --emerald-600: #059669;
-      
-      --orange-400: #fb923c;
-      --orange-500: #f97316;
-      --orange-600: #ea580c;
-      
-      --pink-400: #f472b6;
-      --pink-500: #ec4899;
-      --pink-600: #db2777;
-      
-      /* Ultra-modern glassmorphism system */
-      --glass-ultra: rgba(15, 23, 42, 0.6);
-      --glass-strong: rgba(15, 23, 42, 0.8);
-      --glass-light: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(148, 163, 184, 0.2);
-      --glass-border-strong: rgba(148, 163, 184, 0.3);
-      
-      /* Advanced shadow system */
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
       --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
       --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
       --shadow-glow: 0 0 40px rgba(14, 165, 233, 0.3);
