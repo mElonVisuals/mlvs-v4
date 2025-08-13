@@ -99,6 +99,44 @@
     });
   }
 
+  // Dashboard live refresh (stats)
+  const statusEl = document.getElementById('liveStatus');
+  const kpiGuilds = document.getElementById('kpiGuilds');
+  const kpiUsers = document.getElementById('kpiUsers');
+  const statGuilds = document.getElementById('statGuilds');
+  const statUsers = document.getElementById('statUsers');
+  const statUpdated = document.getElementById('statUpdated');
+  const refreshBtn = document.getElementById('refreshNow');
+  const autoToggle = document.getElementById('autoRefreshToggle');
+  async function fetchStatus() {
+    try {
+      const r = await fetch('/api/status', { cache: 'no-store' });
+      const json = await r.json();
+      const online = !!json?.online;
+      const guilds = json?.guilds ?? 0;
+      const users = json?.users ?? 0;
+      const updated = json?.updatedAt || new Date().toISOString();
+      if (statusEl) {
+        statusEl.textContent = online ? 'Online' : 'Offline';
+        statusEl.classList.toggle('green', online);
+        statusEl.classList.toggle('red', !online);
+      }
+      if (kpiGuilds) kpiGuilds.textContent = String(guilds);
+      if (kpiUsers) kpiUsers.textContent = String(users);
+      if (statGuilds) statGuilds.textContent = String(guilds);
+      if (statUsers) statUsers.textContent = String(users);
+      if (statUpdated) statUpdated.textContent = updated;
+    } catch {}
+  }
+  if (refreshBtn) refreshBtn.addEventListener('click', fetchStatus);
+  let rafInterval = null;
+  function startAuto() { if (rafInterval) clearInterval(rafInterval); rafInterval = setInterval(fetchStatus, 15000); }
+  function stopAuto() { if (rafInterval) { clearInterval(rafInterval); rafInterval = null; } }
+  if (autoToggle) {
+    autoToggle.addEventListener('change', () => { autoToggle.checked ? startAuto() : stopAuto(); });
+    startAuto();
+  }
+
   // Command explorer search and chips
   const input = document.getElementById('cmdSearch');
   const chips = document.getElementById('cmdChips');

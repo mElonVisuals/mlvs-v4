@@ -8,13 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <script>setTimeout(()=>location.reload(), 15000)</script>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   </head>
   <body>
-    <main class="shell">
+    <main class="shell sidebar-hidden">
       <aside class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
         <div class="side-group">
           <div class="side-title">Navigation</div>
@@ -48,7 +47,7 @@
             <div class="hero-left">
               <div class="eyebrow">Live Dashboard</div>
               <h1 class="hero-title">mlvs.me</h1>
-              <p class="hero-sub">Status: <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></p>
+              <p class="hero-sub">Status: <span id="liveStatus" class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></p>
             </div>
             <div class="hero-right">
               <div class="tile kpi-tile">
@@ -58,8 +57,8 @@
                 </div>
                 <div class="tile-body">
                   <div class="kpi-row">
-                    <div class="kpi-item"><span>Guilds</span><strong><%= guilds %></strong></div>
-                    <div class="kpi-item"><span>Users</span><strong><%= users %></strong></div>
+                    <div class="kpi-item"><span>Guilds</span><strong id="kpiGuilds"><%= guilds %></strong></div>
+                    <div class="kpi-item"><span>Users</span><strong id="kpiUsers"><%= users %></strong></div>
                   </div>
                   <div class="kpi-foot">
                     <a href="/api/status" target="_blank" class="pill small">Health API</a>
@@ -73,22 +72,37 @@
         <div class="kpi-grid">
           <div class="kpi-card">
             <div class="label">Servers</div>
-            <div class="value"><%= guilds %></div>
+            <div class="value" id="statGuilds"><%= guilds %></div>
           </div>
           <div class="kpi-card">
             <div class="label">Users</div>
-            <div class="value"><%= users %></div>
+            <div class="value" id="statUsers"><%= users %></div>
           </div>
           <div class="kpi-card">
             <div class="label">Updated</div>
-            <div class="value"><%= updatedAt || '—' %></div>
+            <div class="value" id="statUpdated"><%= updatedAt || '—' %></div>
           </div>
           <div class="kpi-card">
             <div class="label">Health</div>
             <div class="value"><a href="/api/status" target="_blank">/api/status</a></div>
           </div>
         </div>
-        <p class="muted" style="margin-top:10px">Auto-refresh every 15s.</p>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:10px">
+          <p class="muted" style="margin:0">Auto-refresh every 15s.</p>
+          <button id="refreshNow" class="btn small" style="padding:6px 10px">Refresh now</button>
+          <label style="display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--muted)"><input id="autoRefreshToggle" type="checkbox" checked /> Auto-refresh</label>
+        </div>
+        
+        <section aria-label="Recent Activity" style="margin-top:18px" class="card">
+          <div style="display:flex; align-items:center; justify-content:space-between">
+            <h3 style="margin:0">Recent Activity</h3>
+            <div style="display:flex; gap:8px; align-items:center">
+              <span class="badge">Live</span>
+            </div>
+          </div>
+          <div id="activityEmpty" class="muted" style="margin-top:8px">No recent activity available.</div>
+          <ul id="activityList" style="list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px"></ul>
+        </section>
       </section>
     </main>
 
