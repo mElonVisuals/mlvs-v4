@@ -18,26 +18,26 @@
           <span><%= brand.title %></span>
         </a>
         <nav class="nav-links">
-          <a href="/">Home</a>
-          <a href="/dashboard">Dashboard</a>
-          <a href="/api/status" target="_blank">API</a>
-          <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
+          <a class="pill small active" href="/">Home</a>
+          <a class="pill small" href="/dashboard">Dashboard</a>
+          <a class="pill small" href="/api/status" target="_blank">API</a>
+          <% if (brand.inviteUrl) { %><a class="pill small" href="/invite">Invite</a><% } %>
         </nav>
         <div class="nav-actions">
-          <% if (brand.supportUrl) { %><a class="btn ghost" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-          <a class="btn" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+          <% if (brand.supportUrl) { %><a class="pill small" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+          <a class="pill small" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
         </div>
         <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
       </div>
       <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
         <div class="mobile-sheet card">
           <div class="row">
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/api/status" target="_blank">API</a>
-            <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
-            <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-            <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+            <a class="pill" href="/">Home</a>
+            <a class="pill" href="/dashboard">Dashboard</a>
+            <a class="pill" href="/api/status" target="_blank">API</a>
+            <% if (brand.inviteUrl) { %><a class="pill" href="/invite">Invite</a><% } %>
+            <% if (brand.supportUrl) { %><a class="pill" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+            <a class="pill" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
           </div>
         </div>
       </div>
