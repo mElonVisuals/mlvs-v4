@@ -10,45 +10,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <!-- Navigation -->
-    <header class="navbar bordered">
-      <div class="container inner">
-        <a class="brand" href="/" aria-label="Home">
+    <main id="homeShell" class="shell">
+      <!-- Sidebar -->
+      <aside class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+        <a class="brand" href="/" aria-label="Home" style="margin-bottom:10px; display:flex; align-items:center; gap:10px">
           <img src="/logo.png" alt="" />
+          <strong><%= brand.title %></strong>
         </a>
-        <nav class="nav-links">
-          <a class="nav-link active" href="/">Home</a>
-          <a class="nav-link" href="/dashboard">Dashboard</a>
-        </nav>
-        <div class="nav-actions">
-          <div class="nav-more">
-            <button id="navMore" class="nav-link" aria-haspopup="menu" aria-expanded="false" aria-controls="navDropdown" title="More">•••</button>
-            <div id="navDropdown" class="dropdown-menu" role="menu" aria-hidden="true">
-              <a class="dropdown-item" href="/api/status" target="_blank" rel="noopener">API</a>
-              <% if (brand.inviteUrl) { %><a class="dropdown-item" href="/invite">Invite</a><% } %>
-              <% if (brand.supportUrl) { %><a class="dropdown-item" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
-              <a class="dropdown-item" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
-            </div>
-          </div>
+        <div class="side-group">
+          <div class="side-title">Navigation</div>
+          <a class="side-link" href="/">Home</a>
+          <a class="side-link" href="/dashboard">Dashboard</a>
         </div>
-        <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
-      </div>
-      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-        <div class="mobile-sheet card">
-          <div class="row">
-            <a class="pill" href="/">Home</a>
-            <a class="pill" href="/dashboard">Dashboard</a>
-            <a class="pill" href="/api/status" target="_blank">API</a>
-            <% if (brand.inviteUrl) { %><a class="pill" href="/invite">Invite</a><% } %>
-            <% if (brand.supportUrl) { %><a class="pill" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-            <a class="pill" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
-          </div>
+        <div class="side-group">
+          <div class="side-title">More</div>
+          <a class="side-link" href="/api/status" target="_blank" rel="noopener">API</a>
+          <% if (brand.inviteUrl) { %><a class="side-link" href="/invite">Invite</a><% } %>
+          <% if (brand.supportUrl) { %><a class="side-link" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
+          <a class="side-link" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
         </div>
-      </div>
-    </header>
+      </aside>
+      <div id="sideOverlay" class="offcanvas-overlay" aria-hidden="true"></div>
 
-    <!-- Hero -->
-    <section class="hero hero-advanced" aria-label="Hero">
+      <!-- Content -->
+      <section class="content">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px">
+          <button id="sideToggle" class="burger" aria-label="Open menu" aria-controls="homeShell" aria-expanded="false" style="margin-right:4px"><span></span></button>
+          <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" style="width:36px;height:36px;border-radius:8px" />
+          <h1 style="margin:0"><%= botName %></h1>
+        </div>
+
+  <!-- Hero -->
+  <section class="hero hero-advanced" aria-label="Hero">
       <div class="hero-bg" style="background-image:url('<%= brand.homeBannerUrl || brand.bannerUrl %>')"></div>
       <div class="hero-overlay"></div>
       <div class="container hero-grid">
@@ -100,7 +93,7 @@
           </div>
         </div>
       </div>
-    </section>
+  </section>
 
     <!-- Capabilities -->
     <section class="capabilities">
@@ -128,10 +121,10 @@
           </div>
         </div>
       </div>
-    </section>
+  </section>
 
-    <!-- Command Explorer (vanilla) -->
-    <section class="explorer">
+  <!-- Command Explorer (vanilla) -->
+  <section class="explorer">
       <div class="container">
         <div class="section-head">
           <h2>Command Explorer</h2>
@@ -167,10 +160,10 @@
           <% } %>
         </div>
       </div>
-    </section>
+  </section>
 
-    <!-- Getting Started CTA -->
-    <section class="cta">
+  <!-- Getting Started CTA -->
+  <section class="cta">
       <div class="container">
         <div class="cta-box">
           <div class="cta-left">
@@ -192,9 +185,9 @@
           </div>
         </div>
       </div>
-    </section>
+  </section>
 
-    <footer class="footer">
+  <footer class="footer">
       <div class="container footer-row">
         <div class="footer-left">
           <span>© <%= new Date().getFullYear() %> <%= brand.title %></span>
@@ -204,6 +197,8 @@
         </div>
       </div>
     </footer>
+      </section>
+    </main>
 
     <script>
       // Copy Usage buttons

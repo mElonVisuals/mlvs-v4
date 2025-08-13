@@ -30,6 +30,38 @@
     });
   }
 
+  // Collapsible left sidebar (homepage)
+  const shell = document.getElementById('homeShell');
+  const sideToggle = document.getElementById('sideToggle');
+  const sideOverlay = document.getElementById('sideOverlay');
+  const sidebar = document.querySelector('#homeShell .sidebar');
+  function setSidebar(open){
+    if (!shell || !sidebar) return;
+    if (open) {
+      shell.classList.add('sidebar-open');
+      sidebar.setAttribute('aria-hidden','false');
+      sideToggle?.setAttribute('aria-expanded','true');
+      if (sideOverlay) sideOverlay.style.display = 'block';
+    } else {
+      shell.classList.remove('sidebar-open');
+      sidebar.setAttribute('aria-hidden','true');
+      sideToggle?.setAttribute('aria-expanded','false');
+      if (sideOverlay) sideOverlay.style.display = 'none';
+    }
+  }
+  if (sideToggle && shell && sidebar) {
+    // Default: closed on mobile, open on desktop via CSS; JS ensures overlay behavior
+    sideToggle.addEventListener('click', () => {
+      const isOpen = shell.classList.contains('sidebar-open');
+      setSidebar(!isOpen);
+    });
+  }
+  if (sideOverlay) sideOverlay.addEventListener('click', () => setSidebar(false));
+  // Close sidebar on ESC
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && shell?.classList.contains('sidebar-open')) setSidebar(false);
+  });
+
   // Command explorer search and chips
   const input = document.getElementById('cmdSearch');
   const chips = document.getElementById('cmdChips');

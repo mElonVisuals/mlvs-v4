@@ -201,7 +201,10 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 	.grid-3 { grid-template-columns: 1fr }
 	.grid-2 { grid-template-columns: 1fr }
 	.explorer-grid { grid-template-columns: 1fr }
-	.shell { grid-template-columns: 1fr }
-	.sidebar { display: none }
+	.shell { grid-template-columns: 1fr; position: relative }
+	/* Off-canvas sidebar */
+	.shell .sidebar { display: block; position: fixed; top: 0; left: 0; bottom: 0; width: 86%; max-width: 320px; z-index: 60; transform: translateX(-100%); transition: transform .2s ease; border-right: 1px solid hsl(var(--border)); background: hsl(var(--card)); padding: 14px }
+	.shell.sidebar-open .sidebar { transform: translateX(0) }
+	.offcanvas-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 50 }
 	.kpi-grid { grid-template-columns: 1fr 1fr }
 }
