@@ -45,6 +45,11 @@ async function buildSessionStore() {
 }
 
 const store = await buildSessionStore();
+if (!store) {
+  console.warn('[session] Using MemoryStore (development). Set REDIS_URL or MONGO_URL + SESSION_SECRET for production.');
+} else {
+  console.log('[session] External session store active');
+}
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
