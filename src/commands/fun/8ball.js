@@ -1,4 +1,4 @@
-import { baseEmbed } from '../../utils/embed.js';
+import { commandEmbed, warnEmbed } from '../../utils/embed.js';
 
 export const name = '8ball';
 export const description = 'Ask the magic 8ball a question.';
@@ -13,11 +13,9 @@ const answers = [
 
 export async function execute(message, args) {
   const question = args.join(' ');
-  if (!question) return message.reply('Ask a question: `!8ball <your question>`');
-  const embed = baseEmbed(message, { banner: false })
-    .setTitle('Magic 8-Ball')
-  .setDescription(['Usage:\n• 8ball <question>', '—'].join('\n'))
-  .addFields(
+  if (!question) return message.reply({ embeds:[warnEmbed(message,'Question Required','Provide a question: `!8ball <question>`')] });
+  const embed = commandEmbed(message, { name: '8ball', usage: '8ball <question>', description: 'Consult the mystical 8-ball.', icon: '🎱' })
+    .addFields(
       { name: 'Question', value: question },
       { name: 'Answer', value: answers[Math.floor(Math.random()*answers.length)] }
     );

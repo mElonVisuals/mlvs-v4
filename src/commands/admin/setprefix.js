@@ -13,7 +13,7 @@ export async function execute(message, args) {
   return message.channel.send({ embeds: [embed] });
   }
   const newPrefix = args[0];
-  if (!newPrefix) return message.reply('Provide a new prefix.');
+  if (!newPrefix) return message.reply({ embeds:[errorEmbed(message,'Prefix Required','Provide a new prefix.')] });
 
   try {
     const envPath = path.join(process.cwd(), '.env');
@@ -30,7 +30,6 @@ export async function execute(message, args) {
   } catch {}
 
   process.env.PREFIX = newPrefix;
-  const embed = successEmbed(message, 'Prefix Updated', `Prefix set to \`${newPrefix}\``)
-    .setDescription('Usage:\n• setprefix <newPrefix>');
+  const embed = successEmbed(message, 'Prefix Updated', `Prefix set to \`${newPrefix}\``);
   return message.channel.send({ embeds: [embed] });
 }

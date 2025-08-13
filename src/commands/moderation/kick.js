@@ -11,13 +11,12 @@ export async function execute(message, args) {
     return message.channel.send({ embeds: [embed] });
   }
   const member = message.mentions.members.first();
-  if (!member) return message.reply('Mention a user to kick.');
+  if (!member) return message.reply({ embeds:[errorEmbed(message,'User Required','Mention a user to kick.')] });
   const reason = args.slice(1).join(' ') || 'No reason provided';
   try {
     await member.kick(reason);
   const embed = successEmbed(message, 'Member Kicked', `${member.user.tag} was kicked.`)
-  .addFields({ name: 'Reason', value: reason })
-  .setDescription('Usage:\n• kick @user [reason]');
+  .addFields({ name: 'Reason', value: reason });
     await message.channel.send({ embeds: [embed] });
   } catch (e) {
     const embed = errorEmbed(message, 'Action Failed', 'Failed to kick member.');

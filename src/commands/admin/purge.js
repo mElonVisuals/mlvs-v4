@@ -11,15 +11,14 @@ export async function execute(message, args) {
     return message.channel.send({ embeds: [embed] });
   }
   const amount = parseInt(args[0], 10);
-  if (isNaN(amount) || amount < 1 || amount > 100) return message.reply('Provide a number between 1 and 100.');
+  if (isNaN(amount) || amount < 1 || amount > 100) return message.reply({ embeds:[errorEmbed(message,'Invalid Amount','Provide a number between 1 and 100.')] });
   const confirmed = args.includes('--yes');
   if (!confirmed) {
-    return message.reply(`Type: \`${process.env.PREFIX || '!'}purge ${amount} --yes\` to confirm deletion.`);
+    return message.reply({ embeds:[errorEmbed(message,'Confirmation Needed',`Re-run with \`${process.env.PREFIX || '!'}purge ${amount} --yes\` to confirm.`)] });
   }
   try {
     await message.channel.bulkDelete(amount, true);
-    const embed = successEmbed(message, 'Purge Complete', `Deleted ${amount} messages.`)
-      .setDescription('Usage:\n• purge <1-100> [--yes]');
+  const embed = successEmbed(message, 'Purge Complete', `Deleted ${amount} messages.`);
     const msg = await message.channel.send({ embeds: [embed] });
     setTimeout(() => msg.delete().catch(() => {}), 3500);
   } catch (e) {

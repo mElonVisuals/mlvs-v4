@@ -12,9 +12,9 @@ export async function execute(message){
   const m = Math.floor(ms/60000) % 60;
   const s = Math.floor(ms/1000) % 60;
   const human = [seg(d,'d'), seg(h,'h'), seg(m,'m'), seg(s,'s')].filter(Boolean).join(' ');
-  const embed = baseEmbed(message)
+  const embed = baseEmbed(message, { banner:false })
     .setTitle('⏱️ Uptime')
-    .setDescription(`The bot has been running for **${human}**.`)
+    .setDescription(`Running for **${human}**.`)
     .addFields({ name: 'Milliseconds', value: String(ms), inline: true });
   await message.channel.send({ embeds: [embed] });
 }

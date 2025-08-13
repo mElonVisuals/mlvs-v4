@@ -1,4 +1,4 @@
-import { baseEmbed, addBotMetrics } from '../../utils/embed.js';
+import { commandEmbed, addBotMetrics } from '../../utils/embed.js';
 
 export const name = 'stats';
 export const description = 'Show bot statistics.';
@@ -10,9 +10,7 @@ function formatUptime(ms){
 }
 
 export async function execute(message, args, client) {
-  const embed = baseEmbed(message)
-    .setTitle('Bot Stats')
-    .setDescription('Usage:\n• stats');
+  const embed = commandEmbed(message, { name: 'stats', usage: 'stats', description: 'Bot runtime statistics.', icon: '📈' });
   addBotMetrics(embed, client);
   await message.channel.send({ embeds: [embed] });
 }

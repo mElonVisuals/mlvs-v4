@@ -10,11 +10,11 @@ export async function execute(message, args){
     return message.channel.send({ embeds:[errorEmbed(message,'Permission Denied','Need Manage Channels.')] });
   }
   const val = args[0];
-  if (!val) return message.reply(`Usage: ${(process.env.PREFIX||'!')}slowmode <seconds|off>`);
+  if (!val) return message.reply({ embeds:[errorEmbed(message,'Value Required',`Usage: \`${(process.env.PREFIX||'!')}slowmode <seconds|off>\``)] });
   let seconds = 0;
   if (val.toLowerCase() !== 'off') {
     seconds = parseInt(val,10);
-    if (isNaN(seconds) || seconds < 0 || seconds > 21600) return message.reply('Seconds must be between 0 and 21600 (6h).');
+  if (isNaN(seconds) || seconds < 0 || seconds > 21600) return message.reply({ embeds:[errorEmbed(message,'Out of Range','Seconds must be 0 - 21600 (6h).')] });
   }
   try {
     await message.channel.setRateLimitPerUser(seconds, `Slowmode set by ${message.author.tag}`);

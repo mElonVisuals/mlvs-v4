@@ -1,4 +1,4 @@
-import { baseEmbed, linkify, addBotMetrics } from '../../utils/embed.js';
+import { commandEmbed, linkify, addBotMetrics } from '../../utils/embed.js';
 import fetch from 'node-fetch';
 
 export const name = 'dashboard';
@@ -17,9 +17,10 @@ export async function execute(message, args, client) {
   } catch {
     status = 'Offline';
   }
-  const embed = baseEmbed(message)
-    .setTitle('Dashboard')
-    .setDescription(`Manage the bot here: ${linkify('Open Dashboard', url)}`)
+  const embed = commandEmbed(message, { name: 'dashboard', usage: 'dashboard', description: 'Dashboard status and link.', icon: '📊' })
+    .addFields(
+      { name: 'Link', value: linkify('Open', url), inline: true },
+    )
     .addFields(
       { name: 'Status', value: status, inline: true },
       { name: 'Servers', value: `${client.guilds.cache.size}`, inline: true }
