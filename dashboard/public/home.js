@@ -1,4 +1,5 @@
 (function(){
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const dot = document.getElementById('liveDot');
   if (dot){ const st = dot.getAttribute('data-state'); dot.style.background = st === 'Online' ? '#10b981' : '#ef4444'; }
   const heroStatus = document.getElementById('heroStatus');
@@ -34,5 +35,19 @@
     }catch(e){ if(errBox){ errBox.textContent='Refresh failed'; errBox.style.display='block'; } }
   }
   refreshBtn && refreshBtn.addEventListener('click', pull);
-  pull(); setInterval(pull, 15000);
+  pull(); if(!prefersReduced) setInterval(pull, 15000);
+
+  // Horizontal drag scroll for module scroller
+  const scroller = document.querySelector('.mod-scroller');
+  if (scroller){
+    let isDown=false,startX,scrollLeft; let lastVel=0, momentumId; const friction=0.95;
+    function momentum(){ if(Math.abs(lastVel) < 0.5) return; scroller.scrollLeft -= lastVel; lastVel*=friction; momentumId=requestAnimationFrame(momentum); }
+    scroller.addEventListener('mousedown', e=>{ isDown=true; scroller.classList.add('dragging'); startX=e.pageX - scroller.offsetLeft; scrollLeft=scroller.scrollLeft; cancelAnimationFrame(momentumId); });
+    scroller.addEventListener('mouseleave', ()=>{ if(isDown){ isDown=false; scroller.classList.remove('dragging'); momentum(); }});
+    scroller.addEventListener('mouseup', ()=>{ if(isDown){ isDown=false; scroller.classList.remove('dragging'); momentum(); }});
+    scroller.addEventListener('mousemove', e=>{ if(!isDown) return; e.preventDefault(); const x=e.pageX - scroller.offsetLeft; const walk=(x-startX); scroller.scrollLeft = scrollLeft - walk; lastVel = walk; });
+    scroller.addEventListener('wheel', e=>{ if(Math.abs(e.deltaY) > Math.abs(e.deltaX)) { scroller.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive:false });
+    // Keyboard accessibility
+    scroller.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){ scroller.scrollLeft += 60; e.preventDefault(); } else if(e.key==='ArrowLeft'){ scroller.scrollLeft -= 60; e.preventDefault(); } });
+  }
 })();
