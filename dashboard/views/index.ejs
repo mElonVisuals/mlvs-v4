@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= botName %> Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>setTimeout(()=>location.reload(), 15000)</script>
+  </head>
+<body>
+  <div class="container">
+    <header>
+      <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" />
+      <h1><%= botName %> Dashboard</h1>
+    </header>
+    <div class="status <%= status === 'Online' ? 'online' : 'offline' %>">
+      Status: <span><%= status %></span>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="value"><%= guilds %></div><div class="label">Servers</div></div>
+      <div class="card"><div class="value"><%= users %></div><div class="label">Users</div></div>
+      <div class="card"><div class="value"><%= updatedAt ? new Date(updatedAt).toLocaleString() : '-' %></div><div class="label">Updated</div></div>
+    </div>
+    <p class="hint">Page auto-refreshes every 15s. Keep the bot running to update stats.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+:root{--bg:#0f1115;--panel:#151823;--muted:#8b90a1;--text:#e8ecf1;--brand:#5865f2;--good:#43b581;--bad:#f04747}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Arial,sans-serif;margin:0;padding:0}
+.container{max-width:840px;margin:60px auto;background:linear-gradient(180deg,#171a24, #141824);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.35);padding:28px 28px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.logo{width:36px;height:36px;border-radius:8px}
+h1{color:var(--brand);margin:0;font-size:24px}
+.status{margin:8px 0 18px;font-size:14px;font-weight:600;color:var(--muted)}
+.status.online span{color:var(--good)}
+.status.offline span{color:var(--bad)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:10px 0 8px}
+.card{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:18px 16px;text-align:center}
+.card .value{font-size:28px;font-weight:700;margin-bottom:6px}
+.card .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.hint{color:var(--muted);font-size:12px;margin-top:8px;text-align:center}

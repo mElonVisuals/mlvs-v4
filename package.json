@@ -1,0 +1,19 @@
+{
+  "name": "discord-bot-dashboard",
+  "version": "1.0.0",
+  "description": "Prefix-based Discord bot with a simple dashboard",
+  "main": "src/bot.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/bot.js",
+    "start:bot": "node src/bot.js",
+    "dashboard": "node dashboard/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+  "express": "^4.19.2",
+  "node-fetch": "^3.3.2"
+  }
+}
