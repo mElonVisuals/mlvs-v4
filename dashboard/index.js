@@ -15,15 +15,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// basic request logger (very light) — must be after app is initialized
-app.use((req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    const ms = Date.now() - start;
-    console.log(`[dash] ${req.method} ${req.url} -> ${res.statusCode} ${ms}ms`);
-  });
-  next();
-});
 const PORT = process.env.PORT || 3001;
 const BRAND = {
   title: process.env.DASHBOARD_TITLE || 'Discord Bot',
