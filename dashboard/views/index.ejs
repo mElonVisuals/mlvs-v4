@@ -22,14 +22,24 @@
     <div class="links">
       <a href="/">Home</a>
       <a href="/dashboard">Dashboard</a>
+  <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
+  <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
       <a href="/api/status" target="_blank">API</a>
+  <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
     </div>
   </nav>
 
   <div class="container">
-    <header>
-      <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" />
-      <h1><%= botName %> Dashboard</h1>
+    <header class="dash-header">
+      <div class="title">
+        <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" />
+        <h1><%= botName %> Dashboard</h1>
+      </div>
+      <div class="quick">
+        <% if (brand.inviteUrl) { %><a class="btn" href="/invite">Invite</a><% } %>
+        <% if (brand.supportUrl) { %><a class="btn" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+        <a class="btn primary" href="/">Home</a>
+      </div>
     </header>
     <div class="status <%= status === 'Online' ? 'online' : 'offline' %>">
       Status: <span><%= status %></span>

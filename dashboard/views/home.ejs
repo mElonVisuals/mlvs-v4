@@ -18,16 +18,33 @@
     <div class="links">
       <a href="/">Home</a>
       <a href="/dashboard">Dashboard</a>
+      <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
+      <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
       <a href="/api/status" target="_blank">API</a>
+      <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
     </div>
   </nav>
 
   <header class="hero" style="background-image: url('<%= brand.bannerUrl %>')">
     <div class="overlay">
-      <h1><%= botName %></h1>
-      <p class="subtitle">A clean, modern Discord bot with a live dashboard.</p>
-      <div class="cta">
-        <a class="btn primary" href="/dashboard">Open Dashboard</a>
+      <div class="hero-inner">
+        <img class="hero-logo" src="/logo.png" alt="logo" />
+        <h1><%= botName %></h1>
+        <p class="subtitle"><%= brand.subtitle %></p>
+        <div class="badges">
+          <span class="badge <%= status==='Online'?'green':'red' %>">Status: <%= status %></span>
+          <span class="badge">Servers: <%= guilds %></span>
+          <span class="badge">Users: <%= users %></span>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="/dashboard">Open Dashboard</a>
+          <% if (brand.inviteUrl) { %>
+            <a class="btn" href="/invite">Invite Bot</a>
+          <% } %>
+          <% if (brand.supportUrl) { %>
+            <a class="btn" href="<%= brand.supportUrl %>" target="_blank">Join Support</a>
+          <% } %>
+        </div>
       </div>
     </div>
   </header>
@@ -38,18 +55,33 @@
       <p>Monitor servers and users in real time via the dashboard.</p>
     </div>
     <div class="feature">
-      <h3>Prefix Commands</h3>
-      <p>Categories for general, fun, util, moderation, and more.</p>
+      <h3>Command System</h3>
+      <p>Categorized commands (general, fun, util, moderation) with rich embeds.</p>
     </div>
     <div class="feature">
-      <h3>Custom Embeds</h3>
-      <p>Modern embed design with your logo and banner.</p>
+      <h3>Branding</h3>
+      <p>Customized logo, banner, and colors out of the box.</p>
+    </div>
+    <div class="feature">
+      <h3>Docker Ready</h3>
+      <p>Ship and deploy with confidence using Docker/Dokploy.</p>
+    </div>
+    <div class="feature">
+      <h3>Status API</h3>
+      <p>Health endpoint for uptime checks and deployments.</p>
+    </div>
+    <div class="feature">
+      <h3>Logging</h3>
+      <p>Readable startup banner and request logs.</p>
     </div>
   </section>
 
   <footer class="footer">
-    <span>Status:</span>
-    <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
+    <div class="left">© <%= new Date().getFullYear() %> <%= brand.title %></div>
+    <div class="right">
+      <span>Status:</span>
+      <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
+    </div>
   </footer>
 </body>
 </html>

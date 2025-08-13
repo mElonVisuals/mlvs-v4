@@ -16,10 +16,23 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 const PORT = process.env.PORT || 3001;
+const computedInvite = (() => {
+  const direct = process.env.INVITE_URL;
+  if (direct) return direct;
+  const cid = process.env.CLIENT_ID;
+  if (!cid) return null;
+  const perms = process.env.INVITE_PERMS || '8';
+  const scopes = encodeURIComponent('bot applications.commands');
+  return `https://discord.com/api/oauth2/authorize?client_id=${cid}&permissions=${perms}&scope=${scopes}`;
+})();
 const BRAND = {
   title: process.env.DASHBOARD_TITLE || 'Discord Bot',
+  subtitle: process.env.DASHBOARD_SUBTITLE || 'A clean, modern Discord bot with a live dashboard.',
   logoUrl: process.env.LOGO_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&',
-  bannerUrl: process.env.BANNER_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402473578254962808/banner3.png?ex=689d454d&is=689bf3cd&hm=ead97252818d9c11ceea7650d0fffe8a783afe8c2d33abd1bdaff51f5c584207&'
+  bannerUrl: process.env.BANNER_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402473578254962808/banner3.png?ex=689d454d&is=689bf3cd&hm=ead97252818d9c11ceea7650d0fffe8a783afe8c2d33abd1bdaff51f5c584207&',
+  supportUrl: process.env.SUPPORT_SERVER_URL || null,
+  githubUrl: process.env.GITHUB_URL || 'https://github.com/mElonVisuals/mlvs-v4',
+  inviteUrl: computedInvite,
 };
 
 app.set('view engine', 'ejs');
@@ -44,7 +57,9 @@ app.get('/', (req, res) => {
     brand: BRAND,
     botName: status?.bot?.tag || BRAND.title,
     status: status?.online ? 'Online' : 'Offline',
-    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`
+  dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
+  guilds: status?.guilds || 0,
+  users: status?.users || 0,
   });
 });
 
@@ -63,6 +78,12 @@ app.get('/dashboard', (req, res) => {
 
 app.get('/api/status', (req, res) => {
   res.json(readStatus());
+});
+
+// Invite redirect if available
+app.get('/invite', (req, res) => {
+  if (BRAND.inviteUrl) return res.redirect(BRAND.inviteUrl);
+  res.status(404).send('Invite not configured');
 });
 
 // simple passthrough for logo from CDN to avoid mixed content/CORS surprises in some setups
