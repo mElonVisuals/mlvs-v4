@@ -33,6 +33,19 @@ h1{color:var(--brand);margin:0;font-size:24px}
 .features{max-width:1120px;margin:24px auto;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 16px}
 .features .feature h3{margin-top:0}
 .feature{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:18px}
+.glass{backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);}
+.commands{max-width:1120px;margin:24px auto;padding:0 16px}
+.commands-inner{background:rgba(21,24,35,.45);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 18px}
+.commands h2{margin:0 0 4px}
+.commands .muted{color:var(--muted);margin:0 0 14px}
+.commands-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cmd-section{background:rgba(21,24,35,.35);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px}
+.cmd-cat{margin:0 0 8px;color:var(--brand)}
+.cmd-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.cmd-name code{background:rgba(255,255,255,.06);padding:2px 6px;border-radius:6px}
+.cmd-usage code{background:rgba(255,255,255,.06);padding:2px 6px;border-radius:6px}
+.cmd-desc{color:var(--muted);font-size:13px;margin:4px 0}
+.cmd-cta{margin-top:14px;display:flex;gap:10px}
 .highlights{max-width:1120px;margin:10px auto 28px;padding:0 16px}
 .highlights .container{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .highlight h3{margin:0 0 6px}
@@ -55,4 +68,5 @@ h1{color:var(--brand);margin:0;font-size:24px}
 	.cards{grid-template-columns:1fr}
 	.features{grid-template-columns:1fr}
 	.highlights .container{grid-template-columns:1fr}
+	.commands-grid{grid-template-columns:1fr}
 }

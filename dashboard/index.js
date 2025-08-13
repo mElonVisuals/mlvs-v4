@@ -51,9 +51,44 @@ function readStatus() {
   return { online: false, guilds: 0, users: 0 };
 }
 
+function loadCommands() {
+  const root = path.join(process.cwd(), 'src', 'commands');
+  const out = {};
+  try {
+    if (!fs.existsSync(root)) return out;
+    const walk = (dir, categoryHint) => {
+      const items = fs.readdirSync(dir, { withFileTypes: true });
+      for (const it of items) {
+        const full = path.join(dir, it.name);
+        if (it.isDirectory()) {
+          walk(full, it.name);
+        } else if (it.isFile() && it.name.endsWith('.js')) {
+          if (/help\.js$/i.test(it.name)) continue; // skip help
+          const rel = path.relative(root, full).replace(/\\/g, '/');
+          const cat = categoryHint || rel.split('/')[0] || 'misc';
+          const src = fs.readFileSync(full, 'utf8');
+          const mName = src.match(/export\s+const\s+name\s*=\s*['"`]([^'"`]+)['"`]/);
+          const mDesc = src.match(/export\s+const\s+description\s*=\s*['"`]([^'"`]+)['"`]/);
+          const mUsage = src.match(/export\s+const\s+usage\s*=\s*['"`]([^'"`]+)['"`]/);
+          const name = mName?.[1] || it.name.replace(/\.js$/, '');
+          const description = mDesc?.[1] || '';
+          const usage = mUsage?.[1] || name;
+          if (!out[cat]) out[cat] = [];
+          out[cat].push({ name, description, usage, path: rel });
+        }
+      }
+    };
+    walk(root);
+    // sort
+    for (const k of Object.keys(out)) out[k].sort((a,b)=>a.name.localeCompare(b.name));
+  } catch {}
+  return out;
+}
+
 // Homepage
 app.get('/', (req, res) => {
   const status = readStatus();
+  const commands = loadCommands();
   res.render('home', {
     brand: BRAND,
     botName: status?.bot?.tag || BRAND.title,
@@ -61,6 +96,7 @@ app.get('/', (req, res) => {
   dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
   guilds: status?.guilds || 0,
   users: status?.users || 0,
+    commands,
   });
 });
 
