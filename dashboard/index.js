@@ -236,6 +236,28 @@ app.get('/support', (req, res) => {
   });
 });
 
+// Terms of Service page
+app.get('/terms', (req, res) => {
+  const status = readStatus();
+  res.render('terms', {
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
+    status: status?.online ? 'Online' : 'Offline',
+    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
+  });
+});
+
+// Privacy Policy page
+app.get('/privacy', (req, res) => {
+  const status = readStatus();
+  res.render('privacy', {
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
+    status: status?.online ? 'Online' : 'Offline',
+    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`,
+  });
+});
+
 // Dashboard redirect to health page (new multi-page layout)
 app.get('/dashboard', ensureAuth, (req, res) => res.redirect('/dashboard/health'));
 

@@ -100,6 +100,138 @@ main.homepage-main > section:last-child {
   margin-bottom: 0;
 }
 
+/* Secondary page section spacing - full screen coverage */
+main.secondary-main > section {
+  margin-bottom: clamp(6rem, 10vw, 10rem);
+  min-height: 80vh;
+}
+
+main.secondary-main > section:last-child {
+  margin-bottom: 0;
+}
+
+/* Content sections need proper spacing */
+.content-section {
+  padding: clamp(6rem, 10vw, 8rem) 0 clamp(8rem, 12vw, 10rem) 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+/* Add breathing room to content sections */
+.docs-page main,
+.status-page main,
+.support-page main,
+.terms-page main,
+.privacy-page main {
+  padding-bottom: clamp(6rem, 10vw, 10rem);
+}
+
+/* Ensure doc sections have proper full-screen coverage */
+.docs-page .features-section,
+.status-page .features-section,
+.support-page .features-section {
+  min-height: 100vh;
+  padding: clamp(6rem, 10vw, 8rem) 0 clamp(8rem, 12vw, 10rem) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Better section headers for secondary pages */
+.sec-head {
+  text-align: center;
+  margin-bottom: clamp(4rem, 6vw, 6rem);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sec-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.sec-intro {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+  max-width: 800px;
+  margin: 0 auto;
+  padding: clamp(2rem, 4vw, 4rem) 0;
+}
+
+.terms-article,
+.privacy-article {
+  background: rgba(17, 25, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.terms-section,
+.privacy-section {
+  margin-bottom: 3rem;
+}
+
+.terms-section:last-child,
+.privacy-section:last-child {
+  margin-bottom: 0;
+}
+
+.terms-section h2,
+.privacy-section h2 {
+  color: hsl(var(--neon-cyan));
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-section h3,
+.privacy-section h3 {
+  color: hsl(var(--neon-purple));
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.terms-section p,
+.privacy-section p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.terms-section ul,
+.privacy-section ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.terms-section li,
+.privacy-section li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.text-link {
+  color: hsl(var(--neon-cyan));
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.text-link:hover {
+  color: hsl(var(--neon-purple));
+  border-bottom-color: hsl(var(--neon-purple));
+}
+
 .container {
   width: 100%;
   margin: 0 auto;
@@ -138,10 +270,10 @@ main.homepage-main > section:last-child {
 
 .hp-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
   background: linear-gradient(135deg, #040810 0%, #070b14 50%, #0a0f1c 100%);
   animation: cosmicShift 60s ease-in-out infinite alternate;
 }
@@ -550,14 +682,17 @@ main.homepage-main > section:last-child {
   text-align: center;
 }
 
-/* Secondary pages hero - optimized for better positioning */
+/* Secondary pages hero - full screen with proper spacing */
 .docs-page .hero,
 .status-page .hero,
-.support-page .hero {
-  min-height: 65vh;
-  padding: clamp(4rem, 8vw, 6rem) 0 clamp(2rem, 4vw, 3rem) 0;
+.support-page .hero,
+.terms-page .hero,
+.privacy-page .hero {
+  min-height: 100vh;
+  padding: clamp(8rem, 12vw, 10rem) 0 clamp(6rem, 8vw, 8rem) 0;
   align-items: center;
   justify-content: center;
+}
 }
 
 .hero-glow {
@@ -712,24 +847,28 @@ main.homepage-main > section:last-child {
   background: var(--glass-border);
 }
 
-/* Modern Features Section */
+/* Modern Features Section - full screen with better spacing */
 .features-section {
   padding: clamp(8rem, 15vw, 16rem) 0 clamp(10rem, 20vw, 20rem) 0;
   position: relative;
   overflow: hidden;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .features-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(64, 224, 208, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 99, 255, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(64, 224, 208, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(255, 99, 255, 0.08) 0%, transparent 60%);
   pointer-events: none;
+  z-index: -1;
 }
 
 .modern-features-grid {
@@ -1127,22 +1266,26 @@ main.homepage-main > section:last-child {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  max-width: 1200px;
+  margin: 0 auto 4rem auto;
+  padding: 0 2rem;
 }
 
 .footer-brand-section {
   text-align: center;
+  max-width: 600px;
 }
 
 .footer-brand {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-size: 2rem;
+  gap: 1rem;
+  font-size: 2.2rem;
   font-weight: 800;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   background: linear-gradient(135deg, hsl(var(--neon-cyan)), hsl(var(--neon-purple)));
   background-clip: text;
   -webkit-background-clip: text;
@@ -1150,12 +1293,11 @@ main.homepage-main > section:last-child {
 }
 
 .footer-desc {
-  font-size: 1.1rem;
-  color: hsl(var(--text-secondary));
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto;
   text-align: center;
+  margin: 0;
 }
 
 .footer-links {
@@ -1187,10 +1329,60 @@ main.homepage-main > section:last-child {
 .footer-bottom {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  padding-top: 2.5rem;
+  gap: 2rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.footer-copyright {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Add better footer logo styling */
+.footer-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+}
+
+/* Improve footer links layout */
+.footer-links-section {
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-column {
+  text-align: center;
+}
+
+.footer-column-title {
+  color: hsl(var(--neon-cyan));
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.footer-link {
+  display: block;
+  padding: 0.5rem 0;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all var(--duration-normal) var(--ease-smooth);
+}
+
+.footer-link:hover {
+  color: hsl(var(--neon-purple));
+  transform: translateX(4px);
+}
   border-top: 1px solid var(--glass-border);
 }
 
@@ -2251,5 +2443,115 @@ main.homepage-main > section:last-child {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* ==== IMPROVED SECTION SPACING FOR SECONDARY PAGES ==== */
+
+/* Ensure doc sections have proper full-screen coverage */
+.docs-page .features-section,
+.status-page .features-section,
+.support-page .features-section {
+  min-height: 100vh;
+  padding: clamp(6rem, 10vw, 8rem) 0 clamp(8rem, 12vw, 10rem) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Better section headers for secondary pages */
+.sec-head {
+  text-align: center;
+  margin-bottom: clamp(4rem, 6vw, 6rem);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sec-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.sec-intro {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Legal pages styling */
+.legal-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: clamp(2rem, 4vw, 4rem) 0;
+}
+
+.terms-article,
+.privacy-article {
+  background: rgba(17, 25, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.terms-section,
+.privacy-section {
+  margin-bottom: 3rem;
+}
+
+.terms-section:last-child,
+.privacy-section:last-child {
+  margin-bottom: 0;
+}
+
+.terms-section h2,
+.privacy-section h2 {
+  color: hsl(var(--neon-cyan));
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-section h3,
+.privacy-section h3 {
+  color: hsl(var(--neon-purple));
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.terms-section p,
+.privacy-section p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.terms-section ul,
+.privacy-section ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.terms-section li,
+.privacy-section li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.text-link {
+  color: hsl(var(--neon-cyan));
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.text-link:hover {
+  color: hsl(var(--neon-purple));
+  border-bottom-color: hsl(var(--neon-purple));
 }
 
