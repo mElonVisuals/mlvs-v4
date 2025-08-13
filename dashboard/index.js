@@ -30,6 +30,7 @@ const BRAND = {
   subtitle: process.env.DASHBOARD_SUBTITLE || 'A clean, modern Discord bot with a live dashboard.',
   logoUrl: process.env.LOGO_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&',
   bannerUrl: process.env.BANNER_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402473578254962808/banner3.png?ex=689d454d&is=689bf3cd&hm=ead97252818d9c11ceea7650d0fffe8a783afe8c2d33abd1bdaff51f5c584207&',
+  homeBannerUrl: process.env.HOMEPAGE_BANNER_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1405178445079646400/web-banner3.png?ex=689de1e8&is=689c9068&hm=4df7140240de653274a6add71ad3457e18405d04c8a70a53388ac725bf6ce6d9&',
   supportUrl: process.env.SUPPORT_SERVER_URL || null,
   githubUrl: process.env.GITHUB_URL || 'https://github.com/mElonVisuals/mlvs-v4',
   inviteUrl: computedInvite,

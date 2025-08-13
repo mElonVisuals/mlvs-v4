@@ -25,7 +25,7 @@
     </div>
   </nav>
 
-  <header class="hero" style="background-image: url('<%= brand.bannerUrl %>')">
+  <header class="hero" style="background-image: url('<%= brand.homeBannerUrl || brand.bannerUrl %>')">
     <div class="overlay">
       <div class="hero-inner">
         <img class="hero-logo" src="/logo.png" alt="logo" />
@@ -73,6 +73,32 @@
     <div class="feature">
       <h3>Logging</h3>
       <p>Readable startup banner and request logs.</p>
+    </div>
+  </section>
+
+  <section class="highlights">
+    <div class="container">
+      <div class="highlight">
+        <h3>Why this bot?</h3>
+        <p>Fast, reliable, and easy to use. Built with discord.js v14, Express, and a slick UI. Plug-and-play branding and a clean commands system.</p>
+      </div>
+      <div class="highlight">
+        <h3>Categories</h3>
+        <ul class="tags">
+          <li>General</li>
+          <li>Fun</li>
+          <li>Util</li>
+          <li>Moderation</li>
+        </ul>
+      </div>
+      <div class="highlight">
+        <h3>Get Started</h3>
+        <ol class="steps">
+          <li>Invite the bot using the Invite button.</li>
+          <li>Type <code>!help</code> in your server to explore commands.</li>
+          <li>Open the Dashboard to view live stats.</li>
+        </ol>
+      </div>
     </div>
   </section>
 
