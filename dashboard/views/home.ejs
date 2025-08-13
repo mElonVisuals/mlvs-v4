@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><%= botName %> — Home</title>
+  <title>mlvs.me — Home</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,12 +11,8 @@
   </head>
   <body>
     <main id="homeShell" class="shell">
-      <!-- Sidebar -->
-      <aside class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
-        <a class="brand" href="/" aria-label="Home" style="margin-bottom:10px; display:flex; align-items:center; gap:10px">
-          <img src="/logo.png" alt="" />
-          <strong><%= brand.title %></strong>
-        </a>
+  <!-- Sidebar -->
+  <aside class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
         <div class="side-group">
           <div class="side-title">Navigation</div>
           <a class="side-link" href="/">Home</a>
@@ -30,24 +26,20 @@
           <a class="side-link" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
         </div>
       </aside>
-      <div id="sideOverlay" class="offcanvas-overlay" aria-hidden="true"></div>
+      
 
       <!-- Content -->
-      <section class="content">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px">
-          <button id="sideToggle" class="burger" aria-label="Open menu" aria-controls="homeShell" aria-expanded="false" style="margin-right:4px"><span></span></button>
-          <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" style="width:36px;height:36px;border-radius:8px" />
-          <!-- Title removed per request -->
-        </div>
+    <section class="content">
 
   <!-- Hero -->
   <section class="hero hero-advanced" aria-label="Hero">
       <div class="hero-bg" style="background-image:url('<%= brand.homeBannerUrl || brand.bannerUrl %>')"></div>
       <div class="hero-overlay"></div>
+    <div class="hero-mark" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-left">
           <div class="eyebrow">Modern Discord Bot</div>
-          <h1 class="hero-title"><%= botName %></h1>
+      <h1 class="hero-title">mlvs.me</h1>
           <p class="hero-sub"><%= brand.subtitle %></p>
           <div class="hero-actions">
             <% if (brand.inviteUrl) { %>
@@ -71,10 +63,10 @@
           </div>
         </div>
         <div class="hero-right">
-          <div class="tile kpi-tile">
+      <div class="tile kpi-tile">
             <div class="tile-head">
               <img src="/logo.png" alt="" class="tile-logo" />
-              <div class="tile-title">Live Overview</div>
+        <div class="tile-title">Live Overview</div>
             </div>
             <div class="tile-body">
               <div class="kpi-row">

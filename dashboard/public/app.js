@@ -73,6 +73,16 @@
     if (e.key === 'Escape' && shell?.classList.contains('sidebar-open')) setSidebar(false);
   });
 
+  // Dashboard desktop sidebar toggle
+  const dashToggle = document.getElementById('dashSideToggle');
+  if (dashToggle && shell) {
+    dashToggle.addEventListener('click', () => {
+      const hidden = shell.classList.contains('sidebar-hidden');
+      if (hidden) shell.classList.remove('sidebar-hidden');
+      else shell.classList.add('sidebar-hidden');
+    });
+  }
+
   // Command explorer search and chips
   const input = document.getElementById('cmdSearch');
   const chips = document.getElementById('cmdChips');

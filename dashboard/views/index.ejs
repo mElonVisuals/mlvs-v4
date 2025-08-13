@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><%= botName %> — Dashboard</title>
+  <title>mlvs.me — Dashboard</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,65 +14,56 @@
     <script>setTimeout(()=>location.reload(), 15000)</script>
   </head>
   <body>
-    <!-- Navbar -->
-    <header class="navbar bordered">
-      <div class="container inner">
-        <a class="brand" href="/" aria-label="Home">
-          <img src="/logo.png" alt="" />
-        </a>
-        <nav class="nav-links">
-          <a class="nav-link" href="/">Home</a>
-          <a class="nav-link active" href="/dashboard">Dashboard</a>
-        </nav>
-        <div class="nav-actions">
-          <div class="nav-more">
-            <button id="navMore" class="nav-link" aria-haspopup="menu" aria-expanded="false" aria-controls="navDropdown" title="More">•••</button>
-            <div id="navDropdown" class="dropdown-menu" role="menu" aria-hidden="true">
-              <a class="dropdown-item" href="/api/status" target="_blank" rel="noopener">API</a>
-              <% if (brand.inviteUrl) { %><a class="dropdown-item" href="/invite">Invite</a><% } %>
-              <% if (brand.supportUrl) { %><a class="dropdown-item" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
-              <a class="dropdown-item" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
-            </div>
-          </div>
-        </div>
-        <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
-      </div>
-      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-        <div class="mobile-sheet card">
-          <div class="row">
-            <a class="pill" href="/">Home</a>
-            <a class="pill" href="/dashboard">Dashboard</a>
-            <a class="pill" href="/api/status" target="_blank">API</a>
-            <% if (brand.inviteUrl) { %><a class="pill" href="/invite">Invite</a><% } %>
-            <% if (brand.supportUrl) { %><a class="pill" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-            <a class="pill" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- App Shell -->
     <main class="shell">
-      <aside class="sidebar">
+      <aside class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
         <div class="side-group">
-          <div class="side-title">Overview</div>
-          <a class="side-link" href="/dashboard">Dashboard Home</a>
-          <a class="side-link" href="/">Public Homepage</a>
+          <div class="side-title">Navigation</div>
+          <a class="side-link" href="/">Home</a>
+          <a class="side-link" href="/dashboard">Dashboard</a>
         </div>
         <div class="side-group">
-          <div class="side-title">Links</div>
+          <div class="side-title">More</div>
+          <a class="side-link" href="/api/status" target="_blank" rel="noopener">API</a>
           <% if (brand.inviteUrl) { %><a class="side-link" href="/invite">Invite</a><% } %>
-          <% if (brand.supportUrl) { %><a class="side-link" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-          <a class="side-link" href="/api/status" target="_blank">Status API</a>
-          <a class="side-link" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+          <% if (brand.supportUrl) { %><a class="side-link" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
+          <a class="side-link" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
         </div>
       </aside>
+
       <section class="content">
-        <header style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" style="width:36px;height:36px;border-radius:8px" />
-          <h1 style="margin:0"><%= botName %> Dashboard</h1>
-        </header>
-        <div style="margin-bottom:12px">Status: <span class="badge <%= status === 'Online' ? 'green' : 'red' %>"><%= status %></span></div>
+        <div class="content-head" style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <button id="dashSideToggle" class="btn" aria-label="Toggle sidebar">Toggle Sidebar</button>
+        </div>
+        <section class="hero hero-advanced" aria-label="Header">
+          <div class="hero-bg" style="background-image:url('<%= brand.bannerUrl %>')"></div>
+          <div class="hero-overlay"></div>
+          <div class="hero-mark" aria-hidden="true"></div>
+          <div class="container hero-grid">
+            <div class="hero-left">
+              <div class="eyebrow">Live Dashboard</div>
+              <h1 class="hero-title">mlvs.me</h1>
+              <p class="hero-sub">Status: <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></p>
+            </div>
+            <div class="hero-right">
+              <div class="tile kpi-tile">
+                <div class="tile-head">
+                  <img src="/logo.png" alt="" class="tile-logo" />
+                  <div class="tile-title">Overview</div>
+                </div>
+                <div class="tile-body">
+                  <div class="kpi-row">
+                    <div class="kpi-item"><span>Guilds</span><strong><%= guilds %></strong></div>
+                    <div class="kpi-item"><span>Users</span><strong><%= users %></strong></div>
+                  </div>
+                  <div class="kpi-foot">
+                    <a href="/api/status" target="_blank" class="pill small">Health API</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <div class="kpi-grid">
           <div class="kpi-card">
             <div class="label">Servers</div>
@@ -103,6 +94,6 @@
         </div>
       </div>
     </footer>
-    <script src="/app.js"></script>
+  <script src="/app.js"></script>
   </body>
  </html>
