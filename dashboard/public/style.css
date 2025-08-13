@@ -230,6 +230,8 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 .dash2-title strong { font-size:16px }
 .dash2-title span { font-size:12px; color:hsl(var(--muted)) }
 .dash2-meta { display:flex; align-items:center; gap:8px }
+.guild-box { display:grid; grid-template-columns: auto 1fr; align-items:center; gap:6px; padding:0 8px }
+.guild-box select { background:hsl(var(--card)); border:1px solid hsl(var(--border)); color:inherit; padding:6px 8px; border-radius:8px; min-width:200px }
 .token-box { display:flex; gap:6px; align-items:center }
 .token-box input { background:hsl(var(--card)); border:1px solid hsl(var(--border)); color:inherit; padding:6px 8px; border-radius:8px }
 

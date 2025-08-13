@@ -22,6 +22,12 @@
         </div>
       </div>
       <div class="dash2-meta">
+        <div class="guild-box">
+          <label for="guildSelect" class="muted" style="font-size:12px">Guild</label>
+          <select id="guildSelect">
+            <option value="">All guilds</option>
+          </select>
+        </div>
         <span id="d2Status" class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
         <a class="pill small" href="/" style="margin-left:8px">Home</a>
         <a class="pill small" href="/api/status" target="_blank" style="margin-left:8px">Health</a>

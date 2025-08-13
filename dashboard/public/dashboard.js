@@ -3,10 +3,17 @@
   const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
   const tokenInput = $('#apiToken');
   const saveTokenBtn = $('#saveToken');
+  const guildSelect = $('#guildSelect');
+  const announceGuildInput = $('#announceForm')?.querySelector('[name="guildId"]');
   const store = {
     get token(){ try{ return localStorage.getItem('apiToken')||'' }catch{ return '' } },
     set token(v){ try{ localStorage.setItem('apiToken', v||'') }catch{} }
   };
+  // persist selected guild
+  Object.defineProperty(store, 'selectedGuild', {
+    get(){ try{ return localStorage.getItem('selectedGuild')||'' }catch{ return '' } },
+    set(v){ try{ localStorage.setItem('selectedGuild', v||'') }catch{} }
+  });
   if (tokenInput) tokenInput.value = store.token;
   if (saveTokenBtn) saveTokenBtn.addEventListener('click', ()=>{ store.token = tokenInput.value; saveTokenBtn.textContent='Saved'; setTimeout(()=>saveTokenBtn.textContent='Save', 900); });
 
@@ -23,6 +30,46 @@
     const r = await fetch(url, { method:'PATCH', headers, body: JSON.stringify(body||{}) });
     if (!r.ok) throw new Error('HTTP '+r.status); return r.json();
   }
+
+  // Me + guilds
+  let currentGuild = '';
+  async function loadMeAndGuilds(){
+    try{
+      const r = await fetch('/api/me', { cache:'no-store' });
+      if (!r.ok) return; const data = await r.json();
+      const guilds = data?.user?.guilds || [];
+      if (guildSelect && guilds.length){
+        // clear existing except first "All guilds"
+        [...guildSelect.querySelectorAll('option')].slice(1).forEach(o=>o.remove());
+        for(const g of guilds){
+          const opt = document.createElement('option'); opt.value = g.id; opt.textContent = g.name || g.id; guildSelect.appendChild(opt);
+        }
+        // restore persisted selection if applicable
+        const persisted = store.selectedGuild;
+        if (persisted && guilds.some(g=>g.id===persisted)){
+          guildSelect.value = persisted;
+          currentGuild = persisted;
+        }
+      }
+    }catch{}
+    // sync announce form with selection
+    syncAnnounceGuild();
+    // refresh lists with filtering
+    refreshActions();
+  }
+
+  function syncAnnounceGuild(){
+    if (!announceGuildInput) return;
+    if (currentGuild){ announceGuildInput.value = currentGuild; }
+    else if (!announceGuildInput.value){ announceGuildInput.placeholder = 'Guild ID'; }
+  }
+
+  guildSelect?.addEventListener('change', ()=>{
+    currentGuild = guildSelect.value || '';
+    store.selectedGuild = currentGuild;
+    syncAnnounceGuild();
+    refreshActions();
+  });
 
   // Status + stats
   async function refreshStatus(){
@@ -82,6 +129,8 @@
   });
   $('#announceForm')?.addEventListener('submit', async (e)=>{
     e.preventDefault(); const fd = new FormData(e.target); const body = { guildId: fd.get('guildId'), channelId: fd.get('channelId'), message: fd.get('message') };
+  // fallback to selected guild if input empty
+  if ((!body.guildId || String(body.guildId).trim()==='') && currentGuild){ body.guildId = currentGuild; }
     try{ await jpost('/api/actions/announce', body); e.target.reset(); }catch{}
   });
 
@@ -110,9 +159,13 @@
     try{
       const data = await jget('/api/actions');
       if (!actionsList) return; actionsList.innerHTML='';
-      for(const a of (data?.items||[]).slice(-30).reverse()){
+  // filter by selected guild if set
+  const src = (data?.items||[]);
+  const filtered = currentGuild ? src.filter(a=>a?.payload?.guildId===currentGuild) : src;
+  for(const a of filtered.slice(-30).reverse()){
         const li = document.createElement('li'); li.className='act-item';
-        li.innerHTML = `<span class="badge">${a.type}</span><span>${a.payload?.message||''}</span><span class="muted">${a.status}</span>`;
+    const gtag = a?.payload?.guildId ? ` <span class="muted">(${a.payload.guildId})</span>` : '';
+    li.innerHTML = `<span class="badge">${a.type}</span><span>${a.payload?.message||''}${gtag}</span><span class="muted">${a.status}</span>`;
   const btn = document.createElement('button'); btn.className='btn small'; btn.textContent='Ack done';
   btn.addEventListener('click', async ()=>{ try{ await jpatch(`/api/actions/${a.id}`, { status:'done' }); refreshActions(); }catch{} });
         li.appendChild(btn);
@@ -120,5 +173,7 @@
       }
     }catch{}
   }
+  // initial wiring
+  loadMeAndGuilds();
   refreshActions(); setInterval(refreshActions, 20000);
 })();
