@@ -693,7 +693,6 @@ main.secondary-main > section:last-child {
   align-items: center;
   justify-content: center;
 }
-}
 
 .hero-glow {
   position: absolute;
@@ -2481,9 +2480,9 @@ main.secondary-main > section:last-child {
 
 /* Legal pages styling */
 .legal-content {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: clamp(2rem, 4vw, 4rem) 0;
+  padding: clamp(2rem, 4vw, 4rem) 1.5rem;
 }
 
 .terms-article,
@@ -2492,7 +2491,8 @@ main.secondary-main > section:last-child {
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   border-radius: 24px;
-  padding: clamp(2rem, 4vw, 4rem);
+  padding: clamp(3rem, 5vw, 5rem);
+  text-align: left;
 }
 
 .terms-section,
