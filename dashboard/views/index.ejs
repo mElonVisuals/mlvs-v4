@@ -39,10 +39,7 @@
             </svg>
           </button>
         </div>
-        <section class="hero hero-advanced" aria-label="Header">
-          <div class="hero-bg" style="background-image:url('<%= brand.bannerUrl %>')"></div>
-          <div class="hero-overlay"></div>
-          <div class="hero-mark" aria-hidden="true"></div>
+  <section class="hero hero-advanced animated-surface" aria-label="Header">
           <div class="container hero-grid">
             <div class="hero-left">
               <div class="eyebrow">Live Dashboard</div>
@@ -86,11 +83,22 @@
             <div class="label">Health</div>
             <div class="value"><a href="/api/status" target="_blank">/api/status</a></div>
           </div>
+          <div class="kpi-card">
+            <div class="label">Latency</div>
+            <div class="value" id="statLatency">— ms</div>
+            <div class="sparkline-wrap" style="margin-top:8px">
+              <svg id="latencySpark" width="100%" height="36" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true">
+                <path id="latencyPath" d="" fill="none" stroke="currentColor" opacity="0.6" stroke-width="2" />
+              </svg>
+            </div>
+          </div>
         </div>
-        <div style="display:flex; align-items:center; gap:10px; margin-top:10px">
+        <div style="display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap">
           <p class="muted" style="margin:0">Auto-refresh every 15s.</p>
           <button id="refreshNow" class="btn small" style="padding:6px 10px">Refresh now</button>
           <label style="display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--muted)"><input id="autoRefreshToggle" type="checkbox" checked /> Auto-refresh</label>
+          <button id="copyJson" class="btn small" style="padding:6px 10px">Copy status JSON</button>
+          <button id="downloadJson" class="btn small" style="padding:6px 10px">Download JSON</button>
         </div>
         
         <section aria-label="Recent Activity" style="margin-top:18px" class="card">

@@ -30,10 +30,7 @@ html, body { height: 100% }
 body {
 	margin: 0;
 	color: hsl(var(--foreground));
-	background:
-		radial-gradient(1200px 800px at 20% -10%, rgba(88,101,242,.15), transparent 40%),
-		radial-gradient(800px 500px at 110% 0%, rgba(0,0,0,.25), transparent 40%),
-		hsl(var(--background));
+	background: hsl(var(--background));
 	font-family: 'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -91,12 +88,7 @@ body {
 /* Hero layout */
 .hero { position: relative; padding: 32px 0 20px; overflow: hidden }
 .hero-advanced { min-height: 72vh; display: grid; align-items: center }
-.hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: saturate(.9) brightness(.8) }
-.hero-overlay { position: absolute; inset: 0; background:
-	radial-gradient(900px 450px at 10% 0%, rgba(88,101,242,.28), transparent 60%),
-	radial-gradient(1200px 600px at 100% 0%, rgba(0,0,0,.45), transparent 50%),
-	linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.75)); }
-.hero-mark { position:absolute; inset:0; background: url('/logo.png') no-repeat right -20px bottom -20px / 220px; opacity: .06; pointer-events:none; filter: blur(0.2px) }
+.hero-bg, .hero-overlay, .hero-mark { display: none }
 .hero-grid { position: relative; display: grid; gap: 20px; grid-template-columns: 1fr; align-items: center }
 .hero-left { display: grid; gap: 14px; text-align: left }
 .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted)) }
@@ -188,6 +180,31 @@ section { padding: 28px 0 }
 .kpi-card .label { color: hsl(var(--muted)); font-size: 12px; letter-spacing: .08em; text-transform: uppercase }
 
 footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color: hsl(var(--muted)) }
+
+/* Animated background surface */
+.animated-surface::before,
+.animated-surface::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+.animated-surface::before {
+	background:
+		radial-gradient(800px 500px at 10% -10%, rgba(88,101,242,.16), transparent 40%),
+		radial-gradient(700px 450px at 110% 0%, rgba(0,0,0,.22), transparent 40%);
+	filter: saturate(.9) brightness(.95);
+	animation: shimmer 14s ease-in-out infinite alternate;
+}
+.animated-surface::after {
+	background:
+		linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.78));
+	opacity: .9;
+}
+@keyframes shimmer {
+	0% { transform: translate3d(0,0,0) scale(1); opacity: .9 }
+	100% { transform: translate3d(0, -12px, 0) scale(1.02); opacity: 1 }
+}
 
 /* Breakpoints */
 @media (min-width: 860px) {

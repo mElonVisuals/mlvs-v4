@@ -108,10 +108,19 @@
   const statUpdated = document.getElementById('statUpdated');
   const refreshBtn = document.getElementById('refreshNow');
   const autoToggle = document.getElementById('autoRefreshToggle');
+  const copyJsonBtn = document.getElementById('copyJson');
+  const downloadJsonBtn = document.getElementById('downloadJson');
+  const statLatency = document.getElementById('statLatency');
+  const latencyPath = document.getElementById('latencyPath');
+  const latencySpark = document.getElementById('latencySpark');
+  const latencyPoints = [];
   async function fetchStatus() {
     try {
+      const t0 = performance.now();
       const r = await fetch('/api/status', { cache: 'no-store' });
       const json = await r.json();
+      const t1 = performance.now();
+      const latency = Math.max(0, Math.round(t1 - t0));
       const online = !!json?.online;
       const guilds = json?.guilds ?? 0;
       const users = json?.users ?? 0;
@@ -126,6 +135,24 @@
       if (statGuilds) statGuilds.textContent = String(guilds);
       if (statUsers) statUsers.textContent = String(users);
       if (statUpdated) statUpdated.textContent = updated;
+      if (statLatency) statLatency.textContent = `${latency} ms`;
+      if (latencyPath && latencySpark) {
+        // maintain last 30 points
+        latencyPoints.push(latency);
+        while (latencyPoints.length > 30) latencyPoints.shift();
+        // normalize to 0..max
+        const max = Math.max(60, ...latencyPoints);
+        const w = 120, h = 36;
+        const step = w / Math.max(1, latencyPoints.length - 1);
+        const d = latencyPoints.map((v, i) => {
+          const x = i * step;
+          const y = h - (v / max) * h;
+          return `${i === 0 ? 'M' : 'L'}${x.toFixed(2)},${y.toFixed(2)}`;
+        }).join(' ');
+        latencyPath.setAttribute('d', d);
+      }
+      // stash last JSON for copy/download
+      fetchStatus.last = json;
     } catch {}
   }
   if (refreshBtn) refreshBtn.addEventListener('click', fetchStatus);
@@ -135,6 +162,20 @@
   if (autoToggle) {
     autoToggle.addEventListener('change', () => { autoToggle.checked ? startAuto() : stopAuto(); });
     startAuto();
+  }
+  if (copyJsonBtn) {
+    copyJsonBtn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(JSON.stringify(fetchStatus.last || {}, null, 2)); } catch {}
+    });
+  }
+  if (downloadJsonBtn) {
+    downloadJsonBtn.addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(fetchStatus.last || {}, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'status.json'; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+    });
   }
 
   // Command explorer search and chips
