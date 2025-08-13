@@ -1,28 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>mlvs.me — Next-Gen Discord Bot Experience</title>
-  <meta name="description" content="Transform your Discord server with mlvs.me - the most advanced bot platform featuring AI-powered commands, real-time analytics, and stunning modern interface." />
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="stylesheet" href="/home.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
-  
-  <style>
-    /* ==== ULTRA MODERN HOMEPAGE DESIGN - 2024+ ==== */
-    
-    :root {
-      /* Next-gen color system with semantic meanings */
-      --primary-50: #f0f9ff;
-      --primary-100: #e0f2fe;
-      --primary-200: #bae6fd;
-      --primary-300: #7dd3fc;
-      --primary-400: #38bdf8;
-      --primary-500: #0ea5e9;
-      --primary-600: #0284c7;
+  </footer>
+  <!-- Page end: cleaned -->
+</body>
+</html>
+<!-- END OF HOMEPAGE -->
+<!-- Truncated: removed duplicate legacy sections -->
       --primary-700: #0369a1;
       --primary-800: #075985;
       --primary-900: #0c4a6e;
@@ -987,12 +970,12 @@
 
   <!-- Hero Section with two-column layout placing stats panel left of feature list -->
   <section class="hero-ultra">
-    <div class="hero-container-ultra" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start;text-align:left;gap:var(--space-16);">
-      <div class="hero-left" style="display:flex;flex-direction:column;gap:var(--space-8);">
+    <div class="hero-container-ultra hero-grid-two">
+      <div class="hero-left hero-left-col">
         <div class="hero-badge-ultra"><span>Next-Generation Discord Bot Platform</span></div>
         <h1 class="hero-title-ultra" style="text-align:left;">Revolutionize Your Discord</h1>
         <p class="hero-subtitle-ultra" style="text-align:left;max-width:640px;">Experience the future of Discord bot management with our cutting-edge platform featuring advanced automation, real-time analytics, and seamless integration.</p>
-        <div class="hero-actions-ultra" style="justify-content:flex-start;">
+  <div class="hero-actions-ultra justify-start">
           <a href="/dashboard" class="btn-ultra btn-primary-ultra"><span>Launch Dashboard</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
           </a>
@@ -1003,7 +986,7 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7L12 12L22 7L12 2Z"/><path d="M2 17L12 22L22 17"/><path d="M2 12L12 17L22 12"/></svg>
           </a>
         </div>
-        <div class="hero-features-ultra" style="justify-content:flex-start;">
+  <div class="hero-features-ultra start">
           <span class="feature-pill-ultra"><span>🚀</span> Lightning Fast</span>
           <span class="feature-pill-ultra"><span>🛡️</span> Ultra Secure</span>
           <span class="feature-pill-ultra"><span>⚡</span> Real-time Analytics</span>
@@ -1011,7 +994,7 @@
           <span class="feature-pill-ultra"><span>🔧</span> No-Code Setup</span>
         </div>
       </div>
-      <div class="hero-right" style="display:flex;flex-direction:column;gap:var(--space-8);position:relative;">
+  <div class="hero-right hero-left-col" style="position:relative;">
         <div class="dashboard-preview-ultra" style="margin:0;">
           <div class="preview-header">
             <div class="preview-logo">
@@ -1027,7 +1010,7 @@
             <div class="preview-card"><div class="card-title">Response Time</div><div class="card-value">23ms</div><div class="card-chart"></div></div>
           </div>
         </div>
-        <div class="floating-stats-ultra" style="position:static;display:flex;gap:var(--space-4);transform:none;">
+  <div class="floating-stats-ultra stats-inline">
           <div class="stat-bubble-ultra"><span class="stat-number-ultra">99.9%</span><span class="stat-label-ultra">Uptime</span></div>
           <div class="stat-bubble-ultra"><span class="stat-number-ultra">24/7</span><span class="stat-label-ultra">Support</span></div>
           <div class="stat-bubble-ultra"><span class="stat-number-ultra">500K+</span><span class="stat-label-ultra">Users</span></div>
@@ -1192,28 +1175,7 @@
   <!-- Removed trailing scripts for cleanliness per user request -->
   
   <!-- (Interactive scripts removed to prevent post-footer content visibility) -->
-  
-  
-
-      function updateParallax() {
-        const scrollTop = window.pageYOffset;
-        const viewportHeight = window.innerHeight;
-        
-        floatingElements.forEach((element, index) => {
-          const rate = scrollTop * (0.2 + index * 0.1);
-          const yPos = rate * -1;
-          element.style.transform = `translate3d(0, ${yPos}px, 0)`;
-        });
-        
-        ticking = false;
-      }
-
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          requestAnimationFrame(updateParallax);
-          ticking = true;
-        }
-      });
+ 
 
       // Enhanced button hover effects with magnetic attraction
       const buttons = document.querySelectorAll('.btn-ultra');
