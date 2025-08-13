@@ -50,10 +50,21 @@
     }
   }
   if (sideToggle && shell && sidebar) {
-    // Default: closed on mobile, open on desktop via CSS; JS ensures overlay behavior
+    // Mobile: toggle off-canvas; Desktop: toggle hidden state
     sideToggle.addEventListener('click', () => {
-      const isOpen = shell.classList.contains('sidebar-open');
-      setSidebar(!isOpen);
+      const isDesktop = window.matchMedia('(min-width: 860px)').matches;
+      if (isDesktop) {
+        // toggle sidebar hidden on desktop
+        const hidden = shell.classList.contains('sidebar-hidden');
+        if (hidden) {
+          shell.classList.remove('sidebar-hidden');
+        } else {
+          shell.classList.add('sidebar-hidden');
+        }
+      } else {
+        const isOpen = shell.classList.contains('sidebar-open');
+        setSidebar(!isOpen);
+      }
     });
   }
   if (sideOverlay) sideOverlay.addEventListener('click', () => setSidebar(false));

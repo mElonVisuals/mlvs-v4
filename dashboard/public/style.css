@@ -194,12 +194,16 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 @media (min-width: 860px) {
 	.nav-links { display: flex }
 	.nav-actions { display: flex }
-	.burger { display: none }
+	.navbar .burger { display: none }
 	.explorer-toolbar { grid-template-columns: 1fr auto }
 	.hero-grid { grid-template-columns: 1.1fr .9fr }
 	.cap-grid { grid-template-columns: repeat(4,1fr) }
 	.explorer-grid { grid-template-columns: repeat(3,1fr) }
 	.cta .cta-box { grid-template-columns: 1fr auto }
+
+	/* Desktop: allow hiding the sidebar */
+	.shell.sidebar-hidden { grid-template-columns: 0 1fr }
+	.shell.sidebar-hidden .sidebar { display: none }
 }
 @media (max-width: 859.98px) {
 	.grid-3 { grid-template-columns: 1fr }
