@@ -1,55 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= botName %> Dashboard</title>
-  <link rel="stylesheet" href="/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <script>setTimeout(()=>location.reload(), 15000)</script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= botName %> — Dashboard</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>setTimeout(()=>location.reload(), 15000)</script>
   </head>
-<body>
-  <nav class="topnav">
-    <div class="brand">
-      <img src="/logo.png" alt="logo" />
-      <span><%= brand.title %></span>
-    </div>
-    <div class="links">
-      <a href="/">Home</a>
-      <a href="/dashboard">Dashboard</a>
-  <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
-  <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-      <a href="/api/status" target="_blank">API</a>
-  <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
-    </div>
-  </nav>
-
-  <div class="container">
-    <header class="dash-header">
-      <div class="title">
-        <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" />
-        <h1><%= botName %> Dashboard</h1>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar glass bordered">
+      <div class="container inner">
+        <a class="brand" href="/">
+          <img src="/logo.png" alt="logo" />
+          <span><%= brand.title %></span>
+        </a>
+        <nav class="nav-links">
+          <a href="/">Home</a>
+          <a href="/dashboard">Dashboard</a>
+          <a href="/api/status" target="_blank">API</a>
+          <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
+        </nav>
+        <div class="nav-actions">
+          <% if (brand.supportUrl) { %><a class="btn ghost" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+          <a class="btn" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+        </div>
+        <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
       </div>
-      <div class="quick">
-        <% if (brand.inviteUrl) { %><a class="btn" href="/invite">Invite</a><% } %>
-        <% if (brand.supportUrl) { %><a class="btn" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-        <a class="btn primary" href="/">Home</a>
+      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-sheet card">
+          <div class="row">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/api/status" target="_blank">API</a>
+            <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
+            <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+            <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+          </div>
+        </div>
       </div>
     </header>
-    <div class="status <%= status === 'Online' ? 'online' : 'offline' %>">
-      Status: <span><%= status %></span>
-    </div>
-    <div class="cards">
-      <div class="card"><div class="value"><%= guilds %></div><div class="label">Servers</div></div>
-      <div class="card"><div class="value"><%= users %></div><div class="label">Users</div></div>
-      <div class="card"><div class="value"><%= updatedAt ? new Date(updatedAt).toLocaleString() : '-' %></div><div class="label">Updated</div></div>
-    </div>
-  <p class="hint">Page auto-refreshes every 15s. Keep the bot running to update stats.</p>
-  </div>
-</body>
-</html>
+
+    <!-- App Shell -->
+    <main class="shell">
+      <aside class="sidebar">
+        <div class="side-group">
+          <div class="side-title">Overview</div>
+          <a class="side-link" href="/dashboard">Dashboard Home</a>
+          <a class="side-link" href="/">Public Homepage</a>
+        </div>
+        <div class="side-group">
+          <div class="side-title">Links</div>
+          <% if (brand.inviteUrl) { %><a class="side-link" href="/invite">Invite</a><% } %>
+          <% if (brand.supportUrl) { %><a class="side-link" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+          <a class="side-link" href="/api/status" target="_blank">Status API</a>
+          <a class="side-link" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+        </div>
+      </aside>
+      <section class="content">
+        <header style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <img class="logo" src="/logo.png" alt="logo" onerror="this.style.display='none'" style="width:36px;height:36px;border-radius:8px" />
+          <h1 style="margin:0"><%= botName %> Dashboard</h1>
+        </header>
+        <div style="margin-bottom:12px">Status: <span class="badge <%= status === 'Online' ? 'green' : 'red' %>"><%= status %></span></div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="value"><%= guilds %></div><div class="label">Servers</div></div>
+          <div class="kpi-card"><div class="value"><%= users %></div><div class="label">Users</div></div>
+          <div class="kpi-card"><div class="value"><%= updatedAt ? new Date(updatedAt).toLocaleString() : '-' %></div><div class="label">Updated</div></div>
+          <div class="kpi-card"><div class="value">/api/status</div><div class="label">Health</div></div>
+        </div>
+        <p class="muted" style="margin-top:10px">Auto-refresh every 15s.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>© <%= new Date().getFullYear() %> <%= brand.title %></div>
+        <div>
+          <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile nav toggle
+      const burger = document.getElementById('navBurger');
+      const menu = document.getElementById('mobileMenu');
+      if (burger && menu) {
+        burger.addEventListener('click', () => {
+          const open = menu.style.display === 'block';
+          menu.style.display = open ? 'none' : 'block';
+          menu.setAttribute('aria-hidden', String(open));
+        });
+        menu.addEventListener('click', (e) => { if (e.target === menu) menu.style.display = 'none'; });
+      }
+    </script>
+  </body>
+ </html>
