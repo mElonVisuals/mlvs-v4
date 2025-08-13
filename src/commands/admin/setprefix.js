@@ -30,6 +30,7 @@ export async function execute(message, args) {
   } catch {}
 
   process.env.PREFIX = newPrefix;
-  const embed = successEmbed(message, `${EMOJI.hammer} Prefix Updated`, `Prefix set to \`${newPrefix}\``);
+  const embed = successEmbed(message, `${EMOJI.hammer} Prefix Updated`, `Prefix set to \`${newPrefix}\``)
+    .setDescription('Usage:\n• setprefix <newPrefix>');
   return message.channel.send({ embeds: [embed] });
 }

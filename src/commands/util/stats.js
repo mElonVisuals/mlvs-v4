@@ -10,7 +10,9 @@ function formatUptime(ms){
 }
 
 export async function execute(message, args, client) {
-  const embed = baseEmbed(message).setTitle(`${EMOJI.bot} Bot Stats`);
+  const embed = baseEmbed(message)
+    .setTitle(`${EMOJI.bot} Bot Stats`)
+    .setDescription('Usage:\n• stats');
   addBotMetrics(embed, client);
   await message.channel.send({ embeds: [embed] });
 }

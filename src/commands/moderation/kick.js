@@ -16,7 +16,8 @@ export async function execute(message, args) {
   try {
     await member.kick(reason);
     const embed = successEmbed(message, `${EMOJI.kick} Member Kicked`, `${member.user.tag} was kicked.`)
-      .addFields({ name: 'Reason', value: reason });
+  .addFields({ name: 'Reason', value: reason })
+  .setDescription('Usage:\n• kick @user [reason]');
     await message.channel.send({ embeds: [embed] });
   } catch (e) {
     const embed = errorEmbed(message, 'Action Failed', 'Failed to kick member.');

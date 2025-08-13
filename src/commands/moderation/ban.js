@@ -16,7 +16,8 @@ export async function execute(message, args) {
   try {
     await member.ban({ reason });
     const embed = successEmbed(message, `${EMOJI.ban} Member Banned`, `${member.user.tag} was banned.`)
-      .addFields({ name: 'Reason', value: reason });
+  .addFields({ name: 'Reason', value: reason })
+  .setDescription('Usage:\n• ban @user [reason]');
     await message.channel.send({ embeds: [embed] });
   } catch (e) {
     const embed = errorEmbed(message, 'Action Failed', 'Failed to ban member.');

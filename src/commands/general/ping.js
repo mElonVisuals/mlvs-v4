@@ -7,7 +7,12 @@ export const usage = 'ping';
 export async function execute(message) {
   const embed = baseEmbed(message)
     .setTitle(`${EMOJI.ping} Pong!`)
-    .setDescription('Here are your latency metrics:');
+    .setDescription([
+      `${EMOJI.sparkle} Responsive and ready.`,
+      '—',
+      `Usage: 
+      • ping`,
+    ].join('\n'));
   addLatency(embed, message);
   withFooterNote(embed, 'Latency numbers are approximate');
   await message.channel.send({ embeds: [embed] });

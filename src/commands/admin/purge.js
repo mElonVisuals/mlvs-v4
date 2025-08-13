@@ -14,7 +14,8 @@ export async function execute(message, args) {
   if (isNaN(amount) || amount < 1 || amount > 100) return message.reply('Provide a number between 1 and 100.');
   try {
     await message.channel.bulkDelete(amount, true);
-    const embed = successEmbed(message, `${EMOJI.broom} Purge Complete`, `Deleted ${amount} messages.`);
+    const embed = successEmbed(message, `${EMOJI.broom} Purge Complete`, `Deleted ${amount} messages.`)
+      .setDescription('Usage:\n• purge <1-100>');
     const msg = await message.channel.send({ embeds: [embed] });
     setTimeout(() => msg.delete().catch(() => {}), 3000);
   } catch (e) {

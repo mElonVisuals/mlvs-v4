@@ -8,6 +8,6 @@ export async function execute(message) {
   const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
   const embed = baseEmbed(message)
   .setTitle(`${EMOJI.coin} Coin Flip`)
-  .setDescription(`Result: **${result}**`);
+  .setDescription(['Usage:\n• coinflip', '—', `Result: **${result}**`].join('\n'));
   await message.channel.send({ embeds: [embed] });
 }

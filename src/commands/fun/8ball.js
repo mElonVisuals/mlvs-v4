@@ -16,7 +16,8 @@ export async function execute(message, args) {
   if (!question) return message.reply('Ask a question: `!8ball <your question>`');
   const embed = baseEmbed(message)
   .setTitle(`${EMOJI.ball} Magic 8-Ball`)
-    .addFields(
+  .setDescription(['Usage:\n• 8ball <question>', '—'].join('\n'))
+  .addFields(
       { name: 'Question', value: question },
       { name: 'Answer', value: answers[Math.floor(Math.random()*answers.length)] }
     );

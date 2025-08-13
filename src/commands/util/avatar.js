@@ -8,6 +8,7 @@ export async function execute(message) {
   const user = message.mentions.users.first() || message.author;
   const embed = baseEmbed(message)
   .setTitle(`${EMOJI.user} ${user.username}'s Avatar`)
-    .setImage(user.displayAvatarURL({ size: 512 }));
+  .setDescription('Usage:\n• avatar [@user]')
+  .setImage(user.displayAvatarURL({ size: 512 }));
   await message.channel.send({ embeds: [embed] });
 }

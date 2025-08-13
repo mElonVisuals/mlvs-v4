@@ -13,6 +13,7 @@ const memes = [
 export async function execute(message) {
   const embed = baseEmbed(message)
   .setTitle(`${EMOJI.sparkle} Random Meme`)
+  .setDescription('Usage:\n• meme')
     .setImage(memes[Math.floor(Math.random()*memes.length)]);
   await message.channel.send({ embeds: [embed] });
 }
