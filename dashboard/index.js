@@ -6,6 +6,7 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as DiscordStrategy } from 'passport-discord';
 import { fileURLToPath } from 'url';
+import ejs from 'ejs';
 // global fetch exists in Node 18+. If missing, dynamically import node-fetch.
 if (typeof fetch === 'undefined') {
   const { default: nf } = await import('node-fetch');
@@ -202,7 +203,9 @@ app.get('/dashboard', ensureAuth, (req, res) => res.redirect('/dashboard/health'
 function renderDashPage(page, req, res, extra = {}) {
   const status = readStatus();
   const sessionStoreType = store ? (process.env.REDIS_URL ? 'redis' : (process.env.MONGO_URL ? 'mongo' : 'external')) : 'memory';
-  res.render(page, {
+  const viewsDir = app.get('views');
+  const pagePath = path.join(viewsDir, `${page}.ejs`);
+  const baseData = {
     page,
     brand: BRAND,
     botName: status?.bot?.tag || BRAND.title,
@@ -212,6 +215,10 @@ function renderDashPage(page, req, res, extra = {}) {
     updatedAt: status?.updatedAt || null,
     sessionStoreType,
     ...extra
+  };
+  ejs.renderFile(pagePath, baseData, (err, str) => {
+    if (err) return res.status(500).send(`Render error (${page}): ${err.message}`);
+    res.render('_dash_layout', { ...baseData, body: str });
   });
 }
 
