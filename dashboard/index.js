@@ -197,13 +197,15 @@ app.get('/', (req, res) => {
 // Dashboard (stats)
 app.get('/dashboard', ensureAuth, (req, res) => {
   const status = readStatus();
+  const sessionStoreType = store ? (process.env.REDIS_URL ? 'redis' : (process.env.MONGO_URL ? 'mongo' : 'external')) : 'memory';
   res.render('index', {
     brand: BRAND,
     botName: status?.bot?.tag || BRAND.title,
     status: status?.online ? 'Online' : 'Offline',
     guilds: status?.guilds || 0,
     users: status?.users || 0,
-    updatedAt: status?.updatedAt || null
+    updatedAt: status?.updatedAt || null,
+    sessionStoreType
   });
 });
 

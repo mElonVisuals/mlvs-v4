@@ -5,12 +5,21 @@
   const sidebar = $('#dashSidebar');
   const shell = $('#dashShell');
   const toggleBtn = $('#sidebarToggle');
+  // Persist sidebar collapsed state
+  const sideStateKey = 'dashSidebarCollapsed';
+  function applySidebarState(){
+    try { const collapsed = localStorage.getItem(sideStateKey)==='1'; sidebar?.classList.toggle('collapsed', collapsed); toggleBtn?.setAttribute('aria-expanded', collapsed? 'false':'true'); }catch{}
+  }
+  applySidebarState();
   toggleBtn?.addEventListener('click', ()=>{
+    const will = !sidebar?.classList.contains('collapsed');
     sidebar?.classList.toggle('collapsed');
+    try { localStorage.setItem(sideStateKey, will? '1':'0'); }catch{}
+    toggleBtn?.setAttribute('aria-expanded', will? 'false':'true');
   });
   // Active nav link highlight on scroll
   const navLinks = $$('.side-link[data-nav]');
-  const sections = navLinks.map(l => ({ id: l.getAttribute('data-nav'), el: $('#sec'+l.getAttribute('data-nav').charAt(0).toUpperCase()+l.getAttribute('data-nav').slice(1)) })).filter(s=>s.el);
+  const sections = navLinks.map(l => ({ id: l.getAttribute('data-nav'), el: document.getElementById('sec'+l.getAttribute('data-nav').charAt(0).toUpperCase()+l.getAttribute('data-nav').slice(1)) || document.getElementById('sec'+l.getAttribute('data-nav').replace(/^(.)/, (m,c)=>c.toUpperCase())) })).filter(s=>s.el);
   const onScroll = () => {
     const y = window.scrollY || document.documentElement.scrollTop;
     let activeId = null;
@@ -26,8 +35,9 @@
   navLinks.forEach(a=>{
     a.addEventListener('click', e=>{
       const id = a.getAttribute('data-nav');
-      const tgt = id && document.querySelector('#sec'+id.charAt(0).toUpperCase()+id.slice(1));
-      if (tgt){ e.preventDefault(); tgt.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      const targetId = 'sec'+id.charAt(0).toUpperCase()+id.slice(1);
+      const tgt = document.getElementById(targetId);
+      if (tgt){ e.preventDefault(); tgt.scrollIntoView({ behavior:'smooth', block:'start' }); history.replaceState(null,'','#'+targetId); }
     });
   });
   const tokenInput = $('#apiToken');
@@ -178,11 +188,13 @@
   }
 
   // Controls
-  $('#d2Refresh')?.addEventListener('click', ()=>{ refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity(); });
+  $('#d2Refresh')?.addEventListener('click', ()=>{ refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity(); refreshActions(); });
   if ($('#d2Auto')){ setInterval(()=>{ if ($('#d2Auto').checked){ refreshStatus(); refreshMetrics(); refreshActivity(); } }, 15000); }
 
   // initial
   refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity();
+  // derive command stats after first load
+  (async()=>{ try { const data = await jget('/api/commands'); const cmds=data?.commands||{}; const groups=Object.keys(cmds); const total=groups.reduce((a,g)=>a+cmds[g].length,0); $('#cmdGroupCount').textContent=groups.length; $('#cmdTotalCount').textContent=total; }catch{} })();
 
   // Actions list + ack
   const actionsList = document.getElementById('d2Actions');
