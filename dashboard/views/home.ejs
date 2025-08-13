@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>mlvs.me — Home</title>
+    <title>mlvs.me — Home</title>
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/home.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -40,91 +41,51 @@
         </button>
       </div>
 
-  <!-- Hero -->
-  <section class="hero hero-advanced animated-surface with-bg no-dim" aria-label="Hero">
-      <div class="hero-bg" style="background-image:url('https://cdn.discordapp.com/attachments/1335734480253747297/1405213387612225666/123.jpg?ex=689e0273&is=689cb0f3&hm=19a11ac5f1238bc1c4c722baf9a232df3a251bf952b4983ae14de9bf5ece8661&')"></div>
-      <div class="hero-overlay"></div>
-      <div class="orb a"></div>
-      <div class="orb b"></div>
-      <div class="orb c"></div>
-      <div class="container hero-grid">
-        <div class="hero-left">
-          <div class="eyebrow">Modern Discord Bot</div>
-  <h1 class="hero-title gradient-text" aria-label="mlvs dot me Discord bot">mlvs.me</h1>
-          <p class="hero-sub">Fast. Sleek. Discord-native. Control your bot with a live dashboard.</p>
-          <p class="hero-sub"><%= brand.subtitle %></p>
-          <div class="hero-actions">
-            <% if (brand.inviteUrl) { %>
-              <a class="btn primary" href="/invite">Add to Discord</a>
-            <% } %>
-            <a class="btn ghost" href="/dashboard">Open Dashboard</a>
-          </div>
-          <div class="hero-stats">
-            <div class="stat-card">
-              <div class="stat-value <%= status==='Online'?'ok':'bad' %>"><%= status %></div>
-              <div class="stat-label">Status</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value"><%= guilds %></div>
-              <div class="stat-label">Servers</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value"><%= users %></div>
-              <div class="stat-label">Users</div>
-            </div>
-          </div>
+  <!-- New Hero -->
+  <section class="home-hero" aria-label="Hero">
+    <div class="home-bg"></div>
+    <div class="container home-grid">
+      <div class="tagline">
+        <div class="eyebrow">Modern Discord Bot</div>
+        <h1 class="super-title">mlvs.me</h1>
+        <p class="lead">Fast. Sleek. Discord-native. Control your bot with a realtime dashboard & smart command suite.</p>
+        <div class="actions-row">
+          <% if (brand.inviteUrl) { %><a class="btn primary gradient" href="/invite">Add to Discord</a><% } %>
+          <a class="btn" href="/dashboard">Open Dashboard</a>
+          <a class="btn ghost" href="/api/status" target="_blank">Health JSON</a>
         </div>
-        <div class="hero-right">
-          <div class="tile" style="display:grid; gap:14px; position:relative; overflow:hidden">
-            <div style="display:flex; align-items:center; gap:10px">
-              <div style="position:relative">
-                <img src="/logo.png" alt="Bot" style="width:56px;height:56px;border-radius:18px; border:1px solid hsl(var(--border))" />
-                <span id="liveDot" data-state="<%= status %>" style="position:absolute; right:4px; bottom:4px; width:14px; height:14px; border:2px solid hsl(var(--card)); border-radius:50%; box-shadow:0 0 0 4px rgba(0,0,0,.35)"></span>
-              </div>
-              <div style="display:flex; flex-direction:column">
-                <strong style="font-size:18px; line-height:1"><%= botName %></strong>
-                <span class="muted" style="font-size:12px">Live Bot Card</span>
-              </div>
-              <div style="margin-left:auto; display:flex; gap:6px; flex-wrap:wrap">
-                <span class="badge" id="heroStatus"><%= status %></span>
-                <span class="badge" id="heroGuilds"><%= guilds %> guilds</span>
-                <span class="badge" id="heroUsers"><%= users %> users</span>
-              </div>
-            </div>
-            <div style="display:grid; gap:12px">
-              <div style="display:flex; align-items:center; gap:12px">
-                <div style="flex:1">
-                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px">
-                    <span class="muted" style="font-size:12px; letter-spacing:.08em">LATENCY</span>
-                    <span id="heroLatency" style="font-size:12px">— ms</span>
-                  </div>
-                  <svg id="heroLatencySpark" viewBox="0 0 160 40" preserveAspectRatio="none" style="width:100%; height:40px"></svg>
-                </div>
-              </div>
-              <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:10px">
-                <div style="padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)/.6); display:grid; gap:4px">
-                  <span class="muted" style="font-size:11px; letter-spacing:.08em">MEMORY</span>
-                  <strong id="heroMem" style="font-size:14px">— MB</strong>
-                </div>
-                <div style="padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)/.6); display:grid; gap:4px">
-                  <span class="muted" style="font-size:11px; letter-spacing:.08em">CPU</span>
-                  <strong id="heroCpu" style="font-size:14px">— %</strong>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap">
-              <a href="/api/status" target="_blank" class="pill small">Health JSON</a>
-              <a href="/dashboard" class="pill small">Open Dashboard</a>
-              <% if (brand.inviteUrl) { %><a href="/invite" class="pill small">Invite</a><% } %>
-            </div>
-            <canvas id="miniMetric" width="220" height="80" style="position:absolute; inset:auto -40px -40px auto; opacity:.08; pointer-events:none"></canvas>
-          </div>
-          <div class="tile note">
-            <div class="note-title">Tip</div>
-            <div class="note-body">Press Ctrl/Cmd + K to search commands instantly.</div>
-          </div>
+        <div class="kpi-inline">
+          <div class="kpi-chip"><span>Status</span><strong id="heroStatus"><%= status %></strong></div>
+          <div class="kpi-chip"><span>Guilds</span><strong id="heroGuilds"><%= guilds %></strong></div>
+          <div class="kpi-chip"><span>Users</span><strong id="heroUsers"><%= users %></strong></div>
+          <div class="kpi-chip"><span>Memory</span><strong id="heroMem">— MB</strong></div>
+          <div class="kpi-chip"><span>CPU</span><strong id="heroCpu">— %</strong></div>
         </div>
       </div>
+      <div class="bot-card">
+        <div class="bot-head">
+          <div style="position:relative">
+            <img src="/logo.png" alt="Bot" />
+            <span class="live-dot" id="liveDot" data-state="<%= status %>"></span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:4px">
+            <strong style="font-size:22px"><%= botName %></strong>
+            <span class="muted" style="font-size:13px">Live performance</span>
+          </div>
+        </div>
+        <div class="mini-metrics">
+          <div class="mini-box"><span>Latency</span><strong id="heroLatency">— ms</strong></div>
+          <div class="mini-box"><span>RAM</span><strong id="heroMemBox">— MB</strong></div>
+          <div class="mini-box"><span>CPU</span><strong id="heroCpuBox">— %</strong></div>
+          <div class="sparkline-wrap"><svg id="heroLatencySpark" viewBox="0 0 300 54" preserveAspectRatio="none"></svg></div>
+        </div>
+        <div class="refresh-bar">
+          <small class="muted">Auto refresh</small>
+          <button id="heroRefresh" class="btn small">Refresh</button>
+        </div>
+        <div class="hero-refresh-error" id="heroRefreshError" style="display:none"></div>
+      </div>
+    </div>
   </section>
   <script>
     (function(){
@@ -149,32 +110,21 @@
     })();
   </script>
 
-    <!-- Capabilities -->
-    <section class="capabilities">
-      <div class="container">
-        <div class="section-head">
-          <h2>Capabilities</h2>
-          <p class="muted">A clean, extensible foundation with a live dashboard and status API.</p>
-        </div>
-        <div class="cap-grid">
-          <div class="cap-card">
-            <h3>Command System</h3>
-            <p>Structured handlers, categories, and sleek embeds.</p>
-          </div>
-          <div class="cap-card">
-            <h3>Dashboard</h3>
-            <p>Express + EJS with live stats and a status endpoint.</p>
-          </div>
-          <div class="cap-card">
-            <h3>Branding</h3>
-            <p>Bring your own logo, banner, colors via env.</p>
-          </div>
-          <div class="cap-card">
-            <h3>Deploy</h3>
-            <p>Docker/Dokploy ready with health checks.</p>
-          </div>
-        </div>
+  <!-- Modules (Capabilities) -->
+  <section class="modules">
+    <div class="container">
+      <div class="modules-head">
+        <h2>Modules</h2>
+        <p class="muted">Expandable architecture with live observability.</p>
       </div>
+      <div class="mod-scroller">
+        <div class="mod-card"><h3>Commands</h3><p>Category-based loader & rich help output.</p></div>
+        <div class="mod-card"><h3>Dashboard</h3><p>Realtime metrics, actions, activity stream.</p></div>
+        <div class="mod-card"><h3>Branding</h3><p>Configure logos & colors via environment.</p></div>
+        <div class="mod-card"><h3>Security</h3><p>Token + OAuth2 gating & guild scoping.</p></div>
+        <div class="mod-card"><h3>Deploy</h3><p>Docker-friendly, health endpoints ready.</p></div>
+      </div>
+    </div>
   </section>
 
   <!-- Command Explorer (vanilla) -->
@@ -241,32 +191,17 @@
       </div>
   </section>
 
-  <footer class="footer">
-      <div class="container footer-row">
-        <div class="footer-left">
-          <span>© <%= new Date().getFullYear() %> <%= brand.title %></span>
-        </div>
-        <div class="footer-right">
-          <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
-        </div>
-      </div>
-    </footer>
-      </section>
+  <div class="footer-light">© <%= new Date().getFullYear() %> <%= brand.title %> • <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></div>
+    </section>
     </main>
-
     <script>
-      // Copy Usage buttons
       document.addEventListener('click', async (e) => {
         const btn = e.target.closest('.copy-btn');
         if (!btn) return;
         const usage = btn.getAttribute('data-usage');
-        try {
-          await navigator.clipboard.writeText(usage);
-          const prev = btn.textContent; btn.textContent = 'Copied!';
-          setTimeout(() => btn.textContent = prev, 1200);
-        } catch {}
+        try { await navigator.clipboard.writeText(usage); const prev = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=prev,1200); }catch{}
       });
     </script>
-    <script src="/app.js"></script>
+    <script src="/home.js"></script>
   </body>
- </html>
+</html>
