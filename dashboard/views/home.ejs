@@ -4,14 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%= botName %> — Home</title>
-    <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css" />
+  <!-- PrimeVue CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
+  <link rel="stylesheet" href="https://unpkg.com/primeflex/primeflex.css" />
+  <link rel="stylesheet" href="https://unpkg.com/primevue/resources/primevue.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/primevue/resources/themes/lara-dark-indigo/theme.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <!-- Navigation -->
-    <header class="navbar glass bordered">
+  <header class="navbar bordered">
       <div class="container inner">
         <a class="brand" href="/" aria-label="Home">
           <img src="/logo.png" alt="" />
@@ -110,19 +115,19 @@
           <p class="muted">A clean, extensible foundation with a live dashboard and status API.</p>
         </div>
         <div class="cap-grid">
-          <div class="cap-card gradient-border">
+          <div class="cap-card">
             <h3>Command System</h3>
             <p>Structured handlers, categories, and sleek embeds.</p>
           </div>
-          <div class="cap-card gradient-border">
+          <div class="cap-card">
             <h3>Dashboard</h3>
             <p>Express + EJS with live stats and a status endpoint.</p>
           </div>
-          <div class="cap-card gradient-border">
+          <div class="cap-card">
             <h3>Branding</h3>
             <p>Bring your own logo, banner, colors via env.</p>
           </div>
-          <div class="cap-card gradient-border">
+          <div class="cap-card">
             <h3>Deploy</h3>
             <p>Docker/Dokploy ready with health checks.</p>
           </div>
@@ -130,44 +135,21 @@
       </div>
     </section>
 
-    <!-- Command Explorer (reworked) -->
+    <!-- Command Explorer (PrimeVue) -->
     <section class="explorer">
       <div class="container">
         <div class="section-head">
           <h2>Command Explorer</h2>
-          <p class="muted">Search and filter by category. Click a chip to narrow down.</p>
+          <p class="muted">Search and filter by category. Use chips to select categories, click a card to copy usage.</p>
         </div>
-        <div class="explorer-toolbar">
-          <label class="input search-input">
-            <input type="search" id="cmdSearch" placeholder="Search commands..." autocomplete="off" />
-            <span class="kbd">Ctrl/Cmd + K</span>
-          </label>
-          <div class="chipbar" id="cmdChips">
-            <% Object.keys(commands||{}).forEach(function(cat){ %>
-              <span class="chip" data-cat="<%= cat %>"><%= cat.charAt(0).toUpperCase()+cat.slice(1) %></span>
-            <% }) %>
-          </div>
-        </div>
-        <div class="explorer-grid" id="cmdGrid">
-          <% Object.keys(commands||{}).forEach(function(cat){ %>
-            <% (commands[cat]||[]).forEach(function(cmd){ %>
-              <div class="explorer-card" data-cat="<%= cat %>" data-name="<%= cmd.name %>" data-desc="<%= cmd.description || '' %>">
-                <div class="ex-head">
-                  <div class="ex-name"><code><%= cmd.name %></code></div>
-                  <% if (cmd.description) { %><div class="ex-desc"><%= cmd.description %></div><% } %>
-                </div>
-                <div class="ex-foot">Usage <code><%= cmd.usage %></code></div>
-              </div>
-            <% }) %>
-          <% }) %>
-        </div>
+        <div id="pv-explorer"></div>
       </div>
     </section>
 
     <!-- Getting Started CTA -->
     <section class="cta">
       <div class="container">
-        <div class="cta-box gradient-border">
+  <div class="cta-box">
           <div class="cta-left">
             <h3>Get Started in minutes</h3>
             <ol class="steps">
@@ -200,7 +182,23 @@
       </div>
     </footer>
 
-    <!-- App JS -->
-    <script src="/app.js"></script>
+  <!-- Data for PrimeVue -->
+  <script id="cmds_data" type="application/json"><%- JSON.stringify(commands || {}) %></script>
+  <script id="nav_data" type="application/json"><%- JSON.stringify({ inviteUrl: brand.inviteUrl || '', supportUrl: brand.supportUrl || '', githubUrl: brand.githubUrl }) %></script>
+  <!-- PrimeVue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/primevue/umd/primevue.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/inputtext.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/chip.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/card.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/button.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/tag.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/toast.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/confirmdialog.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/confirmationservice.min.js"></script>
+  <script src="https://unpkg.com/primevue/umd/toastservice.min.js"></script>
+  <script src="/primevue-home.js"></script>
+  <!-- Base app behaviors -->
+  <script src="/app.js"></script>
   </body>
  </html>
