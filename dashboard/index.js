@@ -8,6 +8,13 @@ if (typeof fetch === 'undefined') {
   const { default: nf } = await import('node-fetch');
   global.fetch = nf;
 }
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+
 // basic request logger (very light) — must be after app is initialized
 app.use((req, res, next) => {
   const start = Date.now();
@@ -17,12 +24,6 @@ app.use((req, res, next) => {
   });
   next();
 });
-dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
 const PORT = process.env.PORT || 3001;
 const BRAND = {
   title: process.env.DASHBOARD_TITLE || 'Discord Bot',
