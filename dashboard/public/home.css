@@ -275,9 +275,13 @@ main.secondary-main > section:last-child {
   right: -50px;
   bottom: -50px;
   background: 
-    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(147, 51, 234, 0.08) 0%, transparent 50%),
+    /* Primary cosmic wallpaper */
+    url('https://w.wallhaven.cc/full/rq/wallhaven-rq2v8j.png') center center / cover no-repeat,
+    /* Gradient overlays for integration */
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(88, 28, 135, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(59, 130, 246, 0.20) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
+    /* Base gradient fallback */
     linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
   animation: cosmicShift 60s ease-in-out infinite alternate;
 }
@@ -293,6 +297,29 @@ main.secondary-main > section:last-child {
     radial-gradient(circle 600px at 30% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
     radial-gradient(circle 400px at 70% 20%, rgba(34, 211, 238, 0.08) 0%, transparent 50%);
   animation: cosmicPulse 45s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+/* Dark overlay for better text readability */
+.hp-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    /* Rotating conic gradient for subtle animation */
+    conic-gradient(from 0deg at 50% 50%, 
+      transparent 0deg, 
+      rgba(139, 92, 246, 0.02) 90deg, 
+      transparent 180deg, 
+      rgba(59, 130, 246, 0.02) 270deg, 
+      transparent 360deg),
+    /* Dark overlay for readability */
+    rgba(4, 8, 16, 0.40);
+  animation: cosmicRotate 120s linear infinite;
+  z-index: 2;
 }
 
 .hp-bg::after {
@@ -310,6 +337,39 @@ main.secondary-main > section:last-child {
       rgba(59, 130, 246, 0.03) 270deg, 
       transparent 360deg);
   animation: cosmicRotate 120s linear infinite;
+}
+
+/* Page-specific backgrounds */
+.docs-page .hp-bg {
+  background: 
+    url('https://w.wallhaven.cc/full/e8/wallhaven-e873x8.png') center center / cover no-repeat,
+    radial-gradient(ellipse 100% 80% at 50% 50%, rgba(245, 158, 11, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 30% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
+}
+
+.status-page .hp-bg {
+  background: 
+    url('https://w.wallhaven.cc/full/e8/wallhaven-e873x8.png') center center / cover no-repeat,
+    radial-gradient(ellipse 80% 60% at 70% 30%, rgba(34, 211, 238, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
+}
+
+.support-page .hp-bg {
+  background: 
+    url('https://w.wallhaven.cc/full/ly/wallhaven-lymvrl.jpg') center center / cover no-repeat,
+    radial-gradient(ellipse 70% 50% at 80% 20%, rgba(132, 204, 22, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 60% at 20% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
+}
+
+.terms-page .hp-bg, .privacy-page .hp-bg {
+  background: 
+    url('https://w.wallhaven.cc/full/9o/wallhaven-9o6ezd.png') center center / cover no-repeat,
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(88, 28, 135, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 50% at 30% 70%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
+    linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
 }
 
 .orb {
