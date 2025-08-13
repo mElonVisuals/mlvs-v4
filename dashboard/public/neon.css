@@ -1,0 +1,33 @@
+/* Neon cyberpunk extension layer */
+:root {
+  --neon-pink: 317 94% 56%;
+  --neon-cyan: 188 94% 62%;
+  --neon-purple: 268 92% 70%;
+  --neon-lime: 86 84% 64%;
+  --neon-amber: 32 96% 58%;
+  --neon-bg-glow: 270 68% 18%;
+}
+
+.neon-gradient { background: linear-gradient(90deg,#f472b6,#8b5cf6,#0ea5e9); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.neon-text { color: hsl(var(--neon-purple)); text-shadow: 0 0 8px hsla(var(--neon-purple)/.6), 0 0 18px hsla(var(--neon-purple)/.4); }
+.glow, .glow-sm { position:relative; }
+.glow::after, .glow-sm::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:0 0 24px 4px hsla(var(--neon-cyan)/.35),0 0 48px 12px hsla(var(--neon-pink)/.25); opacity:.9; mix-blend-mode:screen; }
+.glow-sm::after { box-shadow:0 0 14px 2px hsla(var(--neon-cyan)/.35),0 0 28px 6px hsla(var(--neon-pink)/.25); }
+
+/* Glass edge accent */
+.glass-edge { border:1px solid hsla(var(--neon-cyan)/.35)!important; box-shadow:0 0 0 1px hsla(var(--neon-cyan)/.25) inset, 0 2px 12px -2px rgba(0,0,0,.6), 0 0 24px -4px hsla(var(--neon-pink)/.55); position:relative; }
+.glass-edge::before { content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; background:linear-gradient(135deg,hsla(var(--neon-cyan)/.6),hsla(var(--neon-pink)/.4),hsla(var(--neon-purple)/.5)); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity:.55; pointer-events:none; }
+
+.neon-pill { background:linear-gradient(135deg,hsl(var(--neon-cyan)),hsl(var(--neon-pink))); box-shadow:0 4px 18px -4px hsla(var(--neon-cyan)/.55), 0 0 0 1px rgba(255,255,255,.1) inset; }
+
+/* Focus ring */
+:focus-visible { outline:2px solid hsl(var(--neon-cyan)); outline-offset:3px; }
+
+/* Animated subtle pulse */
+@media (prefers-reduced-motion: no-preference){
+  .glow, .glow-sm { animation: neonPulse 6s ease-in-out infinite; }
+  @keyframes neonPulse { 0%,100% { filter:brightness(1); } 50% { filter:brightness(1.25); } }
+}
+
+/* Utility overrides for dark neon ambience */
+body { background-image: radial-gradient(circle at 18% 22%, rgba(244,114,182,.12), transparent 55%), radial-gradient(circle at 82% 68%, rgba(14,165,233,.12), transparent 55%), radial-gradient(circle at 50% 120%, rgba(139,92,246,.18), transparent 60%); }

@@ -9,9 +9,10 @@
   <link rel="preload" href="/style.css" as="style" />
   <link rel="preload" href="/home.css" as="style" />
   <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/neon.css" />
   <link rel="stylesheet" href="/home.css" />
 </head>
-<body class="landing">
+<body class="homepage">
   <canvas class="hp-bg" aria-hidden="true"></canvas>
   <header class="site-header" role="banner">
     <a href="/" class="brand-link"><%= brand?.short || 'mlvs.me' %></a>
@@ -21,48 +22,51 @@
       <a href="/status" class="nav-link">Status</a>
       <a href="/support" class="nav-link">Support</a>
     </nav>
-    <div class="cta-wrap"><a href="/login" class="btn btn-glow">Login</a></div>
+    <div class="cta-wrap"><a href="/login" class="btn btn-primary glow-sm">Login</a></div>
   </header>
-  <main id="main" class="main" tabindex="-1">
+  <main id="main" class="homepage-main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-inner">
-        <h1 id="hero-title" class="hero-title"><span class="gradient-text"><%= brand?.short || 'mlvs.me' %></span></h1>
-        <p class="hero-tag"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
-        <div class="hero-ctas">
-          <a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
-          <a href="/docs" class="btn btn-ghost">Read Docs</a>
+      <div class="hero-inner hero-head">
+        <h1 id="hero-title" class="hero-title neon-gradient"><%= brand?.short || 'mlvs.me' %></h1>
+        <p class="hero-sub"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+        <div class="hero-actions">
+          <a href="/dashboard" class="btn btn-primary glow">Open Dashboard</a>
+          <a href="/docs" class="btn btn-secondary">Read Docs</a>
         </div>
       </div>
     </section>
-    <section class="features" id="features" aria-labelledby="feat-heading">
-      <div class="section-head"><h2 id="feat-heading" class="section-title">Features</h2></div>
-      <div class="features-grid" role="list">
-        <article class="feat" role="listitem">
-          <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4Z"/></svg></div>
+    <section class="section" id="features" aria-labelledby="feat-heading">
+      <div class="sec-head">
+        <h2 id="feat-heading" class="sec-title neon-text">Features</h2>
+        <p class="sec-intro">Focused essentials. Powerful telemetry. Robust orchestration. Everything you need to run a next‑gen Discord bot with confidence.</p>
+      </div>
+      <div class="feat-grid" role="list">
+        <article class="feat glass-edge" role="listitem" tabindex="0">
+          <div class="feat-ico neon-pill" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4Z"/></svg></div>
           <h3 class="feat-title">Resilient</h3>
           <p class="feat-desc">Self‑healing orchestration keeps your bot online.</p>
           <span class="feat-badge">Stable</span>
         </article>
-        <article class="feat" role="listitem">
-          <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z"/></svg></div>
+        <article class="feat glass-edge" role="listitem" tabindex="0">
+          <div class="feat-ico neon-pill" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z"/></svg></div>
           <h3 class="feat-title">Performance</h3>
           <p class="feat-desc">Optimized dispatch keeps responses instant at scale.</p>
           <span class="feat-badge">Fast</span>
         </article>
-        <article class="feat" role="listitem">
-          <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <article class="feat glass-edge" role="listitem" tabindex="0">
+          <div class="feat-ico neon-pill" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
           <h3 class="feat-title">Realtime Analytics</h3>
           <p class="feat-desc">Live telemetry surfaces trends & capacity signals.</p>
           <span class="feat-badge">Live</span>
         </article>
-        <article class="feat" role="listitem">
-          <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M5 12l5 5L20 7"/></svg></div>
+        <article class="feat glass-edge" role="listitem" tabindex="0">
+          <div class="feat-ico neon-pill" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M5 12l5 5L20 7"/></svg></div>
           <h3 class="feat-title">Security</h3>
           <p class="feat-desc">Scoped roles and hardened endpoints safeguard data.</p>
           <span class="feat-badge">Secure</span>
         </article>
-        <article class="feat" role="listitem">
-          <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg></div>
+        <article class="feat glass-edge" role="listitem" tabindex="0">
+          <div class="feat-ico neon-pill" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg></div>
           <h3 class="feat-title">Modularity</h3>
           <p class="feat-desc">Composable extensions let you evolve rapidly.</p>
           <span class="feat-badge">Modular</span>
@@ -84,206 +88,127 @@
   </footer>
 </body>
 </html>
-    }
-    
-    /* ==== FOOTER ==== */
-    .footer-ultra {
-      padding: var(--space-20) var(--space-4);
-      border-top: 1px solid var(--glass-border);
-      background: var(--glass-ultra);
-      backdrop-filter: blur(12px);
-    }
-    
-    .footer-content-ultra {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    
-    .footer-brand-ultra {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: var(--text-xl);
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: var(--space-4);
-    }
-    
-    .footer-description-ultra {
-      color: var(--text-muted);
-      max-width: 400px;
-      margin: 0 auto var(--space-8);
-      line-height: 1.6;
-    }
-    
-    .footer-links-ultra {
-      display: flex;
-      gap: var(--space-8);
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: var(--space-8);
-    }
-    
-    .footer-link-ultra {
-      color: var(--text-tertiary);
-      text-decoration: none;
-      transition: color var(--duration-200) var(--ease-out);
-    }
-    
-    .footer-link-ultra:hover {
-      color: var(--primary-400);
-    }
-    
-    .footer-copyright-ultra {
-      color: var(--text-muted);
-      font-size: var(--text-sm);
-    }
-    
-    /* ==== ANIMATIONS ==== */
-    @keyframes slideInFromTop {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes slideInFromBottom {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.1); }
-    }
-    
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-    
-    @keyframes floatingStat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    /* ==== RESPONSIVE DESIGN ==== */
-    @media (max-width: 768px) {
-      .hero-container-ultra {
-        gap: var(--space-12);
-      }
-      
-      .hero-actions-ultra {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .btn-ultra {
-        width: 100%;
-        max-width: 300px;
-      }
-      
-      .dashboard-preview-ultra {
-        padding: var(--space-6);
-      }
-      
-      .preview-content {
-        grid-template-columns: 1fr;
-        gap: var(--space-4);
-      }
-      
-      .floating-stats-ultra {
-        position: static;
-        flex-direction: row;
-        justify-content: center;
-        transform: none;
-        margin-top: var(--space-8);
-      }
-      
-      .features-grid-ultra {
-        grid-template-columns: 1fr;
-        gap: var(--space-6);
-      }
-      
-      .feature-card-ultra {
-        padding: var(--space-6);
-      }
-      
-      .cta-card-ultra {
-        padding: var(--space-12);
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .hero-ultra {
-        padding: var(--space-6) var(--space-4);
-      }
-      
-      .features-ultra {
-        padding: var(--space-20) var(--space-4);
-      }
-      
-      .cta-ultra {
-        padding: var(--space-20) var(--space-4);
-      }
-      
-      .footer-links-ultra {
-        flex-direction: column;
-        gap: var(--space-4);
-      }
-    }
-    
-    /* ==== ACCESSIBILITY ==== */
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-    
-    @media (prefers-contrast: high) {
-      :root {
-        --glass-border: rgba(255, 255, 255, 0.8);
-        --glass-border-strong: rgba(255, 255, 255, 1);
-        --text-primary: #ffffff;
-        --text-secondary: #f0f0f0;
-        --text-tertiary: #e0e0e0;
-      }
-    }
-    
-    /* ==== UTILITY CLASSES ==== */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-    
-    .focus-visible {
-      outline: 2px solid var(--primary-400);
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title><%= brand?.short || 'mlvs.me' %> — Discord Bot Platform</title>
+  <meta name="description" content="<%= brand?.tagline || 'Minimal next generation Discord bot platform.' %>">
+  <link rel="preload" href="/style.css" as="style" />
+  <link rel="preload" href="/home.css" as="style" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/home.css" />
+</head>
+<body class="homepage">
+  <canvas class="hp-bg" aria-hidden="true"></canvas>
+  <header class="site-header" role="banner">
+    <a href="/" class="brand-link"><%= brand?.short || 'mlvs.me' %></a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/dashboard" class="nav-link">Dashboard</a>
+      <a href="/docs" class="nav-link">Docs</a>
+      <a href="/status" class="nav-link">Status</a>
+      <a href="/support" class="nav-link">Support</a>
+    </nav>
+    <div class="cta-wrap"><a href="/login" class="btn btn-primary">Login</a></div>
+  </header>
+  <main id="main" class="homepage-main" tabindex="-1">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner hero-head">
+        <h1 id="hero-title" class="hero-title"><%= brand?.short || 'mlvs.me' %></h1>
+        <p class="hero-sub"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+        <div class="hero-actions">
+          <a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
+          <!DOCTYPE html>
+          <html lang="en" data-theme="dark">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="color-scheme" content="dark" />
+            <title><%= brand?.short || 'mlvs.me' %> — Discord Bot Platform</title>
+            <meta name="description" content="<%= brand?.tagline || 'Minimal next generation Discord bot platform.' %>">
+            <link rel="preload" href="/style.css" as="style" />
+            <link rel="preload" href="/home.css" as="style" />
+            <link rel="stylesheet" href="/style.css" />
+            <link rel="stylesheet" href="/home.css" />
+          </head>
+          <body class="homepage">
+            <canvas class="hp-bg" aria-hidden="true"></canvas>
+            <header class="site-header" role="banner">
+              <a href="/" class="brand-link"><%= brand?.short || 'mlvs.me' %></a>
+              <nav class="main-nav" aria-label="Primary">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/docs" class="nav-link">Docs</a>
+                <a href="/status" class="nav-link">Status</a>
+                <a href="/support" class="nav-link">Support</a>
+              </nav>
+              <div class="cta-wrap"><a href="/login" class="btn btn-primary">Login</a></div>
+            </header>
+            <main id="main" class="homepage-main" tabindex="-1">
+              <section class="hero" aria-labelledby="hero-title">
+                <div class="hero-inner hero-head">
+                  <h1 id="hero-title" class="hero-title"><%= brand?.short || 'mlvs.me' %></h1>
+                  <p class="hero-sub"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+                  <div class="hero-actions">
+                    <a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
+                    <a href="/docs" class="btn btn-secondary">Read Docs</a>
+                  </div>
+                </div>
+              </section>
+              <section class="section" id="features" aria-labelledby="feat-heading">
+                <div class="sec-head">
+                  <h2 id="feat-heading" class="sec-title">Features</h2>
+                  <p class="sec-intro">Focused essentials. Powerful telemetry. Robust orchestration. Everything you need to run a next‑gen Discord bot with confidence.</p>
+                </div>
+                <div class="feat-grid" role="list">
+                  <article class="feat" role="listitem" tabindex="0">
+                    <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4Z"/></svg></div>
+                    <h3 class="feat-title">Resilient</h3>
+                    <p class="feat-desc">Self‑healing orchestration keeps your bot online.</p>
+                    <span class="feat-badge">Stable</span>
+                  </article>
+                  <article class="feat" role="listitem" tabindex="0">
+                    <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z"/></svg></div>
+                    <h3 class="feat-title">Performance</h3>
+                    <p class="feat-desc">Optimized dispatch keeps responses instant at scale.</p>
+                    <span class="feat-badge">Fast</span>
+                  </article>
+                  <article class="feat" role="listitem" tabindex="0">
+                    <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                    <h3 class="feat-title">Realtime Analytics</h3>
+                    <p class="feat-desc">Live telemetry surfaces trends & capacity signals.</p>
+                    <span class="feat-badge">Live</span>
+                  </article>
+                  <article class="feat" role="listitem" tabindex="0">
+                    <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M5 12l5 5L20 7"/></svg></div>
+                    <h3 class="feat-title">Security</h3>
+                    <p class="feat-desc">Scoped roles and hardened endpoints safeguard data.</p>
+                    <span class="feat-badge">Secure</span>
+                  </article>
+                  <article class="feat" role="listitem" tabindex="0">
+                    <div class="feat-ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg></div>
+                    <h3 class="feat-title">Modularity</h3>
+                    <p class="feat-desc">Composable extensions let you evolve rapidly.</p>
+                    <span class="feat-badge">Modular</span>
+                  </article>
+                </div>
+              </section>
+            </main>
+            <footer class="footer" role="contentinfo">
+              <div class="footer-brand"><%= brand?.short || 'mlvs.me' %></div>
+              <p class="footer-desc"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
+              <nav class="footer-links" aria-label="Footer links">
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/support" class="footer-link">Support</a>
+                <a href="/docs" class="footer-link">Docs</a>
+                <a href="/status" class="footer-link">Status</a>
+              </nav>
+              <p class="legal">© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %>.</p>
+            </footer>
+          </body>
+          </html>
       outline-offset: 2px;
     }
   </style>
