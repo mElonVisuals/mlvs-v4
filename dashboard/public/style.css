@@ -50,6 +50,9 @@ body {
 	font-weight: 600; border: 1px solid hsl(var(--border));
 	background: hsl(var(--card)); color: hsl(var(--foreground));
 }
+.icon-btn { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; border:1px solid hsl(var(--border)); background:hsl(var(--card)); color:hsl(var(--foreground)); cursor:pointer }
+.icon-btn:hover { background:hsl(var(--glass)) }
+.icon-btn:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:2px }
 .btn.primary { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: transparent }
 .btn.ghost { background: transparent }
 .badge { padding: 6px 10px; border-radius: 999px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)/.7) }
@@ -209,5 +212,7 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 	.shell > .content { grid-column: 1 }
 	/* Off-canvas not required when no top navbar; sidebar remains static or use sidebar-hidden on desktop */
 	/* overlay styles are global; visibility toggled by script */
+	/* Allow hiding sidebar on mobile when shell has sidebar-hidden */
+	.shell.sidebar-hidden .sidebar { display: none }
 	.kpi-grid { grid-template-columns: 1fr 1fr }
 }

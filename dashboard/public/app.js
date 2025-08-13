@@ -30,11 +30,11 @@
     });
   }
 
-  // Collapsible left sidebar (homepage)
-  const shell = document.getElementById('homeShell');
-  const sideToggle = document.getElementById('sideToggle');
-  const sideOverlay = document.getElementById('sideOverlay');
-  const sidebar = document.querySelector('#homeShell .sidebar');
+  // Collapsible left sidebar (homepage + dashboard)
+  const shell = document.getElementById('homeShell') || document.querySelector('main.shell');
+  const sideToggle = document.getElementById('sideToggle'); // legacy optional
+  const sideOverlay = document.getElementById('sideOverlay') || (shell ? shell.querySelector('.side-overlay') : null);
+  const sidebar = shell ? shell.querySelector('.sidebar') : null;
   function setSidebar(open){
     if (!shell || !sidebar) return;
     if (open) {
@@ -80,6 +80,22 @@
       const hidden = shell.classList.contains('sidebar-hidden');
       if (hidden) shell.classList.remove('sidebar-hidden');
       else shell.classList.add('sidebar-hidden');
+    });
+  }
+
+  // Homepage sidebar toggle
+  const homeToggle = document.getElementById('homeSideToggle');
+  if (homeToggle && shell) {
+    homeToggle.addEventListener('click', () => {
+      const isDesktop = window.matchMedia('(min-width: 860px)').matches;
+      if (isDesktop) {
+        const hidden = shell.classList.contains('sidebar-hidden');
+        if (hidden) shell.classList.remove('sidebar-hidden');
+        else shell.classList.add('sidebar-hidden');
+      } else {
+        const isOpen = shell.classList.contains('sidebar-open');
+        setSidebar(!isOpen);
+      }
     });
   }
 
