@@ -14,6 +14,22 @@
     menu.addEventListener('click', (e) => { if (e.target === menu) menu.style.display = 'none'; });
   }
 
+  // Navbar dropdown (kebab menu)
+  const moreBtn = document.getElementById('navMore');
+  const dd = document.getElementById('navDropdown');
+  if (moreBtn && dd) {
+    const close = () => { dd.style.display = 'none'; moreBtn.setAttribute('aria-expanded', 'false'); dd.setAttribute('aria-hidden','true'); };
+    const open = () => { dd.style.display = 'block'; moreBtn.setAttribute('aria-expanded', 'true'); dd.setAttribute('aria-hidden','false'); };
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dd.style.display === 'block';
+      if (isOpen) close(); else open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!dd.contains(e.target) && e.target !== moreBtn) close();
+    });
+  }
+
   // Command explorer search and chips
   const input = document.getElementById('cmdSearch');
   const chips = document.getElementById('cmdChips');

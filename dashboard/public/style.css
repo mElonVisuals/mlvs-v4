@@ -42,15 +42,8 @@ body {
 /* Utilities */
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px }
 .muted { color: hsl(var(--muted)) }
-.glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
 .bordered { border: 1px solid hsl(var(--border)) }
-.card {
-	background: linear-gradient(180deg, hsl(var(--card)/.9), hsl(var(--card)/.75));
-	border: 1px solid hsl(var(--border));
-	border-radius: var(--radius);
-	box-shadow: var(--shadow);
-}
-.elevated { box-shadow: var(--elevate) }
+.card { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: var(--radius); box-shadow: 0 8px 20px rgba(0,0,0,.25) }
 .btn {
 	display: inline-flex; align-items: center; gap: 8px;
 	padding: 10px 14px; border-radius: 10px; text-decoration: none;
@@ -77,7 +70,7 @@ body {
 .nav-link.active { background:hsl(var(--glass-strong)); opacity:1 }
 
 /* Navbar */
-.navbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); background: hsl(var(--background)/.6); border-bottom: 1px solid hsl(var(--border)) }
+.navbar { position: sticky; top: 0; z-index: 50; background: hsl(var(--background)); border-bottom: 1px solid hsl(var(--border)) }
 .navbar .inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px 0 }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; justify-self: start }
 .brand img { width: 40px; height: 40px; border-radius: 10px }
@@ -97,10 +90,10 @@ body {
 .mobile-sheet .row a.primary { background: hsl(var(--primary)); border-color: transparent; color: hsl(var(--primary-foreground)) }
 
 /* Hero */
-/* Advanced hero layout */
+/* Hero layout */
 .hero { position: relative; padding: 32px 0 20px; overflow: hidden }
 .hero-advanced { min-height: 72vh; display: grid; align-items: center }
-.hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: saturate(.9) brightness(.8); transform: scale(1.02) }
+.hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: saturate(.9) brightness(.8) }
 .hero-overlay { position: absolute; inset: 0; background:
 	radial-gradient(900px 450px at 10% 0%, rgba(88,101,242,.28), transparent 60%),
 	radial-gradient(1200px 600px at 100% 0%, rgba(0,0,0,.45), transparent 50%),
@@ -118,9 +111,7 @@ body {
 .stat-value.bad { color: hsl(var(--danger)) }
 .stat-label { color: hsl(var(--muted)); font-size: 12px; letter-spacing: .08em; text-transform: uppercase }
 .hero-right { display: grid; gap: 12px }
-.glass-tile { border-radius: 16px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.92), hsl(var(--card)/.72)); box-shadow: var(--shadow); padding: 16px }
-.gradient-border { position: relative }
-.gradient-border::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: linear-gradient(90deg, rgba(88,101,242,.6), rgba(147,51,234,.45), rgba(56,189,248,.45)); filter: blur(12px); opacity: .55 }
+.tile { border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); box-shadow: 0 8px 20px rgba(0,0,0,.25); padding: 16px }
 .kpi-tile .tile-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px }
 .tile-logo { width: 28px; height: 28px; border-radius: 8px }
 .tile-title { font-weight: 700 }
@@ -141,7 +132,7 @@ section { padding: 40px 0 }
 /* Capabilities */
 .capabilities .section-head { display: grid; gap: 6px; text-align: left; margin-bottom: 14px }
 .cap-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px }
-.cap-card { padding: 16px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.92), hsl(var(--card)/.72)) }
+.cap-card { padding: 16px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)) }
 .cap-card h3 { margin: 0 0 6px }
 .cap-card p { margin: 0; color: hsl(var(--muted)) }
 
@@ -161,14 +152,20 @@ section { padding: 40px 0 }
 .chip { padding: 6px 10px; border-radius: 999px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); cursor: pointer; user-select: none; font-weight: 600 }
 .chip.active { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: transparent }
 .explorer-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px }
-.explorer-card { padding: 14px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.92), hsl(var(--card)/.74)); display: grid; gap: 6px; transition: transform .08s ease, border-color .15s ease }
+.explorer-card { padding: 14px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); display: grid; gap: 6px; transition: transform .08s ease, border-color .15s ease }
 .explorer-card:hover { transform: translateY(-1px); border-color: hsl(var(--primary)/.45) }
 .ex-head { display: grid; gap: 4px }
 .ex-name code, .ex-foot code { background: hsl(var(--glass)); padding: 2px 6px; border-radius: 6px }
 .ex-desc { color: hsl(var(--muted)); font-size: 13px }
 
 /* CTA */
-.cta .cta-box { display: grid; grid-template-columns: 1fr; gap: 14px; padding: 16px; border-radius: 16px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.92), hsl(var(--card)/.74)) }
+.cta .cta-box { display: grid; grid-template-columns: 1fr; gap: 14px; padding: 16px; border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)) }
+
+/* Dropdown */
+.nav-more { position: relative }
+.dropdown-menu { position: absolute; top: 42px; right: 0; min-width: 160px; padding: 6px; border-radius: 10px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); box-shadow: 0 8px 20px rgba(0,0,0,.35); display: none }
+.dropdown-item { display: block; padding: 8px 10px; border-radius: 8px; text-decoration: none; color: hsl(var(--foreground)) }
+.dropdown-item:hover { background: hsl(var(--glass)) }
 .cta .steps { margin: 8px 0 0 18px; padding: 0; display: grid; gap: 4px }
 .cta .cta-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap }
 

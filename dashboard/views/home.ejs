@@ -19,12 +19,17 @@
         <nav class="nav-links">
           <a class="nav-link active" href="/">Home</a>
           <a class="nav-link" href="/dashboard">Dashboard</a>
-          <a class="nav-link" href="/api/status" target="_blank" rel="noopener">API</a>
-          <% if (brand.inviteUrl) { %><a class="nav-link" href="/invite">Invite</a><% } %>
         </nav>
         <div class="nav-actions">
-          <% if (brand.supportUrl) { %><a class="nav-link" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
-          <a class="nav-link" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
+          <div class="nav-more">
+            <button id="navMore" class="nav-link" aria-haspopup="menu" aria-expanded="false" aria-controls="navDropdown" title="More">•••</button>
+            <div id="navDropdown" class="dropdown-menu" role="menu" aria-hidden="true">
+              <a class="dropdown-item" href="/api/status" target="_blank" rel="noopener">API</a>
+              <% if (brand.inviteUrl) { %><a class="dropdown-item" href="/invite">Invite</a><% } %>
+              <% if (brand.supportUrl) { %><a class="dropdown-item" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
+              <a class="dropdown-item" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
         </div>
         <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
       </div>
@@ -73,7 +78,7 @@
           </div>
         </div>
         <div class="hero-right">
-          <div class="glass-tile kpi-tile">
+          <div class="tile kpi-tile">
             <div class="tile-head">
               <img src="/logo.png" alt="" class="tile-logo" />
               <div class="tile-title">Live Overview</div>
@@ -89,7 +94,7 @@
               </div>
             </div>
           </div>
-          <div class="glass-tile gradient-border note">
+          <div class="tile note">
             <div class="note-title">Tip</div>
             <div class="note-body">Press Ctrl/Cmd + K to search commands instantly.</div>
           </div>
