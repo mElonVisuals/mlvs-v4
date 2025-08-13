@@ -55,6 +55,8 @@ function readStatus() {
 // In-memory extras for demo; replace with real data sources as needed
 let ACTIVITY = [];
 let METRICS = { latencyMs: [], memoryMB: [], cpu: [] };
+let ACTIONS = [];
+let PRESENCE = { status: 'online', activity: '' };
 
 // optional bearer token auth for mutating endpoints
 const API_TOKEN = process.env.API_TOKEN || null;
@@ -168,6 +170,33 @@ app.post('/api/activity', requireToken, (req, res) => {
 // Commands list (re-uses loadCommands)
 app.get('/api/commands', (req, res) => {
   res.json({ commands: loadCommands() });
+});
+
+// Presence endpoints
+app.get('/api/presence', (req, res) => {
+  res.json({ presence: PRESENCE });
+});
+app.post('/api/presence', requireToken, (req, res) => {
+  const { status, activity } = req.body || {};
+  if (status) PRESENCE.status = String(status);
+  if (typeof activity === 'string') PRESENCE.activity = activity;
+  ACTIVITY.push({ id: Date.now().toString(36), type: 'presence', message: `Presence set: ${PRESENCE.status} ${PRESENCE.activity||''}`.trim(), ts: new Date().toISOString() });
+  if (ACTIVITY.length > 200) ACTIVITY = ACTIVITY.slice(-200);
+  res.json({ ok: true, presence: PRESENCE });
+});
+
+// Actions queue (announce example)
+app.post('/api/actions/announce', requireToken, (req, res) => {
+  const { guildId, channelId, message } = req.body || {};
+  if (!guildId || !channelId || !message) return res.status(400).json({ error: 'Missing guildId/channelId/message' });
+  const action = { id: Date.now().toString(36), type: 'announce', payload: { guildId, channelId, message }, ts: new Date().toISOString(), status: 'queued' };
+  ACTIONS.push(action);
+  ACTIVITY.push({ id: action.id, type: 'action', message: `Queued announce to ${guildId}/${channelId}`, ts: action.ts });
+  if (ACTIVITY.length > 200) ACTIVITY = ACTIVITY.slice(-200);
+  res.json({ ok: true, action });
+});
+app.get('/api/actions', (req, res) => {
+  res.json({ items: ACTIONS });
 });
 
 // Invite redirect if available

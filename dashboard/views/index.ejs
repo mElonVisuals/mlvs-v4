@@ -3,125 +3,143 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>mlvs.me — Dashboard</title>
+    <title>mlvs.me — Control Center</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
   </head>
   <body>
-    <main class="shell sidebar-hidden">
-      <aside class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
-        <div class="side-group">
-          <div class="side-title">Navigation</div>
-          <a class="side-link" href="/">Home</a>
-          <a class="side-link" href="/dashboard">Dashboard</a>
+    <header class="dash2-header">
+      <div class="dash2-brand">
+        <img src="/logo.png" alt="" />
+        <div class="dash2-title">
+          <strong>mlvs.me</strong>
+          <span>Control Center</span>
         </div>
-        <div class="side-group">
-          <div class="side-title">More</div>
-          <a class="side-link" href="/api/status" target="_blank" rel="noopener">API</a>
-          <% if (brand.inviteUrl) { %><a class="side-link" href="/invite">Invite</a><% } %>
-          <% if (brand.supportUrl) { %><a class="side-link" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
-          <a class="side-link" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="dash2-meta">
+        <span id="d2Status" class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
+        <a class="pill small" href="/" style="margin-left:8px">Home</a>
+        <a class="pill small" href="/api/status" target="_blank" style="margin-left:8px">Health</a>
+        <div class="token-box">
+          <input id="apiToken" type="password" placeholder="API token (optional)" />
+          <button id="saveToken" class="btn small">Save</button>
         </div>
-      </aside>
+      </div>
+    </header>
 
-      <section class="content">
-        <div class="content-head" style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <button id="dashSideToggle" class="icon-btn" aria-label="Toggle sidebar" title="Toggle sidebar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="4" y="6" width="16" height="2" rx="1" fill="currentColor"/>
-              <rect x="4" y="11" width="16" height="2" rx="1" fill="currentColor"/>
-              <rect x="4" y="16" width="16" height="2" rx="1" fill="currentColor"/>
-            </svg>
-          </button>
+    <main class="dash2">
+      <section class="dash2-row stats">
+        <div class="stat">
+          <div class="stat-label">Servers</div>
+          <div class="stat-value" id="d2Guilds"><%= guilds %></div>
         </div>
-  <section class="hero hero-advanced animated-surface" aria-label="Header">
-          <div class="container hero-grid">
-            <div class="hero-left">
-              <div class="eyebrow">Live Dashboard</div>
-              <h1 class="hero-title">mlvs.me</h1>
-              <p class="hero-sub">Status: <span id="liveStatus" class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></p>
+        <div class="stat">
+          <div class="stat-label">Users</div>
+          <div class="stat-value" id="d2Users"><%= users %></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Updated</div>
+          <div class="stat-value" id="d2Updated"><%= updatedAt || '—' %></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Bot</div>
+          <div class="stat-value" id="d2Bot"><%= botName %></div>
+        </div>
+      </section>
+
+      <section class="dash2-grid">
+        <div class="panel metrics">
+          <div class="panel-head">
+            <h3>Metrics</h3>
+            <div class="panel-actions">
+              <button id="d2Refresh" class="btn small">Refresh</button>
+              <label class="muted" style="display:inline-flex; gap:6px; align-items:center"><input id="d2Auto" type="checkbox" checked /> Auto</label>
             </div>
-            <div class="hero-right">
-              <div class="tile kpi-tile">
-                <div class="tile-head">
-                  <img src="/logo.png" alt="" class="tile-logo" />
-                  <div class="tile-title">Overview</div>
-                </div>
-                <div class="tile-body">
-                  <div class="kpi-row">
-                    <div class="kpi-item"><span>Guilds</span><strong id="kpiGuilds"><%= guilds %></strong></div>
-                    <div class="kpi-item"><span>Users</span><strong id="kpiUsers"><%= users %></strong></div>
-                  </div>
-                  <div class="kpi-foot">
-                    <a href="/api/status" target="_blank" class="pill small">Health API</a>
-                  </div>
-                </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-card">
+              <div class="metric-label">Latency</div>
+              <div class="metric-value" id="mLatency">— ms</div>
+              <svg id="spLatency" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Memory</div>
+              <div class="metric-value" id="mMemory">— MB</div>
+              <svg id="spMemory" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">CPU</div>
+              <div class="metric-value" id="mCpu">— %</div>
+              <svg id="spCpu" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel commands">
+          <div class="panel-head">
+            <h3>Commands</h3>
+            <input id="cmdFilter" class="input-lite" placeholder="Filter" />
+          </div>
+          <div id="cmdList" class="cmd-list"></div>
+        </div>
+
+        <div class="panel actions">
+          <div class="panel-head"><h3>Quick Actions</h3></div>
+          <div class="actions-grid">
+            <form id="presenceForm" class="form">
+              <div class="form-row">
+                <label>Presence</label>
+                <select name="status" required>
+                  <option value="online">online</option>
+                  <option value="idle">idle</option>
+                  <option value="dnd">dnd</option>
+                  <option value="invisible">invisible</option>
+                </select>
               </div>
-            </div>
-          </div>
-        </section>
+              <div class="form-row">
+                <label>Activity</label>
+                <input name="activity" placeholder="Playing mlvs.me" />
+              </div>
+              <button class="btn" type="submit">Set Presence</button>
+            </form>
 
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="label">Servers</div>
-            <div class="value" id="statGuilds"><%= guilds %></div>
-          </div>
-          <div class="kpi-card">
-            <div class="label">Users</div>
-            <div class="value" id="statUsers"><%= users %></div>
-          </div>
-          <div class="kpi-card">
-            <div class="label">Updated</div>
-            <div class="value" id="statUpdated"><%= updatedAt || '—' %></div>
-          </div>
-          <div class="kpi-card">
-            <div class="label">Health</div>
-            <div class="value"><a href="/api/status" target="_blank">/api/status</a></div>
-          </div>
-          <div class="kpi-card">
-            <div class="label">Latency</div>
-            <div class="value" id="statLatency">— ms</div>
-            <div class="sparkline-wrap" style="margin-top:8px">
-              <svg id="latencySpark" width="100%" height="36" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true">
-                <path id="latencyPath" d="" fill="none" stroke="currentColor" opacity="0.6" stroke-width="2" />
-              </svg>
-            </div>
+            <form id="announceForm" class="form">
+              <div class="form-row">
+                <label>Guild ID</label>
+                <input name="guildId" required />
+              </div>
+              <div class="form-row">
+                <label>Channel ID</label>
+                <input name="channelId" required />
+              </div>
+              <div class="form-row">
+                <label>Message</label>
+                <textarea name="message" rows="3" required placeholder="Hello from mlvs.me"></textarea>
+              </div>
+              <button class="btn" type="submit">Queue Announcement</button>
+            </form>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap">
-          <p class="muted" style="margin:0">Auto-refresh every 15s.</p>
-          <button id="refreshNow" class="btn small" style="padding:6px 10px">Refresh now</button>
-          <label style="display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--muted)"><input id="autoRefreshToggle" type="checkbox" checked /> Auto-refresh</label>
-          <button id="copyJson" class="btn small" style="padding:6px 10px">Copy status JSON</button>
-          <button id="downloadJson" class="btn small" style="padding:6px 10px">Download JSON</button>
+
+        <div class="panel activity">
+          <div class="panel-head"><h3>Recent Activity</h3></div>
+          <ul id="d2Activity" class="activity-list"></ul>
         </div>
-        
-        <section aria-label="Recent Activity" style="margin-top:18px" class="card">
-          <div style="display:flex; align-items:center; justify-content:space-between">
-            <h3 style="margin:0">Recent Activity</h3>
-            <div style="display:flex; gap:8px; align-items:center">
-              <span class="badge">Live</span>
-            </div>
-          </div>
-          <div id="activityEmpty" class="muted" style="margin-top:8px">No recent activity available.</div>
-          <ul id="activityList" style="list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px"></ul>
-        </section>
       </section>
     </main>
 
     <footer class="footer">
       <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
         <div>© <%= new Date().getFullYear() %> <%= brand.title %></div>
-        <div>
-          <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
-        </div>
+        <div><span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></div>
       </div>
     </footer>
-  <script src="/app.js"></script>
+
+    <script src="/dashboard.js"></script>
   </body>
- </html>
+</html>
