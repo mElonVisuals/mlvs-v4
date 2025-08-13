@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,22 +10,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <!-- Navbar -->
+    <!-- Navigation -->
     <header class="navbar glass bordered">
       <div class="container inner">
-        <a class="brand" href="/">
-          <img src="/logo.png" alt="logo" />
+        <a class="brand" href="/" aria-label="Home">
+          <img src="/logo.png" alt="" />
           <span><%= brand.title %></span>
         </a>
         <nav class="nav-links">
           <a class="pill small active" href="/">Home</a>
           <a class="pill small" href="/dashboard">Dashboard</a>
-          <a class="pill small" href="/api/status" target="_blank">API</a>
+          <a class="pill small" href="/api/status" target="_blank" rel="noopener">API</a>
           <% if (brand.inviteUrl) { %><a class="pill small" href="/invite">Invite</a><% } %>
         </nav>
         <div class="nav-actions">
-          <% if (brand.supportUrl) { %><a class="pill small" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-          <a class="pill small" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+          <% if (brand.supportUrl) { %><a class="pill small" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
+          <a class="pill small" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
+          <button id="themeToggle" class="pill small" aria-label="Toggle theme">Theme</button>
         </div>
         <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
       </div>
@@ -38,60 +39,122 @@
             <% if (brand.inviteUrl) { %><a class="pill" href="/invite">Invite</a><% } %>
             <% if (brand.supportUrl) { %><a class="pill" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
             <a class="pill" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+            <button class="pill" id="themeToggleMobile" aria-label="Toggle theme">Theme</button>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero" style="background-image:url('<%= brand.homeBannerUrl || brand.bannerUrl %>')">
-      <div class="layer"></div>
-      <div class="container content">
-        <img class="logo" src="/logo.png" alt="logo" />
-        <h1><%= botName %></h1>
-        <p class="muted"><%= brand.subtitle %></p>
-        <div class="kpis">
-          <div class="kpi"><div class="value"><%= status %></div><div class="label">Status</div></div>
-          <div class="kpi"><div class="value"><%= guilds %></div><div class="label">Servers</div></div>
-          <div class="kpi"><div class="value"><%= users %></div><div class="label">Users</div></div>
+    <!-- Hero: split layout with glass cards and gradient accents -->
+    <section class="hero hero-advanced">
+      <div class="hero-bg" style="background-image:url('<%= brand.homeBannerUrl || brand.bannerUrl %>')"></div>
+      <div class="hero-overlay"></div>
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <div class="eyebrow">Modern Discord Bot</div>
+          <h1 class="hero-title"><%= botName %></h1>
+          <p class="hero-sub"><%= brand.subtitle %></p>
+          <div class="hero-actions">
+            <% if (brand.inviteUrl) { %>
+              <a class="btn primary" href="/invite">Add to Discord</a>
+            <% } %>
+            <a class="btn ghost" href="/dashboard">Open Dashboard</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-card">
+              <div class="stat-value <%= status==='Online'?'ok':'bad' %>"><%= status %></div>
+              <div class="stat-label">Status</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value"><%= guilds %></div>
+              <div class="stat-label">Servers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value"><%= users %></div>
+              <div class="stat-label">Users</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="glass-tile kpi-tile">
+            <div class="tile-head">
+              <img src="/logo.png" alt="" class="tile-logo" />
+              <div class="tile-title">Live Overview</div>
+            </div>
+            <div class="tile-body">
+              <div class="kpi-row">
+                <div class="kpi-item"><span>Guilds</span><strong><%= guilds %></strong></div>
+                <div class="kpi-item"><span>Users</span><strong><%= users %></strong></div>
+              </div>
+              <div class="kpi-foot">
+                <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
+                <a href="/api/status" target="_blank" class="pill small">Health API</a>
+              </div>
+            </div>
+          </div>
+          <div class="glass-tile gradient-border note">
+            <div class="note-title">Tip</div>
+            <div class="note-body">Press Ctrl/Cmd + K to search commands instantly.</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Features -->
-    <section>
+    <!-- Capabilities -->
+    <section class="capabilities">
       <div class="container">
-        <h2 class="section-title">Features</h2>
-        <div class="grid-3">
-          <div class="feature card"><h3>Live Stats</h3><p>Monitor servers and users in real time.</p></div>
-          <div class="feature card"><h3>Commands</h3><p>Categorized commands with modern embeds.</p></div>
-          <div class="feature card"><h3>Branding</h3><p>Bring your own logo, banner, and colors.</p></div>
-          <div class="feature card"><h3>Docker Ready</h3><p>Deploy with Docker/Dokploy in minutes.</p></div>
-          <div class="feature card"><h3>Status API</h3><p>Health endpoint for monitoring.</p></div>
-          <div class="feature card"><h3>Logging</h3><p>Readable startup banner and request logs.</p></div>
+        <div class="section-head">
+          <h2>Capabilities</h2>
+          <p class="muted">A clean, extensible foundation with a live dashboard and status API.</p>
+        </div>
+        <div class="cap-grid">
+          <div class="cap-card gradient-border">
+            <h3>Command System</h3>
+            <p>Structured handlers, categories, and sleek embeds.</p>
+          </div>
+          <div class="cap-card gradient-border">
+            <h3>Dashboard</h3>
+            <p>Express + EJS with live stats and a status endpoint.</p>
+          </div>
+          <div class="cap-card gradient-border">
+            <h3>Branding</h3>
+            <p>Bring your own logo, banner, colors via env.</p>
+          </div>
+          <div class="cap-card gradient-border">
+            <h3>Deploy</h3>
+            <p>Docker/Dokploy ready with health checks.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Command Explorer -->
-    <section class="command-explorer">
+    <!-- Command Explorer (reworked) -->
+    <section class="explorer">
       <div class="container">
-        <h2 class="section-title">Command Explorer</h2>
-        <div class="toolbar">
-          <label class="input"><input type="search" id="cmdSearch" placeholder="Search commands..." autocomplete="off" /><span class="muted">Ctrl/Cmd + K</span></label>
+        <div class="section-head">
+          <h2>Command Explorer</h2>
+          <p class="muted">Search and filter by category. Click a chip to narrow down.</p>
+        </div>
+        <div class="explorer-toolbar">
+          <label class="input search-input">
+            <input type="search" id="cmdSearch" placeholder="Search commands..." autocomplete="off" />
+            <span class="kbd">Ctrl/Cmd + K</span>
+          </label>
           <div class="chipbar" id="cmdChips">
             <% Object.keys(commands||{}).forEach(function(cat){ %>
               <span class="chip" data-cat="<%= cat %>"><%= cat.charAt(0).toUpperCase()+cat.slice(1) %></span>
             <% }) %>
           </div>
         </div>
-        <div class="commands-grid" id="cmdGrid">
+        <div class="explorer-grid" id="cmdGrid">
           <% Object.keys(commands||{}).forEach(function(cat){ %>
             <% (commands[cat]||[]).forEach(function(cmd){ %>
-              <div class="cmd-card" data-cat="<%= cat %>" data-name="<%= cmd.name %>" data-desc="<%= cmd.description || '' %>">
-                <div class="name">Command: <code><%= cmd.name %></code></div>
-                <% if (cmd.description) { %><div class="desc"><%= cmd.description %></div><% } %>
-                <div class="usage">Usage: <code><%= cmd.usage %></code></div>
+              <div class="explorer-card" data-cat="<%= cat %>" data-name="<%= cmd.name %>" data-desc="<%= cmd.description || '' %>">
+                <div class="ex-head">
+                  <div class="ex-name"><code><%= cmd.name %></code></div>
+                  <% if (cmd.description) { %><div class="ex-desc"><%= cmd.description %></div><% } %>
+                </div>
+                <div class="ex-foot">Usage <code><%= cmd.usage %></code></div>
               </div>
             <% }) %>
           <% }) %>
@@ -99,62 +162,43 @@
       </div>
     </section>
 
+    <!-- Getting Started CTA -->
+    <section class="cta">
+      <div class="container">
+        <div class="cta-box gradient-border">
+          <div class="cta-left">
+            <h3>Get Started in minutes</h3>
+            <ol class="steps">
+              <li>Invite the bot to your server.</li>
+              <li>Open the dashboard to monitor live stats.</li>
+              <li>Explore commands with the explorer above.</li>
+            </ol>
+          </div>
+          <div class="cta-actions">
+            <% if (brand.inviteUrl) { %>
+              <a class="btn primary" href="/invite">Invite</a>
+            <% } %>
+            <a class="btn" href="/dashboard">Dashboard</a>
+            <% if (brand.supportUrl) { %>
+              <a class="btn" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer class="footer">
-      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-        <div>© <%= new Date().getFullYear() %> <%= brand.title %></div>
-        <div>
+      <div class="container footer-row">
+        <div class="footer-left">
+          <span>© <%= new Date().getFullYear() %> <%= brand.title %></span>
+        </div>
+        <div class="footer-right">
           <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
         </div>
       </div>
     </footer>
 
-    <script>
-      // Mobile nav toggle
-      const burger = document.getElementById('navBurger');
-      const menu = document.getElementById('mobileMenu');
-      if (burger && menu) {
-        burger.addEventListener('click', () => {
-          const open = menu.style.display === 'block';
-          menu.style.display = open ? 'none' : 'block';
-          menu.setAttribute('aria-hidden', String(open));
-        });
-        menu.addEventListener('click', (e) => { if (e.target === menu) menu.style.display = 'none'; });
-      }
-
-      // Command search + chips
-      const input = document.getElementById('cmdSearch');
-      const chips = document.getElementById('cmdChips');
-      const grid = document.getElementById('cmdGrid');
-      let activeCat = null;
-      const applyFilter = () => {
-        const q = (input?.value || '').toLowerCase().trim();
-        [...grid.children].forEach(card => {
-          const name = card.dataset.name?.toLowerCase() || '';
-          const desc = card.dataset.desc?.toLowerCase() || '';
-          const cat = card.dataset.cat;
-          const matchesText = !q || name.includes(q) || desc.includes(q);
-          const matchesCat = !activeCat || cat === activeCat;
-          card.style.display = matchesText && matchesCat ? '' : 'none';
-        });
-      };
-      input?.addEventListener('input', applyFilter);
-      chips?.addEventListener('click', (e) => {
-        const el = e.target.closest('.chip');
-        if (!el) return;
-        if (activeCat === el.dataset.cat) { activeCat = null; el.classList.remove('active'); }
-        else {
-          activeCat = el.dataset.cat;
-          [...chips.children].forEach(c => c.classList.remove('active'));
-          el.classList.add('active');
-        }
-        applyFilter();
-      });
-      // Cmd+K to focus search
-      window.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-          e.preventDefault(); input?.focus();
-        }
-      });
-    </script>
+    <!-- App JS -->
+    <script src="/app.js"></script>
   </body>
  </html>
