@@ -1,0 +1,116 @@
+/* Minimal Animation System - Loading Only */
+
+/* ==== LOADING ANIMATION ONLY ==== */
+
+/* Smooth page transitions - minimal */
+* {
+  transition: none;
+}
+
+/* Basic fade in for page load */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Simple page load animation */
+body {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Remove all hover effects and animations */
+.hero-badge,
+.hero-title,
+.hero-sub,
+.hero-desc,
+.hero-actions,
+.hero-meta,
+.feature-card,
+.modern-feature-card,
+.footer,
+.stat-badge,
+.title-word {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Remove all hover effects */
+.btn:hover,
+.btn-nav:hover,
+.glass-morphism:hover,
+.feature-card:hover,
+.modern-feature-card:hover,
+.social-link:hover,
+.footer-link:hover,
+.brand-logo:hover {
+  transform: none !important;
+  animation: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove interactive classes */
+.interactive-hover:hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Remove all keyframe animations except basic ones */
+.gradient-text {
+  background: linear-gradient(90deg, 
+    hsl(var(--neon-cyan)), 
+    hsl(var(--neon-purple))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: none !important;
+}
+
+/* Remove orb animations */
+.orb {
+  animation: none !important;
+}
+
+.orb::before {
+  animation: none !important;
+}
+
+/* Remove badge animations */
+.badge-dot {
+  animation: none !important;
+}
+
+.badge-dot.online {
+  animation: none !important;
+}
+
+/* Remove button animations */
+.btn-dashboard {
+  animation: none !important;
+}
+
+/* Remove scroll animation classes */
+.animate-on-scroll,
+.animate-slide-left,
+.animate-slide-right {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Remove legal page animations */
+.legal-content,
+.terms-article,
+.privacy-article,
+.terms-section,
+.privacy-section {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
