@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath, pathToFileURL } from 'url';
+import { logger } from './utils/logger.js';
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,10 +44,22 @@ function writeStatus(extra = {}) {
   } catch {}
 }
 
-client.on('ready', () => writeStatus());
+client.on('ready', () => {
+  writeStatus();
+  logger.banner('Discord Bot Started', [
+    `User: ${client.user.tag}`,
+    `Prefix: ${process.env.PREFIX || '!'}`,
+    `Guilds: ${client.guilds.cache.size}`
+  ]);
+});
 client.on('guildCreate', () => writeStatus());
 client.on('guildDelete', () => writeStatus());
 client.on('guildMemberAdd', () => writeStatus());
 client.on('guildMemberRemove', () => writeStatus());
 
-client.login(process.env.DISCORD_TOKEN);
+logger.start('core', 'Logging in to Discord...');
+client.login(process.env.DISCORD_TOKEN).then(() => {
+  logger.success('core', 'Logged in.');
+}).catch(err => {
+  logger.error('core', `Login failed: ${err?.message || err}`);
+});

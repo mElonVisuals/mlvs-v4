@@ -78,5 +78,5 @@ app.get('/logo.png', async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Dashboard running at http://localhost:${PORT}`);
+  console.log(`[dash] Listening on 0.0.0.0:${PORT} (health: /api/status)`);
 });

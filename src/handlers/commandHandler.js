@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
+import { logger } from '../utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,7 +22,7 @@ export default async function loadCommands(client) {
         client.commands.set(cmd.name, cmd);
         client.categories.get('general').push({ name: cmd.name, description: cmd.description || '', usage: cmd.usage || '' });
       } catch (e) {
-        console.error(`[commands] Failed to load ${file}:`, e.message);
+  logger.error('commands', `Failed to load ${file}: ${e.message}`);
       }
     }
   }
@@ -42,11 +43,11 @@ export default async function loadCommands(client) {
         client.commands.set(cmd.name, cmd);
         client.categories.get(cat).push({ name: cmd.name, description: cmd.description || '', usage: cmd.usage || '' });
       } catch (e) {
-        console.error(`[commands] Failed to load ${cat}/${file}:`, e.message);
+    logger.error('commands', `Failed to load ${cat}/${file}: ${e.message}`);
       }
     }
   }
 
   const total = client.commands.size;
-  console.log(`[commands] Loaded ${total} commands across ${client.categories.size} categories.`);
+  logger.success('commands', `Loaded ${total} commands across ${client.categories.size} categories.`);
 }
