@@ -3,13 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>mlvs.me — Dashboard</title>
-  <link rel="stylesheet" href="/style.css" />
-  <!-- PrimeVue CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
-  <link rel="stylesheet" href="https://unpkg.com/primeflex/primeflex.css" />
-  <link rel="stylesheet" href="https://unpkg.com/primevue/resources/primevue.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/primevue/resources/themes/lara-dark-indigo/theme.css" />
+    <title><%= botName %> — Dashboard</title>
+    <link rel="stylesheet" href="/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -19,13 +14,40 @@
     <script>setTimeout(()=>location.reload(), 15000)</script>
   </head>
   <body>
-  <!-- Navbar -->
-  <header class="navbar bordered">
+    <!-- Navbar -->
+    <header class="navbar bordered">
       <div class="container inner">
         <a class="brand" href="/" aria-label="Home">
           <img src="/logo.png" alt="" />
         </a>
-    <div id="pv-nav" style="justify-self:center; width:100%"></div>
+        <nav class="nav-links">
+          <a class="nav-link" href="/">Home</a>
+          <a class="nav-link active" href="/dashboard">Dashboard</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="nav-more">
+            <button id="navMore" class="nav-link" aria-haspopup="menu" aria-expanded="false" aria-controls="navDropdown" title="More">•••</button>
+            <div id="navDropdown" class="dropdown-menu" role="menu" aria-hidden="true">
+              <a class="dropdown-item" href="/api/status" target="_blank" rel="noopener">API</a>
+              <% if (brand.inviteUrl) { %><a class="dropdown-item" href="/invite">Invite</a><% } %>
+              <% if (brand.supportUrl) { %><a class="dropdown-item" href="<%= brand.supportUrl %>" target="_blank" rel="noopener">Support</a><% } %>
+              <a class="dropdown-item" href="<%= brand.githubUrl %>" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </div>
+        <button class="burger" id="navBurger" aria-label="Open menu"><span></span></button>
+      </div>
+      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-sheet card">
+          <div class="row">
+            <a class="pill" href="/">Home</a>
+            <a class="pill" href="/dashboard">Dashboard</a>
+            <a class="pill" href="/api/status" target="_blank">API</a>
+            <% if (brand.inviteUrl) { %><a class="pill" href="/invite">Invite</a><% } %>
+            <% if (brand.supportUrl) { %><a class="pill" href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+            <a class="pill" href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -51,8 +73,25 @@
           <h1 style="margin:0"><%= botName %> Dashboard</h1>
         </header>
         <div style="margin-bottom:12px">Status: <span class="badge <%= status === 'Online' ? 'green' : 'red' %>"><%= status %></span></div>
-  <div id="pv-cards" class="p-mt-2"></div>
-  <p class="muted" style="margin-top:10px">Auto-refresh every 15s.</p>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="label">Servers</div>
+            <div class="value"><%= guilds %></div>
+          </div>
+          <div class="kpi-card">
+            <div class="label">Users</div>
+            <div class="value"><%= users %></div>
+          </div>
+          <div class="kpi-card">
+            <div class="label">Updated</div>
+            <div class="value"><%= updatedAt || '—' %></div>
+          </div>
+          <div class="kpi-card">
+            <div class="label">Health</div>
+            <div class="value"><a href="/api/status" target="_blank">/api/status</a></div>
+          </div>
+        </div>
+        <p class="muted" style="margin-top:10px">Auto-refresh every 15s.</p>
       </section>
     </main>
 
@@ -64,25 +103,6 @@
         </div>
       </div>
     </footer>
-  <script id="nav_data" type="application/json"><%- JSON.stringify({
-    active: 'dashboard',
-    inviteUrl: brand.inviteUrl || '',
-    supportUrl: brand.supportUrl || '',
-    githubUrl: brand.githubUrl
-  }) %></script>
-  <script id="dash_data" type="application/json"><%- JSON.stringify({
-    status: status,
-    guilds: Number(guilds || 0),
-    users: Number(users || 0),
-    updatedAt: updatedAt || ''
-  }) %></script>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <script src="https://unpkg.com/primevue/umd/primevue.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/menubar.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/button.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/card.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/tag.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/badge.min.js"></script>
-  <script src="/primevue-app.js"></script>
+    <script src="/app.js"></script>
   </body>
  </html>

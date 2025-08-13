@@ -4,19 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%= botName %> — Home</title>
-  <link rel="stylesheet" href="/style.css" />
-  <!-- PrimeVue CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
-  <link rel="stylesheet" href="https://unpkg.com/primeflex/primeflex.css" />
-  <link rel="stylesheet" href="https://unpkg.com/primevue/resources/primevue.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/primevue/resources/themes/lara-dark-indigo/theme.css" />
+    <link rel="stylesheet" href="/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <!-- Navigation -->
-  <header class="navbar bordered">
+    <header class="navbar bordered">
       <div class="container inner">
         <a class="brand" href="/" aria-label="Home">
           <img src="/logo.png" alt="" />
@@ -52,13 +47,13 @@
       </div>
     </header>
 
-    <!-- Hero: split layout with glass cards and gradient accents -->
-  <section class="hero hero-advanced" aria-label="Hero">
+    <!-- Hero -->
+    <section class="hero hero-advanced" aria-label="Hero">
       <div class="hero-bg" style="background-image:url('<%= brand.homeBannerUrl || brand.bannerUrl %>')"></div>
       <div class="hero-overlay"></div>
       <div class="container hero-grid">
         <div class="hero-left">
-      <div class="eyebrow">Modern Discord Bot</div>
+          <div class="eyebrow">Modern Discord Bot</div>
           <h1 class="hero-title"><%= botName %></h1>
           <p class="hero-sub"><%= brand.subtitle %></p>
           <div class="hero-actions">
@@ -135,21 +130,49 @@
       </div>
     </section>
 
-    <!-- Command Explorer (PrimeVue) -->
+    <!-- Command Explorer (vanilla) -->
     <section class="explorer">
       <div class="container">
         <div class="section-head">
           <h2>Command Explorer</h2>
-          <p class="muted">Search and filter by category. Use chips to select categories, click a card to copy usage.</p>
+          <p class="muted">Search and filter by category. Click a card to copy usage.</p>
         </div>
-        <div id="pv-explorer"></div>
+        <div class="explorer-toolbar">
+          <div class="input">
+            <input id="cmdSearch" type="text" placeholder="Search commands..." aria-label="Search commands" />
+            <span class="kbd">Ctrl/Cmd + K</span>
+          </div>
+          <div id="cmdChips" class="chipbar">
+            <% const cats = Object.keys(commands||{}); for (const cat of cats) { %>
+              <span class="chip" data-cat="<%= cat %>"><%= cat %></span>
+            <% } %>
+          </div>
+        </div>
+        <div id="cmdGrid" class="explorer-grid">
+          <% for (const [cat, items] of Object.entries(commands||{})) { %>
+            <% for (const it of items) { %>
+              <div class="explorer-card" data-name="<%= it.name %>" data-desc="<%= it.description || '' %>" data-cat="<%= cat %>">
+                <div class="ex-head">
+                  <div class="ex-name">Command: <code><%= it.name %></code></div>
+                </div>
+                <% if (it.description) { %>
+                  <div class="ex-desc"><%= it.description %></div>
+                <% } %>
+                <div class="ex-foot">Usage: <code><%= it.usage %></code></div>
+                <div style="display:flex; gap:8px; margin-top:6px">
+                  <button class="btn small copy-btn" data-usage="<%= it.usage %>">Copy Usage</button>
+                </div>
+              </div>
+            <% } %>
+          <% } %>
+        </div>
       </div>
     </section>
 
     <!-- Getting Started CTA -->
     <section class="cta">
       <div class="container">
-  <div class="cta-box">
+        <div class="cta-box">
           <div class="cta-left">
             <h3>Get Started in minutes</h3>
             <ol class="steps">
@@ -182,23 +205,19 @@
       </div>
     </footer>
 
-  <!-- Data for PrimeVue -->
-  <script id="cmds_data" type="application/json"><%- JSON.stringify(commands || {}) %></script>
-  <script id="nav_data" type="application/json"><%- JSON.stringify({ inviteUrl: brand.inviteUrl || '', supportUrl: brand.supportUrl || '', githubUrl: brand.githubUrl }) %></script>
-  <!-- PrimeVue -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <script src="https://unpkg.com/primevue/umd/primevue.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/inputtext.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/chip.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/card.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/button.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/tag.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/toast.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/confirmdialog.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/confirmationservice.min.js"></script>
-  <script src="https://unpkg.com/primevue/umd/toastservice.min.js"></script>
-  <script src="/primevue-home.js"></script>
-  <!-- Base app behaviors -->
-  <script src="/app.js"></script>
+    <script>
+      // Copy Usage buttons
+      document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.copy-btn');
+        if (!btn) return;
+        const usage = btn.getAttribute('data-usage');
+        try {
+          await navigator.clipboard.writeText(usage);
+          const prev = btn.textContent; btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = prev, 1200);
+        } catch {}
+      });
+    </script>
+    <script src="/app.js"></script>
   </body>
  </html>
