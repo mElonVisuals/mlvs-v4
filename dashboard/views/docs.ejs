@@ -40,24 +40,19 @@
   
   <header class="site-header glass-morphism" role="banner">
     <a href="/" class="brand-link">
-      <span class="brand-icon">⚡</span>
-      <%= brand?.short || 'mlvs.me' %>
+      <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&" alt="mlvs.me" class="brand-logo">
     </a>
     <nav class="main-nav" aria-label="Primary">
-      <a href="/docs" class="nav-link active">
-        <span class="nav-icon">📚</span>
+      <a href="/docs" class="nav-link btn-nav active">
         Docs
       </a>
-      <a href="/status" class="nav-link">
-        <span class="nav-icon">🟢</span>
+      <a href="/status" class="nav-link btn-nav">
         Status
       </a>
-      <a href="/support" class="nav-link">
-        <span class="nav-icon">💬</span>
+      <a href="/support" class="nav-link btn-nav">
         Support
       </a>
       <a href="/dashboard" class="btn btn-dashboard">
-        <span class="btn-icon">📊</span>
         Dashboard
         <span class="btn-arrow">→</span>
       </a>
@@ -334,7 +329,7 @@
       <div class="footer-content">
         <div class="footer-brand-section">
           <div class="footer-brand">
-            <span class="brand-icon">⚡</span>
+            <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&" alt="mlvs.me" class="footer-logo">
             <%= brand?.short || 'mlvs.me' %>
           </div>
           <p class="footer-desc"><%= brand?.tagline || 'Minimal next generation Discord bot platform.' %></p>
@@ -351,13 +346,13 @@
         <p class="legal">© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %>. All rights reserved.</p>
         <div class="footer-social">
           <a href="#" class="social-link glass-morphism" aria-label="Discord">
-            <span>💬</span>
+            Discord
           </a>
           <a href="#" class="social-link glass-morphism" aria-label="GitHub">
-            <span>⭐</span>
+            GitHub
           </a>
           <a href="#" class="social-link glass-morphism" aria-label="Twitter">
-            <span>🐦</span>
+            Twitter
           </a>
         </div>
       </div>

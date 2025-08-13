@@ -1968,10 +1968,6 @@ main.homepage-main {
   border-color: rgba(139, 92, 246, 0.4);
 }
 
-.btn-dashboard .btn-icon {
-  font-size: 1.1em;
-}
-
 .btn-dashboard .btn-arrow {
   transition: transform 0.3s ease;
   font-weight: bold;
@@ -1979,6 +1975,101 @@ main.homepage-main {
 
 .btn-dashboard:hover .btn-arrow {
   transform: translateX(4px);
+}
+
+/* ==== BRAND LOGO STYLES ==== */
+.brand-logo {
+  height: 32px;
+  width: auto;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3));
+  transition: all 0.3s ease;
+}
+
+.brand-logo:hover {
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.5));
+  transform: scale(1.05);
+}
+
+.footer-logo {
+  height: 20px;
+  width: auto;
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.2));
+  margin-right: 8px;
+  transition: all 0.3s ease;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==== NAVIGATION BUTTON STYLES ==== */
+.btn-nav {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-nav:hover::before {
+  left: 100%;
+}
+
+.btn-nav:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.btn-nav.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.4);
+  color: white;
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ==== ENHANCED SOCIAL LINKS ==== */
+.social-link {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-1px);
 }
 
 /* ==== SUPPORT PAGE SPECIFIC STYLES ==== */
