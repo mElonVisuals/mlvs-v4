@@ -80,7 +80,7 @@ body {
 .navbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); background: hsl(var(--background)/.6); border-bottom: 1px solid hsl(var(--border)) }
 .navbar .inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px 0 }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; justify-self: start }
-.brand img { width: 30px; height: 30px; border-radius: 8px }
+.brand img { width: 40px; height: 40px; border-radius: 10px }
 .nav-links { display: none; gap: 6px; justify-content: center }
 .nav-links a { text-decoration: none }
 .nav-actions { display: none; gap: 6px; justify-content: end; justify-self: end }
@@ -105,29 +105,29 @@ body {
 	radial-gradient(900px 450px at 10% 0%, rgba(88,101,242,.28), transparent 60%),
 	radial-gradient(1200px 600px at 100% 0%, rgba(0,0,0,.45), transparent 50%),
 	linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.75)); }
-.hero-grid { position: relative; display: grid; gap: 18px; grid-template-columns: 1fr; align-items: center }
+.hero-grid { position: relative; display: grid; gap: 20px; grid-template-columns: 1fr; align-items: center }
 .hero-left { display: grid; gap: 14px; text-align: left }
 .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted)) }
 .hero-title { margin: 0; font-size: clamp(32px, 7vw, 56px); line-height: 1.05 }
 .hero-sub { margin: 0; font-size: clamp(14px, 2.2vw, 18px); color: hsl(var(--muted)) }
-.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px }
-.hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 12px }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px }
+.hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 14px }
 .stat-card { padding: 14px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.9), hsl(var(--card)/.7)); text-align: center }
 .stat-value { font-size: clamp(18px, 4vw, 26px); font-weight: 800 }
 .stat-value.ok { color: hsl(var(--success)) }
 .stat-value.bad { color: hsl(var(--danger)) }
 .stat-label { color: hsl(var(--muted)); font-size: 12px; letter-spacing: .08em; text-transform: uppercase }
 .hero-right { display: grid; gap: 12px }
-.glass-tile { border-radius: 16px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.92), hsl(var(--card)/.72)); box-shadow: var(--shadow); padding: 14px }
+.glass-tile { border-radius: 16px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.92), hsl(var(--card)/.72)); box-shadow: var(--shadow); padding: 16px }
 .gradient-border { position: relative }
 .gradient-border::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: linear-gradient(90deg, rgba(88,101,242,.6), rgba(147,51,234,.45), rgba(56,189,248,.45)); filter: blur(12px); opacity: .55 }
 .kpi-tile .tile-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px }
 .tile-logo { width: 28px; height: 28px; border-radius: 8px }
 .tile-title { font-weight: 700 }
-.kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
-.kpi-item { padding: 10px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)) ; display: flex; align-items: center; justify-content: space-between }
+.kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.kpi-item { padding: 12px; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); display: flex; align-items: center; justify-content: space-between }
 .kpi-item span { color: hsl(var(--muted)); font-size: 13px }
-.kpi-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px }
+.kpi-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px }
 .note { padding: 14px }
 .note-title { font-weight: 700; margin-bottom: 6px }
 .note-body { color: hsl(var(--muted)) }

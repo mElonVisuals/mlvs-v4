@@ -15,7 +15,6 @@
       <div class="container inner">
         <a class="brand" href="/" aria-label="Home">
           <img src="/logo.png" alt="" />
-          <span><%= brand.title %></span>
         </a>
         <nav class="nav-links">
           <a class="nav-link active" href="/">Home</a>
@@ -44,12 +43,12 @@
     </header>
 
     <!-- Hero: split layout with glass cards and gradient accents -->
-    <section class="hero hero-advanced">
+  <section class="hero hero-advanced" aria-label="Hero">
       <div class="hero-bg" style="background-image:url('<%= brand.homeBannerUrl || brand.bannerUrl %>')"></div>
       <div class="hero-overlay"></div>
       <div class="container hero-grid">
         <div class="hero-left">
-          <div class="eyebrow">Modern Discord Bot</div>
+      <div class="eyebrow">Modern Discord Bot</div>
           <h1 class="hero-title"><%= botName %></h1>
           <p class="hero-sub"><%= brand.subtitle %></p>
           <div class="hero-actions">
