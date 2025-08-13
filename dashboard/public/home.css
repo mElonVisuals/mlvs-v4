@@ -90,17 +90,30 @@ main.secondary-main {
   pointer-events: none;
 }
 
+/* Solid backdrop to prevent any light breaks */
+.cosmic-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--clr-bg));
+  z-index: -1;
+}
+
 .hp-bg {
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(circle at 20% 25%, hsla(var(--neon-cyan), 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 80% 15%, hsla(var(--neon-purple), 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 60% 75%, hsla(var(--neon-pink), 0.1) 0%, transparent 35%),
-    radial-gradient(circle at 30% 85%, hsla(var(--neon-lime), 0.08) 0%, transparent 30%),
-    radial-gradient(circle at 90% 60%, hsla(var(--neon-amber), 0.07) 0%, transparent 25%),
-    radial-gradient(circle at 10% 60%, hsla(var(--neon-cyan), 0.06) 0%, transparent 35%),
-    radial-gradient(circle at 70% 30%, hsla(var(--neon-purple), 0.05) 0%, transparent 40%);
+    /* Primary solid gradient base */
+    linear-gradient(135deg, 
+      hsl(var(--clr-bg)) 0%, 
+      hsl(var(--clr-bg-alt)) 100%
+    ),
+    /* Colorful overlay effects - more subtle for consistent coverage */
+    radial-gradient(circle at 20% 25%, hsla(var(--neon-cyan), 0.06) 0%, hsla(var(--neon-cyan), 0.01) 70%),
+    radial-gradient(circle at 80% 15%, hsla(var(--neon-purple), 0.05) 0%, hsla(var(--neon-purple), 0.01) 65%),
+    radial-gradient(circle at 60% 75%, hsla(var(--neon-pink), 0.04) 0%, hsla(var(--neon-pink), 0.01) 60%),
+    radial-gradient(circle at 30% 85%, hsla(var(--neon-lime), 0.03) 0%, hsla(var(--neon-lime), 0.005) 55%),
+    radial-gradient(circle at 90% 60%, hsla(var(--neon-amber), 0.03) 0%, hsla(var(--neon-amber), 0.005) 50%);
   animation: cosmicShift 60s ease-in-out infinite alternate;
 }
 
@@ -115,7 +128,7 @@ main.secondary-main {
 .orb-1 {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, hsla(var(--neon-cyan), 0.4), transparent 60%);
+  background: radial-gradient(circle, hsla(var(--neon-cyan), 0.2), transparent 70%);
   top: -5%;
   left: 5%;
   animation-delay: 0s;
@@ -125,7 +138,7 @@ main.secondary-main {
 .orb-2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, hsla(var(--neon-purple), 0.35), transparent 65%);
+  background: radial-gradient(circle, hsla(var(--neon-purple), 0.18), transparent 75%);
   top: 50%;
   right: -5%;
   animation-delay: -8s;
@@ -135,7 +148,7 @@ main.secondary-main {
 .orb-3 {
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, hsla(var(--neon-pink), 0.4), transparent 60%);
+  background: radial-gradient(circle, hsla(var(--neon-pink), 0.2), transparent 70%);
   bottom: -10%;
   left: 50%;
   animation-delay: -15s;
@@ -145,7 +158,7 @@ main.secondary-main {
 .orb-4 {
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, hsla(var(--neon-lime), 0.25), transparent 70%);
+  background: radial-gradient(circle, hsla(var(--neon-lime), 0.15), transparent 80%);
   top: 20%;
   right: 25%;
   animation-delay: -20s;
@@ -155,7 +168,7 @@ main.secondary-main {
 .orb-5 {
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, hsla(var(--neon-amber), 0.3), transparent 65%);
+  background: radial-gradient(circle, hsla(var(--neon-amber), 0.16), transparent 75%);
   bottom: 25%;
   left: 15%;
   animation-delay: -12s;
