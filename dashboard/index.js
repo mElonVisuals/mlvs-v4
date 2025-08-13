@@ -8,7 +8,7 @@ if (typeof fetch === 'undefined') {
   const { default: nf } = await import('node-fetch');
   global.fetch = nf;
 }
-// basic request logger (very light)
+// basic request logger (very light) — must be after app is initialized
 app.use((req, res, next) => {
   const start = Date.now();
   res.on('finish', () => {
