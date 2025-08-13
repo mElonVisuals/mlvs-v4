@@ -1,4 +1,4 @@
-import { baseEmbed, EMOJI } from '../../utils/embed.js';
+import { baseEmbed } from '../../utils/embed.js';
 
 export const name = '8ball';
 export const description = 'Ask the magic 8ball a question.';
@@ -14,8 +14,8 @@ const answers = [
 export async function execute(message, args) {
   const question = args.join(' ');
   if (!question) return message.reply('Ask a question: `!8ball <your question>`');
-  const embed = baseEmbed(message)
-  .setTitle(`${EMOJI.ball} Magic 8-Ball`)
+  const embed = baseEmbed(message, { banner: false })
+    .setTitle('Magic 8-Ball')
   .setDescription(['Usage:\n• 8ball <question>', '—'].join('\n'))
   .addFields(
       { name: 'Question', value: question },

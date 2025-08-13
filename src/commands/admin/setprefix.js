@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { PermissionsBitField } from 'discord.js';
-import { errorEmbed, successEmbed, EMOJI } from '../../utils/embed.js';
+import { errorEmbed, successEmbed } from '../../utils/embed.js';
 
 export const name = 'setprefix';
 export const description = 'Set a new command prefix (admin).';
@@ -30,7 +30,7 @@ export async function execute(message, args) {
   } catch {}
 
   process.env.PREFIX = newPrefix;
-  const embed = successEmbed(message, `${EMOJI.hammer} Prefix Updated`, `Prefix set to \`${newPrefix}\``)
+  const embed = successEmbed(message, 'Prefix Updated', `Prefix set to \`${newPrefix}\``)
     .setDescription('Usage:\n• setprefix <newPrefix>');
   return message.channel.send({ embeds: [embed] });
 }

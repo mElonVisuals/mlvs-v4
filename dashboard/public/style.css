@@ -1,11 +1,14 @@
 :root{--bg:#0f1115;--panel:#151823;--muted:#8b90a1;--text:#e8ecf1;--brand:#5865f2;--good:#43b581;--bad:#f04747}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Arial,sans-serif;margin:0;padding:0}
-.topnav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(21,24,35,.8);backdrop-filter:blur(6px);position:sticky;top:0;border-bottom:1px solid rgba(255,255,255,.06)}
+.topnav{position:sticky;top:0;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.topnav .nav-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;background:rgba(21,24,35,.5);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 14px}
 .topnav .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text)}
 .topnav .brand img{width:28px;height:28px;border-radius:8px}
-.topnav .links a{color:var(--muted);text-decoration:none;margin-left:16px;font-weight:600}
-.topnav .links a:hover{color:var(--text)}
+.topnav .links{display:flex;gap:14px;justify-content:center}
+.topnav .links a{color:var(--text);text-decoration:none;font-weight:600;opacity:.9}
+.topnav .links a:hover{opacity:1}
+.topnav .right{display:flex;gap:12px;justify-content:flex-end}
 
 .hero{height:360px;background-size:cover;background-position:center;position:relative;display:flex;align-items:center;justify-content:center}
 .hero .overlay{background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.6));inset:0;position:absolute;display:flex;align-items:center;justify-content:center}

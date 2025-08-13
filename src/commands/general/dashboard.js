@@ -1,4 +1,4 @@
-import { baseEmbed, EMOJI, linkify, addBotMetrics } from '../../utils/embed.js';
+import { baseEmbed, linkify, addBotMetrics } from '../../utils/embed.js';
 import fetch from 'node-fetch';
 
 export const name = 'dashboard';
@@ -18,11 +18,11 @@ export async function execute(message, args, client) {
     status = 'Offline';
   }
   const embed = baseEmbed(message)
-    .setTitle(`${EMOJI.dashboard} Dashboard`)
+    .setTitle('Dashboard')
     .setDescription(`Manage the bot here: ${linkify('Open Dashboard', url)}`)
     .addFields(
-      { name: `${status === 'Online' ? EMOJI.success : EMOJI.error} Status`, value: status, inline: true },
-      { name: `${EMOJI.server} Servers`, value: `${client.guilds.cache.size}`, inline: true }
+      { name: 'Status', value: status, inline: true },
+      { name: 'Servers', value: `${client.guilds.cache.size}`, inline: true }
     );
   addBotMetrics(embed, client);
   await message.channel.send({ embeds: [embed] });

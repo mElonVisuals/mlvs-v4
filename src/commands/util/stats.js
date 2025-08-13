@@ -1,4 +1,4 @@
-import { baseEmbed, addBotMetrics, EMOJI } from '../../utils/embed.js';
+import { baseEmbed, addBotMetrics } from '../../utils/embed.js';
 
 export const name = 'stats';
 export const description = 'Show bot statistics.';
@@ -11,7 +11,7 @@ function formatUptime(ms){
 
 export async function execute(message, args, client) {
   const embed = baseEmbed(message)
-    .setTitle(`${EMOJI.bot} Bot Stats`)
+    .setTitle('Bot Stats')
     .setDescription('Usage:\n• stats');
   addBotMetrics(embed, client);
   await message.channel.send({ embeds: [embed] });

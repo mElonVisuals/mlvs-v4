@@ -1,11 +1,11 @@
-import { baseEmbed, addLatency, EMOJI, withFooterNote } from '../utils/embed.js';
+import { baseEmbed, addLatency, withFooterNote } from '../utils/embed.js';
 
 export const data = { name: 'ping' };
 
 export async function execute(message) {
-  const embed = baseEmbed(message)
-    .setTitle(`${EMOJI.ping} Pong!`)
-    .setDescription('Here are your latency metrics:');
+  const embed = baseEmbed(message, { banner: false })
+    .setTitle('Pong')
+    .setDescription('Latency metrics for this shard and message.');
   addLatency(embed, message);
   withFooterNote(embed, 'Latency numbers are approximate');
   await message.channel.send({ embeds: [embed] });

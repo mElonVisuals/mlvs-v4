@@ -10,18 +10,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <nav class="topnav">
-    <div class="brand">
-      <img src="/logo.png" alt="logo" />
-      <span><%= brand.title %></span>
-    </div>
-    <div class="links">
-      <a href="/">Home</a>
-      <a href="/dashboard">Dashboard</a>
-      <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
-      <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
-      <a href="/api/status" target="_blank">API</a>
-      <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+  <nav class="topnav glass">
+    <div class="nav-inner">
+      <div class="brand">
+        <img src="/logo.png" alt="logo" />
+        <span><%= brand.title %></span>
+      </div>
+      <div class="links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/api/status" target="_blank">API</a>
+        <% if (brand.inviteUrl) { %><a href="/invite">Invite</a><% } %>
+      </div>
+      <div class="right">
+        <% if (brand.supportUrl) { %><a href="<%= brand.supportUrl %>" target="_blank">Support</a><% } %>
+        <a href="<%= brand.githubUrl %>" target="_blank">GitHub</a>
+      </div>
     </div>
   </nav>
 
@@ -36,15 +40,7 @@
           <span class="badge">Servers: <%= guilds %></span>
           <span class="badge">Users: <%= users %></span>
         </div>
-        <div class="cta">
-          <a class="btn primary" href="/dashboard">Open Dashboard</a>
-          <% if (brand.inviteUrl) { %>
-            <a class="btn" href="/invite">Invite Bot</a>
-          <% } %>
-          <% if (brand.supportUrl) { %>
-            <a class="btn" href="<%= brand.supportUrl %>" target="_blank">Join Support</a>
-          <% } %>
-        </div>
+        
       </div>
     </div>
   </header>
@@ -122,10 +118,7 @@
           </div>
         <% }) %>
       </div>
-      <div class="cmd-cta">
-        <a class="btn primary" href="/dashboard">Open Dashboard</a>
-        <% if (brand.inviteUrl) { %><a class="btn" href="/invite">Invite Bot</a><% } %>
-      </div>
+      
     </div>
   </section>
 

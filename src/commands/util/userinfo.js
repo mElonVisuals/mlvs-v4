@@ -1,4 +1,4 @@
-import { baseEmbed, addUserFields, EMOJI } from '../../utils/embed.js';
+import { baseEmbed, addUserFields } from '../../utils/embed.js';
 
 export const name = 'userinfo';
 export const description = 'Show information about a user.';
@@ -8,7 +8,7 @@ export async function execute(message) {
   const user = message.mentions.users.first() || message.author;
   const member = await message.guild.members.fetch(user.id).catch(() => null);
   const embed = baseEmbed(message)
-    .setTitle(`${EMOJI.user} ${user.username}`)
+    .setTitle(`${user.username}`)
     .setDescription('Usage:\n• userinfo [@user]');
   addUserFields(embed, user, member);
   if (member?.joinedTimestamp) {

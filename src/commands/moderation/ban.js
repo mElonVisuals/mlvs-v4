@@ -1,5 +1,5 @@
 import { PermissionsBitField } from 'discord.js';
-import { baseEmbed, EMOJI, errorEmbed, successEmbed } from '../../utils/embed.js';
+import { errorEmbed, successEmbed } from '../../utils/embed.js';
 
 export const name = 'ban';
 export const description = 'Ban a member.';
@@ -15,7 +15,7 @@ export async function execute(message, args) {
   const reason = args.slice(1).join(' ') || 'No reason provided';
   try {
     await member.ban({ reason });
-    const embed = successEmbed(message, `${EMOJI.ban} Member Banned`, `${member.user.tag} was banned.`)
+  const embed = successEmbed(message, 'Member Banned', `${member.user.tag} was banned.`)
   .addFields({ name: 'Reason', value: reason })
   .setDescription('Usage:\n• ban @user [reason]');
     await message.channel.send({ embeds: [embed] });
