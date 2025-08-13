@@ -20,6 +20,8 @@
 	--shadow: 0 10px 30px rgba(0,0,0,.35);
 	--glass: rgba(255,255,255,.06);
 	--glass-strong: rgba(255,255,255,.12);
+	--glass-blur: 18px;
+	--glass-border: 1px solid rgba(255,255,255,.09);
 	--elevate: 0 8px 24px rgba(0,0,0,.35);
 }
 
@@ -31,6 +33,10 @@ body {
 	margin: 0;
 	color: hsl(var(--foreground));
 	background: hsl(var(--background));
+	background-image:
+		radial-gradient(circle at 15% 20%, rgba(88,101,242,.18), transparent 60%),
+		radial-gradient(circle at 85% 70%, rgba(139,92,246,.14), transparent 55%),
+		radial-gradient(circle at 50% 110%, rgba(16,185,129,.18), transparent 60%);
 	font-family: 'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -257,6 +263,39 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 .dash2-grid { display:grid; grid-template-columns: 1.35fr .65fr; gap:18px }
 .panel { padding:14px; border:1px solid hsl(var(--border)); border-radius:14px; background:hsl(var(--card)) }
 .panel { padding:16px; border:1px solid hsl(var(--border)); border-radius:16px; background:hsl(var(--card)) }
+.glass { background: rgba(255,255,255,.06); backdrop-filter: blur(var(--glass-blur)) saturate(1.4); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4); border: var(--glass-border); box-shadow: 0 4px 24px -4px rgba(0,0,0,.55); }
+.glass-lite { background: rgba(255,255,255,.04); backdrop-filter: blur(calc(var(--glass-blur) * .6)) saturate(1.2); -webkit-backdrop-filter: blur(calc(var(--glass-blur) * .6)) saturate(1.2); border: var(--glass-border); }
+.dash-body { min-height:100vh; display:flex; }
+.dash-shell { flex:1; display:flex; }
+.dash-sidebar { width:250px; background:rgba(20,22,26,.55); backdrop-filter: blur(var(--glass-blur)) saturate(1.5); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5); border-right:var(--glass-border); display:flex; flex-direction:column; gap:24px; padding:18px 16px; position:sticky; top:0; height:100vh; box-shadow: 8px 0 24px -12px rgba(0,0,0,.55); transition: width .25s ease; }
+.dash-sidebar.collapsed { width:76px; }
+.dash-sidebar .brand-mini { display:flex; gap:10px; align-items:center; font-weight:700; font-size:15px; }
+.dash-sidebar .brand-mini img { width:34px; height:34px; border-radius:10px; }
+.side-top { display:flex; align-items:center; justify-content:space-between; }
+#sidebarToggle { font-size:16px; }
+.side-nav { flex:1; overflow:auto; }
+.side-section { margin-bottom:26px; }
+.side-label { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:hsl(var(--muted)); margin:0 0 10px; font-weight:600; }
+.side-link { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; text-decoration:none; color:hsl(var(--foreground)); font-weight:500; font-size:14px; line-height:1; position:relative; transition: background .15s, color .15s; }
+.side-link:hover { background:rgba(255,255,255,.08); }
+.side-link.active { background:linear-gradient(135deg, rgba(88,101,242,.35), rgba(139,92,246,.28)); color:#fff; }
+.side-footer { display:grid; gap:14px; }
+.dash-main { flex:1; display:flex; flex-direction:column; min-width:0; }
+.panel-grid-2 { display:grid; grid-template-columns: 1.15fr .85fr; gap:20px; }
+.dash-footer { margin-top:40px; }
+
+@media (max-width: 1100px){
+	.panel-grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px){
+	.dash-sidebar { position:fixed; left:0; top:0; bottom:0; z-index:50; transform:translateX(0); width:240px; }
+	.dash-sidebar.collapsed { transform:translateX(-105%); width:240px; }
+	.dash-main { margin-left:0; }
+}
+
+/* Animations for value updates */
+.flash-update { animation: flashFade 1s ease; }
+@keyframes flashFade { 0%{ background:rgba(255,255,255,.18) } 100%{ background:transparent } }
 .panel-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px }
 .panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px }
 .panel-head h3 { margin:0 }

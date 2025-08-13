@@ -1,6 +1,35 @@
 (function(){
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+  // Sidebar interactivity
+  const sidebar = $('#dashSidebar');
+  const shell = $('#dashShell');
+  const toggleBtn = $('#sidebarToggle');
+  toggleBtn?.addEventListener('click', ()=>{
+    sidebar?.classList.toggle('collapsed');
+  });
+  // Active nav link highlight on scroll
+  const navLinks = $$('.side-link[data-nav]');
+  const sections = navLinks.map(l => ({ id: l.getAttribute('data-nav'), el: $('#sec'+l.getAttribute('data-nav').charAt(0).toUpperCase()+l.getAttribute('data-nav').slice(1)) })).filter(s=>s.el);
+  const onScroll = () => {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    let activeId = null;
+    for (const s of sections){
+      const r = s.el.getBoundingClientRect();
+      const top = r.top + y - 120; // offset
+      if (y >= top) activeId = s.id; else break;
+    }
+    navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('data-nav')===activeId));
+  };
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+  navLinks.forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.getAttribute('data-nav');
+      const tgt = id && document.querySelector('#sec'+id.charAt(0).toUpperCase()+id.slice(1));
+      if (tgt){ e.preventDefault(); tgt.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    });
+  });
   const tokenInput = $('#apiToken');
   const saveTokenBtn = $('#saveToken');
   const guildSelect = $('#guildSelect');
@@ -80,6 +109,7 @@
       $('#d2Users').textContent = String(s?.users ?? 0);
       $('#d2Updated').textContent = s?.updatedAt || '—';
       $('#d2Bot').textContent = s?.bot?.tag || '—';
+  ['d2Guilds','d2Users','d2Updated'].forEach(id=>{ const el = $('#'+id); if(el){ el.classList.add('flash-update'); setTimeout(()=>el.classList.remove('flash-update'),900); }});
     }catch{}
   }
 
@@ -96,6 +126,7 @@
       renderSpark(sLatency, lat.slice(-80));
       renderSpark(sMemory, mem.slice(-80));
       renderSpark(sCpu, cpu.slice(-80));
+  ['mLatency','mMemory','mCpu'].forEach(id=>{ const el = $('#'+id); if(el){ el.classList.add('flash-update'); setTimeout(()=>el.classList.remove('flash-update'),900); }});
     }catch{}
   }
 

@@ -54,104 +54,170 @@
             <div class="metric-value" id="mLatency">— ms</div>
             <svg id="spLatency" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
           </div>
-          <div class="metric-card">
-            <div class="metric-label">Memory</div>
-            <div class="metric-value" id="mMemory">— MB</div>
-            <svg id="spMemory" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">CPU</div>
-            <div class="metric-value" id="mCpu">— %</div>
-            <svg id="spCpu" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
-          </div>
-        </div>
-        <div class="dash2-row stats" style="margin-top:14px">
-          <div class="stat">
-            <div class="stat-label">Servers</div>
-            <div class="stat-value" id="d2Guilds"><%= guilds %></div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Users</div>
-            <div class="stat-value" id="d2Users"><%= users %></div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Updated</div>
-            <div class="stat-value" id="d2Updated"><%= updatedAt || '—' %></div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Bot</div>
-            <div class="stat-value" id="d2Bot"><%= botName %></div>
-          </div>
-        </div>
-      </section>
+          <body class="dash-body">
+            <div class="dash-shell" id="dashShell">
+              <aside class="dash-sidebar" id="dashSidebar" aria-label="Primary">
+                <div class="side-top">
+                  <button id="sidebarToggle" class="icon-btn ghost" aria-label="Toggle sidebar" title="Toggle sidebar">☰</button>
+                  <div class="brand-mini">
+                    <img src="/logo.png" alt="logo" />
+                    <span class="brand-text">mlvs.me</span>
+                  </div>
+                </div>
+                <nav class="side-nav">
+                  <div class="side-section">
+                    <div class="side-label">Overview</div>
+                    <a href="#secHealth" class="side-link" data-nav="health">Health</a>
+                    <a href="#secActivity" class="side-link" data-nav="activity">Activity</a>
+                    <a href="#secActions" class="side-link" data-nav="actions">Actions</a>
+                    <a href="#secCommands" class="side-link" data-nav="commands">Commands</a>
+                  </div>
+                  <div class="side-section">
+                    <div class="side-label">Links</div>
+                    <a href="/" class="side-link">Home</a>
+                    <a href="/api/status" target="_blank" class="side-link">Raw Status</a>
+                    <% if (brand.githubUrl) { %><a href="<%= brand.githubUrl %>" target="_blank" class="side-link">GitHub</a><% } %>
+                    <% if (brand.inviteUrl) { %><a href="<%= brand.inviteUrl %>" target="_blank" class="side-link">Invite</a><% } %>
+                  </div>
+                </nav>
+                <div class="side-footer">
+                  <div class="guild-box">
+                    <label for="guildSelect" class="muted" style="font-size:11px">Guild</label>
+                    <select id="guildSelect">
+                      <option value="">All guilds</option>
+                    </select>
+                  </div>
+                  <div class="token-box">
+                    <input id="apiToken" type="password" placeholder="API token" />
+                    <button id="saveToken" class="btn small">Save</button>
+                  </div>
+                </div>
+              </aside>
+              <div class="dash-main">
+                <header class="dash2-header glass">
+                  <div class="dash2-brand">
+                    <img src="/logo.png" alt="" />
+                    <div class="dash2-title">
+                      <strong>mlvs.me</strong>
+                      <span>Control Center</span>
+                    </div>
+                  </div>
+                  <div class="dash2-meta">
+                    <span id="d2Status" class="badge <%= status==='Online'? 'green':'red' %>"><%= status %></span>
+                    <button id="d2Refresh" class="btn small">Refresh</button>
+                    <label class="muted auto-box"><input id="d2Auto" type="checkbox" checked /> Auto</label>
+                  </div>
+                </header>
+                <main id="dashContent" class="dash2">
+                  <!-- Health -->
+                  <section id="secHealth" class="panel glass" style="margin-bottom:22px">
+                    <div class="panel-head">
+                      <h3>Health</h3>
+                      <div class="panel-actions">
+                        <span class="badge" style="font-size:11px">Bot: <span id="d2Bot"><%= botName %></span></span>
+                      </div>
+                    </div>
+                    <div class="metric-row">
+                      <div class="metric-card glass-lite">
+                        <div class="metric-label">Latency</div>
+                        <div class="metric-value" id="mLatency">— ms</div>
+                        <svg id="spLatency" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+                      </div>
+                      <div class="metric-card glass-lite">
+                        <div class="metric-label">Memory</div>
+                        <div class="metric-value" id="mMemory">— MB</div>
+                        <svg id="spMemory" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+                      </div>
+                      <div class="metric-card glass-lite">
+                        <div class="metric-label">CPU</div>
+                        <div class="metric-value" id="mCpu">— %</div>
+                        <svg id="spCpu" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+                      </div>
+                    </div>
+                    <div class="dash2-row stats" style="margin-top:18px">
+                      <div class="stat glass-lite">
+                        <div class="stat-label">Servers</div>
+                        <div class="stat-value" id="d2Guilds"><%= guilds %></div>
+                      </div>
+                      <div class="stat glass-lite">
+                        <div class="stat-label">Users</div>
+                        <div class="stat-value" id="d2Users"><%= users %></div>
+                      </div>
+                      <div class="stat glass-lite">
+                        <div class="stat-label">Updated</div>
+                        <div class="stat-value" id="d2Updated"><%= updatedAt || '—' %></div>
+                      </div>
+                      <div class="stat glass-lite">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" style="font-size:16px"><span class="badge <%= status==='Online'? 'green':'red' %>"><%= status %></span></div>
+                      </div>
+                    </div>
+                  </section>
 
-      <!-- Two-column: Activity and Quick Actions -->
-      <section class="dash2-grid">
-        <div class="panel activity">
-          <div class="panel-head"><h3>Recent Activity</h3></div>
-          <ul id="d2Activity" class="activity-list"></ul>
-        </div>
+                  <div class="panel-grid-2">
+                    <!-- Activity -->
+                    <section id="secActivity" class="panel glass">
+                      <div class="panel-head"><h3>Recent Activity</h3></div>
+                      <ul id="d2Activity" class="activity-list"></ul>
+                    </section>
+                    <!-- Actions -->
+                    <section id="secActions" class="panel glass">
+                      <div class="panel-head"><h3>Quick Actions</h3></div>
+                      <div class="actions-grid">
+                        <form id="presenceForm" class="form">
+                          <div class="form-row">
+                            <label>Presence</label>
+                            <select name="status" required>
+                              <option value="online">online</option>
+                              <option value="idle">idle</option>
+                              <option value="dnd">dnd</option>
+                              <option value="invisible">invisible</option>
+                            </select>
+                          </div>
+                          <div class="form-row">
+                            <label>Activity</label>
+                            <input name="activity" placeholder="Playing mlvs.me" />
+                          </div>
+                          <button class="btn" type="submit">Set Presence</button>
+                        </form>
+                        <form id="announceForm" class="form">
+                          <div class="form-row">
+                            <label>Guild ID</label>
+                            <input name="guildId" required />
+                          </div>
+                          <div class="form-row">
+                            <label>Channel ID</label>
+                            <input name="channelId" required />
+                          </div>
+                          <div class="form-row">
+                            <label>Message</label>
+                            <textarea name="message" rows="3" required placeholder="Hello from mlvs.me"></textarea>
+                          </div>
+                          <button class="btn" type="submit">Queue Announcement</button>
+                        </form>
+                      </div>
+                      <div class="panel-sub">
+                        <h4 style="margin:10px 0 6px">Queued Actions</h4>
+                        <ul id="d2Actions" class="actions-list"></ul>
+                      </div>
+                    </section>
+                  </div>
 
-        <div class="panel actions">
-          <div class="panel-head"><h3>Quick Actions</h3></div>
-          <div class="actions-grid">
-            <form id="presenceForm" class="form">
-              <div class="form-row">
-                <label>Presence</label>
-                <select name="status" required>
-                  <option value="online">online</option>
-                  <option value="idle">idle</option>
-                  <option value="dnd">dnd</option>
-                  <option value="invisible">invisible</option>
-                </select>
+                  <!-- Commands -->
+                    <section id="secCommands" class="panel glass" style="margin-top:22px">
+                      <div class="panel-head">
+                        <h3>Commands</h3>
+                        <input id="cmdFilter" class="input-lite" placeholder="Filter" />
+                      </div>
+                      <div id="cmdList" class="cmd-list"></div>
+                    </section>
+
+                  <footer class="footer dash-footer">
+                    <div class="footer-row">
+                      <div>© <%= new Date().getFullYear() %> <%= brand.title %></div>
+                      <div><span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></div>
+                    </div>
+                  </footer>
+                </main>
               </div>
-              <div class="form-row">
-                <label>Activity</label>
-                <input name="activity" placeholder="Playing mlvs.me" />
-              </div>
-              <button class="btn" type="submit">Set Presence</button>
-            </form>
-
-            <form id="announceForm" class="form">
-              <div class="form-row">
-                <label>Guild ID</label>
-                <input name="guildId" required />
-              </div>
-              <div class="form-row">
-                <label>Channel ID</label>
-                <input name="channelId" required />
-              </div>
-              <div class="form-row">
-                <label>Message</label>
-                <textarea name="message" rows="3" required placeholder="Hello from mlvs.me"></textarea>
-              </div>
-              <button class="btn" type="submit">Queue Announcement</button>
-            </form>
-          </div>
-          <div class="panel-sub">
-            <h4 style="margin:10px 0 6px">Queued Actions</h4>
-            <ul id="d2Actions" class="actions-list"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Commands full-width -->
-      <section class="panel" style="margin-top:18px">
-        <div class="panel-head">
-          <h3>Commands</h3>
-          <input id="cmdFilter" class="input-lite" placeholder="Filter" />
-        </div>
-        <div id="cmdList" class="cmd-list"></div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-        <div>© <%= new Date().getFullYear() %> <%= brand.title %></div>
-        <div><span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span></div>
-      </div>
-    </footer>
-
-    <script src="/dashboard.js"></script>
-  </body>
-</html>
+            </div>
