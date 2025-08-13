@@ -1,6 +1,19 @@
 :root{--bg:#0f1115;--panel:#151823;--muted:#8b90a1;--text:#e8ecf1;--brand:#5865f2;--good:#43b581;--bad:#f04747}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Arial,sans-serif;margin:0;padding:0}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(21,24,35,.8);backdrop-filter:blur(6px);position:sticky;top:0;border-bottom:1px solid rgba(255,255,255,.06)}
+.topnav .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text)}
+.topnav .brand img{width:28px;height:28px;border-radius:8px}
+.topnav .links a{color:var(--muted);text-decoration:none;margin-left:16px;font-weight:600}
+.topnav .links a:hover{color:var(--text)}
+
+.hero{height:280px;background-size:cover;background-position:center;position:relative;display:flex;align-items:center;justify-content:center}
+.hero .overlay{background:linear-gradient(180deg,rgba(0,0,0,.4),rgba(0,0,0,.55));inset:0;position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.hero h1{margin:0;font-size:36px}
+.hero .subtitle{color:var(--muted)}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.08)}
+.btn.primary{background:var(--brand);color:#fff;border-color:transparent}
+
 .container{max-width:840px;margin:60px auto;background:linear-gradient(180deg,#171a24, #141824);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.35);padding:28px 28px}
 header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .logo{width:36px;height:36px;border-radius:8px}
@@ -13,3 +26,10 @@ h1{color:var(--brand);margin:0;font-size:24px}
 .card .value{font-size:28px;font-weight:700;margin-bottom:6px}
 .card .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .hint{color:var(--muted);font-size:12px;margin-top:8px;text-align:center}
+
+.features{max-width:980px;margin:24px auto;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 16px}
+.feature{background:var(--panel);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:18px}
+.footer{max-width:980px;margin:24px auto;color:var(--muted);display:flex;align-items:center;gap:8px;padding:0 16px}
+.badge{padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+.badge.green{background:rgba(67,181,129,.1);color:var(--good)}
+.badge.red{background:rgba(240,71,71,.1);color:var(--bad)}

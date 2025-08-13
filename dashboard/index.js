@@ -15,6 +15,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const BRAND = {
+  title: process.env.DASHBOARD_TITLE || 'Discord Bot',
+  logoUrl: process.env.LOGO_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&',
+  bannerUrl: process.env.BANNER_URL || 'https://cdn.discordapp.com/attachments/1335734480253747297/1402473578254962808/banner3.png?ex=689d454d&is=689bf3cd&hm=ead97252818d9c11ceea7650d0fffe8a783afe8c2d33abd1bdaff51f5c584207&'
+};
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -31,10 +36,23 @@ function readStatus() {
   return { online: false, guilds: 0, users: 0 };
 }
 
+// Homepage
 app.get('/', (req, res) => {
   const status = readStatus();
+  res.render('home', {
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
+    status: status?.online ? 'Online' : 'Offline',
+    dashboardUrl: process.env.DASHBOARD_URL || `http://localhost:${PORT}`
+  });
+});
+
+// Dashboard (stats)
+app.get('/dashboard', (req, res) => {
+  const status = readStatus();
   res.render('index', {
-    botName: status?.bot?.tag || 'Discord.js Bot',
+    brand: BRAND,
+    botName: status?.bot?.tag || BRAND.title,
     status: status?.online ? 'Online' : 'Offline',
     guilds: status?.guilds || 0,
     users: status?.users || 0,

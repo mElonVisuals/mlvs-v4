@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= botName %> — Home</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="topnav">
+    <div class="brand">
+      <img src="/logo.png" alt="logo" />
+      <span><%= brand.title %></span>
+    </div>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/api/status" target="_blank">API</a>
+    </div>
+  </nav>
+
+  <header class="hero" style="background-image: url('<%= brand.bannerUrl %>')">
+    <div class="overlay">
+      <h1><%= botName %></h1>
+      <p class="subtitle">A clean, modern Discord bot with a live dashboard.</p>
+      <div class="cta">
+        <a class="btn primary" href="/dashboard">Open Dashboard</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="features">
+    <div class="feature">
+      <h3>Live Stats</h3>
+      <p>Monitor servers and users in real time via the dashboard.</p>
+    </div>
+    <div class="feature">
+      <h3>Prefix Commands</h3>
+      <p>Categories for general, fun, util, moderation, and more.</p>
+    </div>
+    <div class="feature">
+      <h3>Custom Embeds</h3>
+      <p>Modern embed design with your logo and banner.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Status:</span>
+    <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
+  </footer>
+</body>
+</html>

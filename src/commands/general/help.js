@@ -20,7 +20,7 @@ export async function execute(message, args, client) {
 
   const embed = baseEmbed(message)
     .setTitle('Help Menu')
-    .setDescription('Browse commands by category. Use `!help <command>` for details.')
+  .setDescription('Browse commands by category. Use `!help <command>` for details.')
     .addFields(
       ...Array.from(client.categories.keys()).map(cat => ({
         name: cat.charAt(0).toUpperCase() + cat.slice(1),
