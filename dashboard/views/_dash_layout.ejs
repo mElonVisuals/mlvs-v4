@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>mlvs.me — <%= page.charAt(0).toUpperCase()+page.slice(1) %></title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="dash-body">
+  <div class="dash-shell" id="dashShell">
+    <aside class="dash-sidebar" id="dashSidebar" aria-label="Primary Navigation" data-store="<%= sessionStoreType %>">
+      <div class="side-top">
+        <div class="brand-mini">
+          <img src="/logo.png" alt="logo" />
+          <span class="brand-text">mlvs.me</span>
+        </div>
+      </div>
+      <nav class="side-nav" aria-label="Section">
+        <div class="side-section">
+          <div class="side-label">Overview</div>
+          <a href="/dashboard/health" class="side-link <%= page==='health'?'active':'' %>">Health</a>
+          <a href="/dashboard/activity" class="side-link <%= page==='activity'?'active':'' %>">Activity</a>
+          <a href="/dashboard/actions" class="side-link <%= page==='actions'?'active':'' %>">Actions</a>
+            <a href="/dashboard/commands" class="side-link <%= page==='commands'?'active':'' %>">Commands</a>
+          <a href="/dashboard/telemetry" class="side-link <%= page==='telemetry'?'active':'' %>">Telemetry</a>
+          <a href="/dashboard/system" class="side-link <%= page==='system'?'active':'' %>">System</a>
+          <a href="/dashboard/about" class="side-link <%= page==='about'?'active':'' %>">About</a>
+        </div>
+        <div class="side-section">
+          <div class="side-label">Links</div>
+          <a href="/" class="side-link">Home</a>
+          <a href="/api/status" class="side-link" target="_blank">Raw Status</a>
+          <% if (brand.githubUrl) { %><a href="<%= brand.githubUrl %>" target="_blank" class="side-link">GitHub</a><% } %>
+          <% if (brand.inviteUrl) { %><a href="<%= brand.inviteUrl %>" target="_blank" class="side-link">Invite</a><% } %>
+        </div>
+      </nav>
+      <div class="side-footer">
+        <div class="guild-box">
+          <label for="guildSelect" class="muted" style="font-size:11px">Guild</label>
+          <select id="guildSelect"><option value="">All guilds</option></select>
+        </div>
+        <div class="token-box">
+          <input id="apiToken" type="password" placeholder="API token" />
+          <button id="saveToken" class="btn small">Save</button>
+        </div>
+        <div class="muted" style="font-size:11px">Store: <%= sessionStoreType %></div>
+      </div>
+    </aside>
+    <div class="dash-main">
+      <header class="dash2-header glass">
+        <div class="dash2-brand">
+          <img src="/logo.png" alt="" />
+          <div class="dash2-title">
+            <strong>mlvs.me</strong>
+            <span><%= page.charAt(0).toUpperCase()+page.slice(1) %></span>
+          </div>
+        </div>
+        <div class="dash2-meta">
+          <span id="d2Status" class="badge <%= status==='Online'? 'green':'red' %>"><%= status %></span>
+          <span class="badge" id="storeBadge"><%= sessionStoreType %></span>
+          <button id="d2Refresh" class="btn small">Refresh</button>
+          <label class="muted" style="display:inline-flex;gap:6px;align-items:center"><input id="d2Auto" type="checkbox" checked /> Auto</label>
+        </div>
+      </header>
+      <main id="dashContent" class="dash2">
+        <%- body %>
+        <footer class="footer dash-footer" style="margin-top:40px">
+          <div class="footer-row">
+            <div>© <%= new Date().getFullYear() %> <%= brand.title %></div>
+            <div style="display:flex;gap:8px;align-items:center"><span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span><span class="badge"><%= sessionStoreType %></span></div>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+  <script src="/dashboard.js" defer></script>
+</body>
+</html>

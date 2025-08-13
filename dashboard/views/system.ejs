@@ -1,0 +1,14 @@
+<% layout('_dash_layout') -%>
+<section class="panel glass" id="secSystem">
+  <div class="panel-head"><h3>System</h3><div class="panel-actions"><button class="btn small" id="sysRefresh">Refresh</button></div></div>
+  <div class="dash2-row stats" style="grid-template-columns:repeat(4,1fr)">
+    <div class="stat glass-lite"><div class="stat-label">Uptime</div><div class="stat-value" id="sysUptime">—</div></div>
+    <div class="stat glass-lite"><div class="stat-label">Actions Done</div><div class="stat-value" id="sysDone">—</div></div>
+    <div class="stat glass-lite"><div class="stat-label">Queued</div><div class="stat-value" id="sysQueued">—</div></div>
+    <div class="stat glass-lite"><div class="stat-label">Store</div><div class="stat-value" id="sysStore"><%= sessionStoreType %></div></div>
+  </div>
+  <div style="margin-top:20px;display:grid;gap:14px">
+    <div class="glass-lite" style="padding:14px;border-radius:12px"><strong style="font-size:14px">Presence</strong><div id="sysPresence" class="muted" style="font-size:13px">—</div></div>
+    <div class="glass-lite" style="padding:14px;border-radius:12px"><strong style="font-size:14px">Queue Details</strong><div id="sysQueueDetails" class="muted" style="font-size:13px">—</div></div>
+  </div>
+</section>

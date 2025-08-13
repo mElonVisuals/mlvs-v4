@@ -17,29 +17,7 @@
     try { localStorage.setItem(sideStateKey, will? '1':'0'); }catch{}
     toggleBtn?.setAttribute('aria-expanded', will? 'false':'true');
   });
-  // Active nav link highlight on scroll
-  const navLinks = $$('.side-link[data-nav]');
-  const sections = navLinks.map(l => ({ id: l.getAttribute('data-nav'), el: document.getElementById('sec'+l.getAttribute('data-nav').charAt(0).toUpperCase()+l.getAttribute('data-nav').slice(1)) || document.getElementById('sec'+l.getAttribute('data-nav').replace(/^(.)/, (m,c)=>c.toUpperCase())) })).filter(s=>s.el);
-  const onScroll = () => {
-    const y = window.scrollY || document.documentElement.scrollTop;
-    let activeId = null;
-    for (const s of sections){
-      const r = s.el.getBoundingClientRect();
-      const top = r.top + y - 120; // offset
-      if (y >= top) activeId = s.id; else break;
-    }
-    navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('data-nav')===activeId));
-  };
-  document.addEventListener('scroll', onScroll, { passive:true });
-  onScroll();
-  navLinks.forEach(a=>{
-    a.addEventListener('click', e=>{
-      const id = a.getAttribute('data-nav');
-      const targetId = 'sec'+id.charAt(0).toUpperCase()+id.slice(1);
-      const tgt = document.getElementById(targetId);
-      if (tgt){ e.preventDefault(); tgt.scrollIntoView({ behavior:'smooth', block:'start' }); history.replaceState(null,'','#'+targetId); }
-    });
-  });
+  // Multipage layout now; anchor highlight logic removed.
   const tokenInput = $('#apiToken');
   const saveTokenBtn = $('#saveToken');
   const guildSelect = $('#guildSelect');
@@ -194,7 +172,31 @@
   // initial
   refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity();
   // derive command stats after first load
-  (async()=>{ try { const data = await jget('/api/commands'); const cmds=data?.commands||{}; const groups=Object.keys(cmds); const total=groups.reduce((a,g)=>a+cmds[g].length,0); $('#cmdGroupCount').textContent=groups.length; $('#cmdTotalCount').textContent=total; }catch{} })();
+  (async()=>{ try { const data = await jget('/api/commands'); const cmds=data?.commands||{}; const groups=Object.keys(cmds); const total=groups.reduce((a,g)=>a+cmds[g].length,0); $('#cmdGroupCount')?.textContent=groups.length; $('#cmdTotalCount')?.textContent=total; }catch{} })();
+
+  // Telemetry page logic
+  async function refreshTelemetry(){
+    const latSvg = $('#telLatency'), memSvg = $('#telMemory'), cpuSvg = $('#telCpu');
+    try {
+      const t = await jget('/api/telemetry');
+      if (t.latency) { $('#telLatAvg')?.textContent = t.latency.avg ?? '—'; drawLine(latSvg, collectSeries(METRICS?.latencyMsCache||[],160,80)); }
+      if (t.memory) { $('#telMemAvg')?.textContent = t.memory.avg ?? '—'; }
+      if (t.cpu) { $('#telCpuAvg')?.textContent = t.cpu.avg ?? '—'; }
+      // build simple series from metrics endpoint for visuals
+      try { const m = await jget('/api/metrics'); METRICS.latencyMsCache = m.latencyMs||[]; METRICS.memoryCache=m.memoryMB||[]; METRICS.cpuCache=m.cpu||[]; drawLine(latSvg, METRICS.latencyMsCache); drawLine(memSvg, METRICS.memoryCache); drawLine(cpuSvg, METRICS.cpuCache); }catch{}
+    }catch{}
+  }
+  function drawLine(svg, arr){ if(!svg||!arr||!arr.length) return; const w=300,h=80; const max=Math.max(...arr,1); const step=arr.length>1?w/(arr.length-1):w; const d=arr.map((v,i)=>`${i?'L':'M'}${(i*step).toFixed(2)},${(h-(v/max)*h).toFixed(2)}`).join(' '); svg.innerHTML=`<path d="${d}" fill="none" stroke="currentColor" stroke-width="2" opacity="0.8"/>`; }
+  function collectSeries(a){ return a.slice(-80); }
+  $('#telRefresh')?.addEventListener('click', refreshTelemetry);
+  if (document.getElementById('secTelemetry')) { refreshTelemetry(); setInterval(()=>{ if($('#d2Auto')?.checked) refreshTelemetry(); }, 20000); }
+
+  // System page logic
+  async function refreshSystem(){
+    try { const s = await jget('/api/system'); if(!s) return; const upMin = Math.floor((s.uptimeMs||0)/60000); $('#sysUptime')?.textContent = upMin + 'm'; $('#sysDone')?.textContent = s.actionsProcessed; $('#sysQueued')?.textContent = s.queue?.queued ?? 0; $('#sysStore')?.textContent = s.sessionStore || ''; $('#sysPresence')?.textContent = `${s.presence?.status||''} ${s.presence?.activity||''}`.trim(); $('#sysQueueDetails')?.textContent = Object.entries(s.queue||{}).map(([k,v])=>`${k}:${v}`).join(' • '); }catch{}
+  }
+  $('#sysRefresh')?.addEventListener('click', refreshSystem);
+  if (document.getElementById('secSystem')) { refreshSystem(); setInterval(()=>{ if($('#d2Auto')?.checked) refreshSystem(); }, 25000); }
 
   // Actions list + ack
   const actionsList = document.getElementById('d2Actions');

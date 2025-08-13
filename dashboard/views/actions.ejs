@@ -1,0 +1,23 @@
+<% layout('_dash_layout') -%>
+<section class="panel glass" id="secActions">
+  <div class="panel-head"><h3>Quick Actions</h3></div>
+  <div class="actions-grid">
+    <form id="presenceForm" class="form" aria-describedby="presenceHelp">
+      <div class="form-row"><label for="presenceStatus">Presence</label><select id="presenceStatus" name="status" required><option value="online">online</option><option value="idle">idle</option><option value="dnd">dnd</option><option value="invisible">invisible</option></select></div>
+      <div class="form-row"><label for="presenceActivity">Activity</label><input id="presenceActivity" name="activity" placeholder="Playing mlvs.me" /></div>
+      <div id="presenceHelp" class="muted" style="font-size:11px">Updates the bot's public presence.</div>
+      <button class="btn" type="submit">Set Presence</button>
+    </form>
+    <form id="announceForm" class="form" aria-describedby="announceHelp">
+      <div class="form-row"><label for="announceGuild">Guild ID</label><input id="announceGuild" name="guildId" required /></div>
+      <div class="form-row"><label for="announceChannel">Channel ID</label><input id="announceChannel" name="channelId" required /></div>
+      <div class="form-row"><label for="announceMessage">Message</label><textarea id="announceMessage" name="message" rows="3" required placeholder="Hello from mlvs.me"></textarea></div>
+      <div id="announceHelp" class="muted" style="font-size:11px">Queues a broadcast action consumed by the bot.</div>
+      <button class="btn" type="submit">Queue Announcement</button>
+    </form>
+  </div>
+  <div class="panel-sub" style="margin-top:14px">
+    <h4 style="margin:10px 0 6px">Queued Actions</h4>
+    <ul id="d2Actions" class="actions-list" aria-live="polite"></ul>
+  </div>
+</section>

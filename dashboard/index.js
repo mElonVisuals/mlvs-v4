@@ -134,6 +134,8 @@ let ACTIVITY = [];
 let METRICS = { latencyMs: [], memoryMB: [], cpu: [] };
 let ACTIONS = [];
 let PRESENCE = { status: 'online', activity: '' };
+let ACTIONS_PROCESSED = 0;
+const SERVER_STARTED_AT = Date.now();
 
 // optional bearer token auth for mutating endpoints
 const API_TOKEN = process.env.API_TOKEN || null;
@@ -194,20 +196,33 @@ app.get('/', (req, res) => {
   });
 });
 
-// Dashboard (stats)
-app.get('/dashboard', ensureAuth, (req, res) => {
+// Dashboard redirect to health page (new multi-page layout)
+app.get('/dashboard', ensureAuth, (req, res) => res.redirect('/dashboard/health'));
+
+function renderDashPage(page, req, res, extra = {}) {
   const status = readStatus();
   const sessionStoreType = store ? (process.env.REDIS_URL ? 'redis' : (process.env.MONGO_URL ? 'mongo' : 'external')) : 'memory';
-  res.render('index', {
+  res.render(page, {
+    page,
     brand: BRAND,
     botName: status?.bot?.tag || BRAND.title,
     status: status?.online ? 'Online' : 'Offline',
     guilds: status?.guilds || 0,
     users: status?.users || 0,
     updatedAt: status?.updatedAt || null,
-    sessionStoreType
+    sessionStoreType,
+    ...extra
   });
-});
+}
+
+// Individual dashboard pages
+app.get('/dashboard/health', ensureAuth, (req,res)=> renderDashPage('health', req, res));
+app.get('/dashboard/activity', ensureAuth, (req,res)=> renderDashPage('activity', req, res));
+app.get('/dashboard/actions', ensureAuth, (req,res)=> renderDashPage('actions', req, res));
+app.get('/dashboard/commands', ensureAuth, (req,res)=> renderDashPage('commands', req, res));
+app.get('/dashboard/telemetry', ensureAuth, (req,res)=> renderDashPage('telemetry', req, res));
+app.get('/dashboard/system', ensureAuth, (req,res)=> renderDashPage('system', req, res));
+app.get('/dashboard/about', ensureAuth, (req,res)=> renderDashPage('about', req, res));
 
 app.get('/api/status', (req, res) => {
   res.json(readStatus());
@@ -302,9 +317,38 @@ app.patch('/api/actions/:id', requireToken, (req, res) => {
   item.status = status;
   if (result !== undefined) item.result = result;
   item.updatedAt = new Date().toISOString();
+  if (status === 'done') ACTIONS_PROCESSED++;
   ACTIVITY.push({ id: `${id}-ack`, type: 'action', message: `Action ${id} -> ${status}`, ts: item.updatedAt });
   if (ACTIVITY.length > 200) ACTIVITY = ACTIVITY.slice(-200);
   res.json({ ok: true, item });
+});
+
+// Telemetry aggregation helper
+function summarize(arr){
+  if(!arr.length) return { min:null,max:null,avg:null,last:null,count:0 };
+  let min=Infinity, max=-Infinity, sum=0; for(const v of arr){ if(typeof v==='number'&&!Number.isNaN(v)){ if(v<min)min=v; if(v>max)max=v; sum+=v; } }
+  const count = arr.length; const avg = count? +(sum/count).toFixed(2):null; return { min, max, avg, last: arr[arr.length-1], count };
+}
+
+app.get('/api/telemetry', (req,res)=>{
+  const latency = summarize(METRICS.latencyMs.slice(-300));
+  const memory = summarize(METRICS.memoryMB.slice(-300));
+  const cpu = summarize(METRICS.cpu.slice(-300));
+  res.json({ latency, memory, cpu, updatedAt: new Date().toISOString() });
+});
+
+app.get('/api/system', (req,res)=>{
+  const uptimeMs = Date.now() - SERVER_STARTED_AT;
+  const queueCounts = { queued: ACTIONS.filter(a=>a.status==='queued').length, processing: ACTIONS.filter(a=>a.status==='processing').length, done: ACTIONS.filter(a=>a.status==='done').length, failed: ACTIONS.filter(a=>a.status==='failed').length };
+  res.json({
+    uptimeMs,
+    uptimeHuman: `${Math.floor(uptimeMs/1000/60)}m`,
+    actionsProcessed: ACTIONS_PROCESSED,
+    queue: queueCounts,
+    presence: PRESENCE,
+    sessionStore: store ? (process.env.REDIS_URL ? 'redis' : (process.env.MONGO_URL ? 'mongo' : 'external')) : 'memory',
+    updatedAt: new Date().toISOString()
+  });
 });
 
 // Invite redirect if available

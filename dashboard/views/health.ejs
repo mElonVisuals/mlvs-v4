@@ -1,0 +1,15 @@
+<% layout('_dash_layout') -%>
+<section class="panel glass" id="secHealth">
+  <div class="panel-head"><h3>Health</h3><div class="panel-actions"><span class="badge" style="font-size:11px">Bot: <span id="d2Bot"><%= botName %></span></span></div></div>
+  <div class="metric-row">
+    <div class="metric-card glass-lite"><div class="metric-label">Latency</div><div class="metric-value" id="mLatency">— ms</div><svg id="spLatency" viewBox="0 0 160 44"></svg></div>
+    <div class="metric-card glass-lite"><div class="metric-label">Memory</div><div class="metric-value" id="mMemory">— MB</div><svg id="spMemory" viewBox="0 0 160 44"></svg></div>
+    <div class="metric-card glass-lite"><div class="metric-label">CPU</div><div class="metric-value" id="mCpu">— %</div><svg id="spCpu" viewBox="0 0 160 44"></svg></div>
+  </div>
+  <div class="dash2-row stats" style="margin-top:18px">
+    <div class="stat glass-lite"><div class="stat-label">Servers</div><div class="stat-value" id="d2Guilds"><%= guilds %></div></div>
+    <div class="stat glass-lite"><div class="stat-label">Users</div><div class="stat-value" id="d2Users"><%= users %></div></div>
+    <div class="stat glass-lite"><div class="stat-label">Updated</div><div class="stat-value" id="d2Updated"><%= updatedAt || '—' %></div></div>
+    <div class="stat glass-lite"><div class="stat-label">Status</div><div class="stat-value" style="font-size:16px"><span class="badge <%= status==='Online'? 'green':'red' %>"><%= status %></span></div></div>
+  </div>
+</section>

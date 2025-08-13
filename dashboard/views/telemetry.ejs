@@ -1,0 +1,14 @@
+<% layout('_dash_layout') -%>
+<section class="panel glass" id="secTelemetry">
+  <div class="panel-head"><h3>Telemetry</h3><div class="panel-actions"><button class="btn small" id="telRefresh">Refresh</button></div></div>
+  <div class="dash2-row stats" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
+    <div class="stat glass-lite"><div class="stat-label">Latency Avg</div><div class="stat-value" id="telLatAvg">—</div></div>
+    <div class="stat glass-lite"><div class="stat-label">Memory Avg</div><div class="stat-value" id="telMemAvg">—</div></div>
+    <div class="stat glass-lite"><div class="stat-label">CPU Avg</div><div class="stat-value" id="telCpuAvg">—</div></div>
+  </div>
+  <div class="metric-row">
+    <div class="metric-card glass-lite"><div class="metric-label">Latency Spark</div><svg id="telLatency" viewBox="0 0 300 80"></svg></div>
+    <div class="metric-card glass-lite"><div class="metric-label">Memory Spark</div><svg id="telMemory" viewBox="0 0 300 80"></svg></div>
+    <div class="metric-card glass-lite"><div class="metric-label">CPU Spark</div><svg id="telCpu" viewBox="0 0 300 80"></svg></div>
+  </div>
+</section>
