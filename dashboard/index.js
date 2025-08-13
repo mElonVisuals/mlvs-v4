@@ -18,9 +18,40 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
-// Sessions for OAuth2
+// Sessions for OAuth2 (production store if available)
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev_session_secret_change_me';
-app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }));
+
+async function buildSessionStore() {
+  try {
+    // Prefer Redis if REDIS_URL is set
+    if (process.env.REDIS_URL) {
+      const { default: connectRedis } = await import('connect-redis');
+      const { createClient } = await import('redis');
+      const RedisStore = connectRedis(session);
+      const client = createClient({ url: process.env.REDIS_URL });
+      client.on('error', () => {});
+      await client.connect();
+      return new RedisStore({ client, prefix: 'sess:' });
+    }
+  } catch {}
+  try {
+    // Fallback: Mongo if MONGO_URL provided
+    if (process.env.MONGO_URL) {
+      const { default: connectMongo } = await import('connect-mongo');
+      return connectMongo.create({ mongoUrl: process.env.MONGO_URL, collectionName: 'sessions' });
+    }
+  } catch {}
+  return null; // MemoryStore
+}
+
+const store = await buildSessionStore();
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: store || undefined,
+  cookie: { sameSite: 'lax' }
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 

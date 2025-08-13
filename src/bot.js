@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits, Partials, Collection } from 'discord.js';
+import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -54,6 +55,8 @@ client.on('ready', () => {
     `Prefix: ${process.env.PREFIX || '!'}`,
     `Guilds: ${client.guilds.cache.size}`
   ]);
+  // Start metrics heartbeat
+  startMetricsLoop();
 });
 client.on('guildCreate', () => writeStatus());
 client.on('guildDelete', () => writeStatus());
@@ -66,3 +69,40 @@ client.login(process.env.DISCORD_TOKEN).then(() => {
 }).catch(err => {
   logger.error('core', `Login failed: ${err?.message || err}`);
 });
+
+// Metrics heartbeat
+function startMetricsLoop(){
+  const urlBase = process.env.DASHBOARD_URL || `http://localhost:${process.env.PORT || 3001}`;
+  const token = process.env.API_TOKEN || '';
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  const post = async (payload) => {
+    try{
+      await fetch(`${urlBase}/api/metrics`, { method:'POST', headers, body: JSON.stringify(payload) });
+    }catch{}
+  };
+  setInterval(async () => {
+    try{
+      const latency = Math.round(client.ws.ping || 0);
+      const memoryMB = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
+      const cpu = Math.min(100, Math.round((osLoad() || 0) * 100));
+      await post({ latencyMs: latency, memoryMB, cpu });
+      writeStatus();
+    }catch{}
+  }, Number(process.env.METRICS_INTERVAL_MS || 15000));
+}
+
+function osLoad(){
+  try {
+    const loads = os.loadavg?.();
+    if (loads && loads.length) return loads[0] / (os.cpus?.().length || 1);
+  } catch {}
+  return 0.2; // safe default
+}
+
+// Polyfill fetch if needed (older Node versions)
+if (typeof fetch === 'undefined') {
+  const { default: nf } = await import('node-fetch');
+  // @ts-ignore
+  global.fetch = nf;
+}

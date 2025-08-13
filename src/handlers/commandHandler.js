@@ -9,6 +9,8 @@ const __dirname = path.dirname(__filename);
 export default async function loadCommands(client) {
   const base = path.join(__dirname, '..', 'commands');
   const categories = [];
+  // Simple per-command cooldown map (ms)
+  client.cooldowns = new Map();
 
   // 1) Load root-level commands (backward compatible)
   if (fs.existsSync(base)) {

@@ -87,6 +87,7 @@ body {
 /* Hero */
 /* Hero layout */
 .hero { position: relative; padding: 32px 0 20px; overflow: hidden }
+.hero { position: relative; padding: 48px 0 32px; overflow: hidden }
 .hero-advanced { min-height: 72vh; display: grid; align-items: center }
 .hero-bg, .hero-overlay, .hero-mark { display: none }
 /* Opt-in background for hero when a section has .with-bg */
@@ -106,11 +107,13 @@ body {
 @keyframes floatB { 0%{ transform: translateY(0)} 100%{ transform: translateY(-16px)} }
 @keyframes floatC { 0%{ transform: translateY(0)} 100%{ transform: translateY(12px)} }
 .hero-grid { position: relative; display: grid; gap: 20px; grid-template-columns: 1fr; align-items: center }
+.hero-grid { position: relative; display: grid; gap: 26px; grid-template-columns: 1fr; align-items: center }
 .hero-left { display: grid; gap: 14px; text-align: left }
 .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted)) }
 .hero-title { margin: 0; font-size: clamp(32px, 7vw, 56px); line-height: 1.05 }
 .hero-sub { margin: 0; font-size: clamp(14px, 2.2vw, 18px); color: hsl(var(--muted)) }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; filter: drop-shadow(0 6px 20px rgba(88,101,242,.18)) }
 .hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 14px }
 .stat-card { padding: 14px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.9), hsl(var(--card)/.7)); text-align: center }
 .stat-value { font-size: clamp(18px, 4vw, 26px); font-weight: 800 }
@@ -119,6 +122,7 @@ body {
 .stat-label { color: hsl(var(--muted)); font-size: 12px; letter-spacing: .08em; text-transform: uppercase }
 .hero-right { display: grid; gap: 12px }
 .tile { border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); box-shadow: 0 8px 20px rgba(0,0,0,.25); padding: 16px }
+.tile { border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); box-shadow: 0 10px 28px rgba(0,0,0,.28); padding: 18px; backdrop-filter: saturate(1.1) blur(4px) }
 .kpi-tile .tile-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px }
 .tile-logo { width: 28px; height: 28px; border-radius: 8px }
 .tile-title { font-weight: 700 }
@@ -139,12 +143,14 @@ section { padding: 28px 0 }
 /* Capabilities */
 .capabilities .section-head { display: grid; gap: 6px; text-align: left; margin-bottom: 14px }
 .cap-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px }
+.cap-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px }
 .cap-card { padding: 16px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)) }
 .cap-card h3 { margin: 0 0 6px }
 .cap-card p { margin: 0; color: hsl(var(--muted)) }
 
 /* Feature cards */
 .feature { padding: 18px; border-radius: var(--radius); border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.9), hsl(var(--card)/.7)) }
+.feature { padding: 20px; border-radius: var(--radius); border: 1px solid hsl(var(--border)); background: linear-gradient(180deg, hsl(var(--card)/.9), hsl(var(--card)/.7)) }
 .feature h3 { margin: 0 0 6px }
 .feature p { margin: 0; color: hsl(var(--muted)) }
 
@@ -159,6 +165,7 @@ section { padding: 28px 0 }
 .chip { padding: 6px 10px; border-radius: 999px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); cursor: pointer; user-select: none; font-weight: 600 }
 .chip.active { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: transparent }
 .explorer-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px }
+.explorer-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px }
 .explorer-card { padding: 14px; border-radius: 14px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); display: grid; gap: 6px; transition: transform .08s ease, border-color .15s ease }
 .explorer-card:hover { transform: translateY(-1px); border-color: hsl(var(--primary)/.45) }
 .ex-head { display: grid; gap: 4px }
@@ -167,6 +174,7 @@ section { padding: 28px 0 }
 
 /* CTA */
 .cta .cta-box { display: grid; grid-template-columns: 1fr; gap: 14px; padding: 16px; border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)) }
+.cta .cta-box { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 18px; border-radius: 16px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)) }
 
 /* Dropdown */
 .nav-more { position: relative }
@@ -236,18 +244,24 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 .token-box input { background:hsl(var(--card)); border:1px solid hsl(var(--border)); color:inherit; padding:6px 8px; border-radius:8px }
 
 .dash2 { padding:16px }
+.dash2 { padding:20px }
 .dash2-row.stats { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-bottom:14px }
+.dash2-row.stats { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-bottom:18px }
 .dash2-row .stat { padding:14px; border-radius:12px; border:1px solid hsl(var(--border)); background:hsl(var(--card)) }
 .dash2-row .stat-label { font-size:12px; color:hsl(var(--muted)); text-transform:uppercase; letter-spacing:.08em }
 .dash2-row .stat-value { font-size:22px; font-weight:800 }
 
 .dash2-grid { display:grid; grid-template-columns: 1.3fr .7fr; gap:14px }
+.dash2-grid { display:grid; grid-template-columns: 1.35fr .65fr; gap:18px }
 .panel { padding:14px; border:1px solid hsl(var(--border)); border-radius:14px; background:hsl(var(--card)) }
+.panel { padding:16px; border:1px solid hsl(var(--border)); border-radius:16px; background:hsl(var(--card)) }
 .panel-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px }
+.panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px }
 .panel-head h3 { margin:0 }
 .panel-actions { display:flex; gap:8px; align-items:center }
 
 .metric-row { display:grid; grid-template-columns: repeat(3,1fr); gap:10px }
+.metric-row { display:grid; grid-template-columns: repeat(3,1fr); gap:12px }
 .metric-card { padding:12px; border:1px solid hsl(var(--border)); border-radius:12px; background:linear-gradient(180deg, hsl(var(--card)/.9), hsl(var(--card)/.7)) }
 .metric-label { font-size:12px; color:hsl(var(--muted)); text-transform:uppercase; letter-spacing:.08em }
 .metric-value { font-size:18px; font-weight:700; margin-bottom:6px }
@@ -255,20 +269,27 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 
 .input-lite { background:hsl(var(--card)); border:1px solid hsl(var(--border)); color:inherit; padding:8px 10px; border-radius:10px; width:180px }
 .cmd-list { display:grid; gap:8px; max-height:420px; overflow:auto; padding-right:4px }
+.cmd-list { display:grid; gap:10px; max-height:440px; overflow:auto; padding-right:6px }
 .cmd-group { display:grid; gap:6px }
 .cmd-cat { font-weight:800; font-size:14px; margin-bottom:4px }
 .cmd-row { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:10px; padding:8px; border:1px solid hsl(var(--border)); border-radius:10px; background:hsl(var(--card)) }
+.cmd-row { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)) }
 
 .actions-grid { display:grid; grid-template-columns: 1fr; gap:12px }
+.actions-grid { display:grid; grid-template-columns: 1fr; gap:14px }
 .form { display:grid; gap:8px; padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)/.6) }
+.form { display:grid; gap:10px; padding:12px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)/.6) }
 .form-row { display:grid; gap:6px }
 .form-row label { font-size:12px; color:hsl(var(--muted)); text-transform:uppercase; letter-spacing:.08em }
 .form input, .form textarea, .form select { background:hsl(var(--card)); border:1px solid hsl(var(--border)); color:inherit; padding:8px 10px; border-radius:10px; font:inherit }
 .form textarea { resize:vertical }
 
 .activity-list { list-style:none; margin:0; padding:0; display:grid; gap:8px; max-height:420px; overflow:auto }
+.activity-list { list-style:none; margin:0; padding:0; display:grid; gap:10px; max-height:440px; overflow:auto }
 .act-item { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:10px; padding:8px; border:1px solid hsl(var(--border)); border-radius:10px; background:hsl(var(--card)) }
+.act-item { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:12px; padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)) }
 .actions-list { list-style:none; margin:0; padding:0; display:grid; gap:8px; max-height:260px; overflow:auto }
+.actions-list { list-style:none; margin:0; padding:0; display:grid; gap:10px; max-height:280px; overflow:auto }
 
 @media (max-width: 1024px) {
 	.dash2-grid { grid-template-columns: 1fr }
@@ -280,6 +301,8 @@ footer.footer { padding: 20px 0; border-top: 1px solid hsl(var(--border)); color
 	.nav-links { display: flex }
 	.nav-actions { display: flex }
 	.navbar .burger { display: none }
+	.explorer-toolbar { grid-template-columns: 1fr auto }
+	.hero-grid { grid-template-columns: 1.1fr .9fr }
 	.explorer-toolbar { grid-template-columns: 1fr auto }
 	.hero-grid { grid-template-columns: 1.1fr .9fr }
 	.cap-grid { grid-template-columns: repeat(4,1fr) }
