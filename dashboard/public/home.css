@@ -1,4 +1,4 @@
-/* Minimal homepage styles extracted from inline <style> to prevent footer code leakage */
+/* Minimal homepage styles (pruned) */
 body { overflow-x:hidden; }
 .hero { min-height:90vh; display:flex; align-items:center; justify-content:center; padding:4rem 1.5rem; }
 .hero-inner { width:100%; max-width:1000px; display:flex; flex-direction:column; gap:2.5rem; }
@@ -25,52 +25,4 @@ body { overflow-x:hidden; }
 .footer-links { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-bottom:1.5rem; }
 .footer-link { font-size:12px; color:hsl(var(--muted)); text-decoration:none; }
 .footer-link:hover { color:hsl(var(--foreground)); }
-@media (max-width:760px){ .hero{min-height:unset;padding:3.5rem 1.25rem 2.5rem;} .hero-inner{gap:2rem;} }/* (Reverted: removed temporary helper classes and smooth scrolling) */
-/* Homepage theme refactor using global design tokens */
-:root { --home-accent: var(--clr-primary); --home-accent-b: 210 90% 70%; }
-
-.home-viewport { min-height: 100vh; display:flex; flex-direction:column; }
-.home-hero { position:relative; min-height:100vh; display:flex; align-items:center; padding: var(--space-12) 0 var(--space-10); overflow:hidden; }
-.home-bg { position:absolute; inset:0; background:
-	radial-gradient(circle at 15% 20%, rgba(88,101,242,.35), transparent 60%),
-	radial-gradient(circle at 85% 30%, rgba(59,130,246,.35), transparent 55%),
-	linear-gradient(140deg, hsl(var(--background)) 0%, hsl(var(--background)) 60%, hsl(var(--background)) 100%);
-}
-.home-grid { position:relative; display:grid; gap: var(--space-8); grid-template-columns:1fr; width:100%; max-width:1280px; margin:0 auto; padding:0 var(--space-6); }
-@media (min-width:960px){ .home-grid { grid-template-columns: 1.05fr .95fr; } }
-.tagline { display:flex; flex-direction:column; gap: var(--space-4); }
-.super-title { font-size: clamp(42px,7vw,70px); line-height:1.02; font-weight:800; letter-spacing:-.02em; background:linear-gradient(90deg,#a5b4fc,#c084fc,#7dd3fc); -webkit-background-clip:text; color:transparent; }
-.lead { font-size: clamp(var(--font-sm),1.8vw,var(--font-lg)); color:hsl(var(--muted)); max-width:680px; }
-a.btn.primary.gradient { background:linear-gradient(90deg,#6366f1,#8b5cf6,#0ea5e9); border:none; color:#fff; }
-.actions-row { display:flex; gap: var(--space-4); flex-wrap:wrap; }
-.kpi-inline { display:flex; gap: var(--space-5); flex-wrap:wrap; margin-top: var(--space-2); }
-.kpi-chip { display:flex; flex-direction:column; min-width:120px; gap: var(--space-1); padding: var(--space-3) var(--space-4); border:1px solid hsl(var(--border)); border-radius: var(--radius); background:linear-gradient(180deg,hsl(var(--card)/.9),hsl(var(--card)/.6)); backdrop-filter:blur(6px) saturate(1.2); }
-.kpi-chip strong { font-size:20px; font-weight:700 }
-.bot-card { position:relative; display:grid; gap: var(--space-5); padding: var(--space-7); border:1px solid hsl(var(--border)); border-radius: var(--radius-xl); background:linear-gradient(160deg,hsl(var(--card)/.85),hsl(var(--card)/.55)); box-shadow: var(--elev-4); overflow:hidden; }
-.bot-card::before { content:""; position:absolute; inset:-2px; background: radial-gradient(circle at 30% 20%, rgba(88,101,242,.35), transparent 60%), radial-gradient(circle at 85% 70%, rgba(16,185,129,.30), transparent 60%); opacity:.7; pointer-events:none; }
-.bot-head { display:flex; align-items:center; gap: var(--space-4); }
-.bot-head img { width:72px; height:72px; border-radius: var(--radius-lg); border:2px solid hsl(var(--border)); }
-.live-dot { position:absolute; right:6px; bottom:6px; width:18px; height:18px; border:3px solid hsl(var(--card)); border-radius:50%; box-shadow:0 0 0 6px rgba(0,0,0,.35) }
-.mini-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap: var(--space-4); }
-.mini-box { padding: var(--space-3); border:1px solid hsl(var(--border)); border-radius: var(--radius); background:hsl(var(--card)/.55); display:grid; gap: var(--space-2); }
-.mini-box span { font-size:11px; letter-spacing:.08em; color:hsl(var(--muted)); }
-.mini-box strong { font-size:18px; font-weight:700; }
-.sparkline-wrap { grid-column:1 / -1; padding:4px 0 2px; }
-.sparkline-wrap svg { width:100%; height:54px; }
-.refresh-bar { display:flex; align-items:center; justify-content:space-between; gap: var(--space-3); margin-top:4px; }
-.modules { padding: var(--space-14) 0 var(--space-12); }
-.modules-head { display:grid; gap: var(--space-3); margin-bottom: var(--space-7); }
-.mod-scroller { display:flex; gap: var(--space-5); overflow:auto; padding-bottom:6px; scrollbar-width:thin; }
-.mod-card { min-width:260px; flex:0 0 260px; display:grid; gap: var(--space-3); padding: var(--space-4); border:1px solid hsl(var(--border)); border-radius: var(--radius-lg); background:hsl(var(--card)/.9); }
-.mod-card h3 { margin:0; font-size:18px; }
-.hero-refresh-error { color: hsl(var(--danger)); font-size:12px; }
-.footer-light { padding: var(--space-10) 0 var(--space-8); text-align:center; color:hsl(var(--muted)); font-size:var(--font-sm); }
-
-/* Responsive adjustments to prevent awkward extra scroll space */
-@media (max-width: 960px){
-	.home-hero { min-height: auto; padding: var(--space-10) 0 var(--space-10); }
-	.modules { padding: var(--space-12) 0 var(--space-10); }
-}
-
-/* Provide subtle scroll margin for in-page anchors without causing layout jump */
-section { scroll-margin-top: 80px; }
+@media (max-width:760px){ .hero{min-height:unset;padding:3.5rem 1.25rem 2.5rem;} .hero-inner{gap:2rem;} }
