@@ -8,6 +8,15 @@ if (typeof fetch === 'undefined') {
   const { default: nf } = await import('node-fetch');
   global.fetch = nf;
 }
+// basic request logger (very light)
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - start;
+    console.log(`[dash] ${req.method} ${req.url} -> ${res.statusCode} ${ms}ms`);
+  });
+  next();
+});
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);

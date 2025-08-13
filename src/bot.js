@@ -9,6 +9,9 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+logger.start('core', `Booting bot process (PID ${process.pid})`);
+logger.info('core', `Env: PORT=${process.env.PORT || 3005}, PREFIX=${process.env.PREFIX || '!'}, LOG_LEVEL=${process.env.LOG_LEVEL || 'info'}`);
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
