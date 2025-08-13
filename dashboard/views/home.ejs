@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" style="margin: 0; padding: 0; background: #040810;">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <meta name="color-scheme" content="dark" />
   <title><%= brand?.short || 'mlvs.me' %> — Discord Bot Platform</title>
   <meta name="description" content="<%= brand?.tagline || 'Minimal next generation Discord bot platform.' %>">
@@ -15,11 +15,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="/logo.png">
+  <style>
+    /* Emergency failsafe for high-res displays */
+    html, body { margin: 0 !important; padding: 0 !important; background: #040810 !important; }
+  </style>
 </head>
-<body class="homepage">
+<body class="homepage" style="margin: 0; padding: 0; background: #040810;">
+  <!-- Emergency background failsafe -->
+  <div style="position: fixed; top: -200px; left: -200px; width: calc(100vw + 400px); height: calc(100vh + 400px); background: #040810; z-index: -20;"></div>
+  
   <!-- Advanced Multi-Layer Background System -->
   <div class="cosmic-bg" aria-hidden="true">
-    <canvas class="hp-bg"></canvas>
+    <div class="hp-bg"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>

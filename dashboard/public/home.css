@@ -42,14 +42,35 @@
 /* ==== GLOBAL STYLES ==== */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Reset browser defaults - aggressive reset for high-res displays */
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #040810;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #040810;
 }
 
 body.homepage {
   overflow-x: hidden;
-  min-height: 100dvh;
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #040810 0%, #070b14 25%, #0a0f1c 50%, #0d1421 100%);
+  background: #040810 !important;
   position: relative;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -67,6 +88,16 @@ main.secondary-main {
   flex: 1 0 auto;
   position: relative;
   z-index: 1;
+  min-height: 100vh;
+}
+
+/* Ensure proper section spacing */
+main.homepage-main > section {
+  margin-bottom: clamp(4rem, 8vw, 8rem);
+}
+
+main.homepage-main > section:last-child {
+  margin-bottom: 0;
 }
 
 .container {
@@ -84,93 +115,92 @@ main.secondary-main {
 /* ==== ADVANCED MULTI-LAYER BACKGROUND SYSTEM ==== */
 .cosmic-bg {
   position: fixed;
-  inset: 0;
+  top: -50px;
+  left: -50px;
+  width: calc(100vw + 100px);
+  height: calc(100vh + 100px);
   z-index: -10;
   overflow: hidden;
   pointer-events: none;
 }
 
-/* Solid backdrop to prevent any light breaks */
+/* Full viewport coverage backdrop - extends beyond viewport */
 .cosmic-bg::before {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: hsl(var(--clr-bg));
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: calc(100vw + 200px);
+  height: calc(100vh + 200px);
+  background: #040810;
   z-index: -1;
 }
 
 .hp-bg {
   position: absolute;
-  inset: 0;
-  background: 
-    /* Primary solid gradient base */
-    linear-gradient(135deg, 
-      hsl(var(--clr-bg)) 0%, 
-      hsl(var(--clr-bg-alt)) 100%
-    ),
-    /* Colorful overlay effects - more subtle for consistent coverage */
-    radial-gradient(circle at 20% 25%, hsla(var(--neon-cyan), 0.06) 0%, hsla(var(--neon-cyan), 0.01) 70%),
-    radial-gradient(circle at 80% 15%, hsla(var(--neon-purple), 0.05) 0%, hsla(var(--neon-purple), 0.01) 65%),
-    radial-gradient(circle at 60% 75%, hsla(var(--neon-pink), 0.04) 0%, hsla(var(--neon-pink), 0.01) 60%),
-    radial-gradient(circle at 30% 85%, hsla(var(--neon-lime), 0.03) 0%, hsla(var(--neon-lime), 0.005) 55%),
-    radial-gradient(circle at 90% 60%, hsla(var(--neon-amber), 0.03) 0%, hsla(var(--neon-amber), 0.005) 50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #040810 0%, #070b14 50%, #0a0f1c 100%);
   animation: cosmicShift 60s ease-in-out infinite alternate;
 }
 
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(40px);
-  mix-blend-mode: screen;
+  filter: blur(100px);
   animation: orbFloat 20s ease-in-out infinite alternate;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 .orb-1 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, hsla(var(--neon-cyan), 0.2), transparent 70%);
-  top: -5%;
-  left: 5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.08), rgba(6, 182, 212, 0.02) 60%, transparent 100%);
+  top: 10vh;
+  left: -100px;
   animation-delay: 0s;
   animation-duration: 25s;
 }
 
 .orb-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, hsla(var(--neon-purple), 0.18), transparent 75%);
-  top: 50%;
-  right: -5%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.06), rgba(147, 51, 234, 0.015) 60%, transparent 100%);
+  top: 20vh;
+  right: -200px;
   animation-delay: -8s;
   animation-duration: 30s;
 }
 
 .orb-3 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, hsla(var(--neon-pink), 0.2), transparent 70%);
-  bottom: -10%;
-  left: 50%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.05), rgba(236, 72, 153, 0.01) 60%, transparent 100%);
+  bottom: 10vh;
+  left: 40vw;
   animation-delay: -15s;
   animation-duration: 22s;
 }
 
 .orb-4 {
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, hsla(var(--neon-lime), 0.15), transparent 80%);
-  top: 20%;
-  right: 25%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(132, 204, 22, 0.04), rgba(132, 204, 22, 0.01) 60%, transparent 100%);
+  top: 15vh;
+  left: 25vw;
   animation-delay: -20s;
   animation-duration: 28s;
 }
 
 .orb-5 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, hsla(var(--neon-amber), 0.16), transparent 75%);
-  bottom: 25%;
-  left: 15%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.01) 60%, transparent 100%);
+  bottom: 25vh;
+  right: 10vw;
   animation-delay: -12s;
   animation-duration: 24s;
 }
@@ -512,11 +542,11 @@ main.secondary-main {
 /* ==== ENHANCED HERO SECTION ==== */
 .hero {
   position: relative;
-  min-height: 85dvh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(4rem, 10vw, 8rem) 0;
+  padding: clamp(6rem, 12vw, 10rem) 0 clamp(8rem, 15vw, 12rem) 0;
   text-align: center;
 }
 
@@ -684,9 +714,10 @@ main.secondary-main {
 
 /* Modern Features Section */
 .features-section {
-  padding: 100px 0;
+  padding: clamp(8rem, 15vw, 16rem) 0 clamp(10rem, 20vw, 20rem) 0;
   position: relative;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .features-bg {
