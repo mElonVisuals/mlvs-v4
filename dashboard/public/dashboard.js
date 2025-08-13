@@ -179,7 +179,13 @@
     const latSvg = $('#telLatency'), memSvg = $('#telMemory'), cpuSvg = $('#telCpu');
     try {
       const t = await jget('/api/telemetry');
-      if (t.latency) { $('#telLatAvg')?.textContent = t.latency.avg ?? '—'; drawLine(latSvg, collectSeries(METRICS?.latencyMsCache||[],160,80)); }
+      if (t.latency) {
+        $('#telLatAvg')?.textContent = t.latency.avg ?? '—';
+        $('#telLatP50')?.textContent = t.latency.p50 ?? '—';
+        $('#telLatP95')?.textContent = t.latency.p95 ?? '—';
+        $('#telLatP99')?.textContent = t.latency.p99 ?? '—';
+        drawLine(latSvg, collectSeries(METRICS?.latencyMsCache||[],160,80));
+      }
       if (t.memory) { $('#telMemAvg')?.textContent = t.memory.avg ?? '—'; }
       if (t.cpu) { $('#telCpuAvg')?.textContent = t.cpu.avg ?? '—'; }
       // build simple series from metrics endpoint for visuals

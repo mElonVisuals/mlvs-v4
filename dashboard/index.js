@@ -332,9 +332,14 @@ app.patch('/api/actions/:id', requireToken, (req, res) => {
 
 // Telemetry aggregation helper
 function summarize(arr){
-  if(!arr.length) return { min:null,max:null,avg:null,last:null,count:0 };
-  let min=Infinity, max=-Infinity, sum=0; for(const v of arr){ if(typeof v==='number'&&!Number.isNaN(v)){ if(v<min)min=v; if(v>max)max=v; sum+=v; } }
-  const count = arr.length; const avg = count? +(sum/count).toFixed(2):null; return { min, max, avg, last: arr[arr.length-1], count };
+  if(!arr.length) return { min:null,max:null,avg:null,last:null,count:0,p50:null,p95:null,p99:null };
+  const clean = arr.filter(v=>typeof v==='number' && !Number.isNaN(v));
+  if(!clean.length) return { min:null,max:null,avg:null,last:null,count:0,p50:null,p95:null,p99:null };
+  let min=Infinity, max=-Infinity, sum=0; for(const v of clean){ if(v<min)min=v; if(v>max)max=v; sum+=v; }
+  const count = clean.length; const avg = +(sum/count).toFixed(2);
+  const sorted = [...clean].sort((a,b)=>a-b);
+  function pct(p){ if(!sorted.length) return null; const idx = Math.min(sorted.length-1, Math.max(0, Math.round(p*(sorted.length-1)))); return sorted[idx]; }
+  return { min, max, avg, last: clean[clean.length-1], count, p50: pct(0.50), p95: pct(0.95), p99: pct(0.99) };
 }
 
 app.get('/api/telemetry', (req,res)=>{
@@ -398,3 +403,17 @@ if (DISCORD_CLIENT_ID) {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[dash] Listening on 0.0.0.0:${PORT} (health: /api/status)`);
 });
+
+// Global error diagnostics to trace unexpected exits
+process.on('unhandledRejection', (reason, p) => {
+  console.error('[dash] UnhandledRejection:', reason); 
+});
+process.on('uncaughtException', (err) => {
+  console.error('[dash] UncaughtException:', err); 
+});
+process.on('exit', (code)=>{
+  console.log('[dash] Process exiting with code', code);
+});
+
+// Heartbeat log (diagnostics for unexpected exit in some environments)
+setInterval(()=>{ console.log('[dash] heartbeat', new Date().toISOString()); }, 60000).unref();
