@@ -77,12 +77,16 @@
         </p>
         <div class="hero-actions">
           <a href="#getting-started" class="btn btn-primary btn-large">
-            <span class="btn-icon">🚀</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
             Get Started
             <span class="btn-arrow">→</span>
           </a>
           <a href="#commands" class="btn btn-secondary btn-large">
-            <span class="btn-icon">⚡</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+            </svg>
             View Commands
           </a>
         </div>
@@ -94,7 +98,9 @@
       <div class="container">
         <div class="sec-head">
           <div class="section-badge glass-morphism">
-            <span class="nav-icon">🚀</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
             Getting Started
           </div>
           <h2 class="sec-title">
@@ -109,7 +115,10 @@
           <div class="feature-card glass-morphism">
             <div class="feature-header">
               <div class="feature-icon gradient-bg">
-                <span>1️⃣</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M8 12l4 4 8-8"/>
+                </svg>
               </div>
               <div class="feature-badge">Step 1</div>
             </div>
@@ -131,7 +140,12 @@
           <div class="feature-card glass-morphism">
             <div class="feature-header">
               <div class="feature-icon gradient-bg">
-                <span>2️⃣</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"/>
+                  <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                  <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                </svg>
               </div>
               <div class="feature-badge">Step 2</div>
             </div>
@@ -153,7 +167,10 @@
           <div class="feature-card glass-morphism">
             <div class="feature-header">
               <div class="feature-icon gradient-bg">
-                <span>3️⃣</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"/>
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
               </div>
               <div class="feature-badge">Step 3</div>
             </div>
@@ -179,7 +196,9 @@
       <div class="container">
         <div class="sec-head">
           <div class="section-badge glass-morphism">
-            <span class="nav-icon">⚡</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+            </svg>
             Commands Reference
           </div>
           <h2 class="sec-title">
@@ -196,7 +215,43 @@
               <div class="feature-card glass-morphism">
                 <div class="feature-header">
                   <div class="feature-icon gradient-bg">
-                    <span><%= category === 'general' ? '🔧' : category === 'moderation' ? '🛡️' : category === 'fun' ? '🎉' : category === 'music' ? '🎵' : category === 'admin' ? '👑' : '📝' %></span>
+                    <% if (category === 'general') { %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                      </svg>
+                    <% } else if (category === 'moderation') { %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <circle cx="12" cy="16" r="1"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                    <% } else if (category === 'fun') { %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                        <line x1="9" y1="9" x2="9.01" y2="9"/>
+                        <line x1="15" y1="9" x2="15.01" y2="9"/>
+                      </svg>
+                    <% } else if (category === 'music') { %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18V5l12-2v13"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="16" r="3"/>
+                      </svg>
+                    <% } else if (category === 'admin') { %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    <% } else { %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                      </svg>
+                    <% } %>
                   </div>
                   <div class="feature-badge"><%= commands[category].length %> commands</div>
                 </div>
@@ -221,7 +276,13 @@
             <div class="feature-card glass-morphism">
               <div class="feature-header">
                 <div class="feature-icon gradient-bg">
-                  <span>📝</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10,9 9,9 8,9"/>
+                  </svg>
                 </div>
                 <div class="feature-badge">Coming Soon</div>
               </div>
@@ -241,7 +302,11 @@
       <div class="container">
         <div class="sec-head">
           <div class="section-badge glass-morphism">
-            <span class="nav-icon">🎯</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="10" r="3"/>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
+            </svg>
             Advanced Features
           </div>
           <h2 class="sec-title">
@@ -256,7 +321,10 @@
           <div class="feature-card glass-morphism">
             <div class="feature-header">
               <div class="feature-icon gradient-bg">
-                <span>🔧</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 20h9"/>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
               </div>
               <div class="feature-badge">Advanced</div>
             </div>
@@ -278,7 +346,11 @@
           <div class="feature-card glass-morphism">
             <div class="feature-header">
               <div class="feature-icon gradient-bg">
-                <span>📊</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
               </div>
               <div class="feature-badge">Analytics</div>
             </div>
