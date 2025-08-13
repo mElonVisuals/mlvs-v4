@@ -275,8 +275,6 @@ main.secondary-main > section:last-child {
   right: -50px;
   bottom: -50px;
   background: 
-    /* Primary cosmic wallpaper */
-    url('https://w.wallhaven.cc/full/rq/wallhaven-rq2v8j.png') center center / cover no-repeat,
     /* Gradient overlays for integration */
     radial-gradient(ellipse 80% 50% at 20% 40%, rgba(88, 28, 135, 0.25) 0%, transparent 50%),
     radial-gradient(ellipse 60% 50% at 80% 60%, rgba(59, 130, 246, 0.20) 0%, transparent 50%),
@@ -339,10 +337,9 @@ main.secondary-main > section:last-child {
   animation: cosmicRotate 120s linear infinite;
 }
 
-/* Page-specific backgrounds */
+/* Page-specific backgrounds - REMOVED (moved to hero sections) */
 .docs-page .hp-bg {
   background: 
-    url('https://w.wallhaven.cc/full/e8/wallhaven-e873x8.png') center center / cover no-repeat,
     radial-gradient(ellipse 100% 80% at 50% 50%, rgba(245, 158, 11, 0.20) 0%, transparent 60%),
     radial-gradient(ellipse 60% 50% at 30% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
     linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
@@ -350,7 +347,6 @@ main.secondary-main > section:last-child {
 
 .status-page .hp-bg {
   background: 
-    url('https://w.wallhaven.cc/full/e8/wallhaven-e873x8.png') center center / cover no-repeat,
     radial-gradient(ellipse 80% 60% at 70% 30%, rgba(34, 211, 238, 0.18) 0%, transparent 50%),
     radial-gradient(ellipse 60% 50% at 20% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
     linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
@@ -358,7 +354,6 @@ main.secondary-main > section:last-child {
 
 .support-page .hp-bg {
   background: 
-    url('https://w.wallhaven.cc/full/ly/wallhaven-lymvrl.jpg') center center / cover no-repeat,
     radial-gradient(ellipse 70% 50% at 80% 20%, rgba(132, 204, 22, 0.18) 0%, transparent 50%),
     radial-gradient(ellipse 60% 60% at 20% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
     linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
@@ -366,10 +361,96 @@ main.secondary-main > section:last-child {
 
 .terms-page .hp-bg, .privacy-page .hp-bg {
   background: 
-    url('https://w.wallhaven.cc/full/9o/wallhaven-9o6ezd.png') center center / cover no-repeat,
     radial-gradient(ellipse 100% 100% at 50% 50%, rgba(88, 28, 135, 0.12) 0%, transparent 70%),
     radial-gradient(ellipse 80% 50% at 30% 70%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
     linear-gradient(135deg, #040810 0%, #070b14 30%, #0a0f1c 70%, #060c18 100%);
+}
+
+/* HERO SECTION WALLPAPER BACKGROUNDS */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(6rem, 12vw, 10rem) 0 clamp(8rem, 15vw, 12rem) 0;
+  text-align: center;
+}
+
+/* Homepage Hero - Cosmic Space Wallpaper */
+.homepage .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(4, 8, 16, 0.40) 0%, rgba(7, 11, 20, 0.50) 100%),
+    url('https://w.wallhaven.cc/full/rq/rq2v8j.jpg') center center / cover no-repeat;
+  z-index: 1;
+  animation: heroBackgroundShift 60s ease-in-out infinite alternate;
+}
+
+/* Docs Page Hero - Cosmic Space Wallpaper */
+.docs-page .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(4, 8, 16, 0.45) 0%, rgba(7, 11, 20, 0.55) 100%),
+    url('https://w.wallhaven.cc/full/ly/lymvrl.jpg') center center / cover no-repeat;
+  z-index: 1;
+  animation: heroBackgroundShift 70s ease-in-out infinite alternate;
+}
+
+/* Status Page Hero - Cosmic Space Wallpaper */
+.status-page .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(4, 8, 16, 0.35) 0%, rgba(7, 11, 20, 0.45) 100%),
+    url('https://w.wallhaven.cc/full/qr/qr681q.jpg') center center / cover no-repeat;
+  z-index: 1;
+  animation: heroBackgroundShift 65s ease-in-out infinite alternate;
+}
+
+/* Support Page Hero - Cosmic Space Wallpaper */
+.support-page .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(4, 8, 16, 0.35) 0%, rgba(7, 11, 20, 0.45) 100%),
+    url('https://w.wallhaven.cc/full/e8/e873x8.jpg') center center / cover no-repeat;
+  z-index: 1;
+  animation: heroBackgroundShift 55s ease-in-out infinite alternate;
+}
+
+/* Legal Pages Hero - Cosmic Space Wallpaper */
+.terms-page .hero::before, .privacy-page .hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(4, 8, 16, 0.50) 0%, rgba(7, 11, 20, 0.60) 100%),
+    url('https://w.wallhaven.cc/full/yq/yqm3wd.jpg') center center / cover no-repeat;
+  z-index: 1;
+  animation: heroBackgroundShift 50s ease-in-out infinite alternate;
 }
 
 .orb {
@@ -555,6 +636,12 @@ main.secondary-main > section:last-child {
 @keyframes cosmicRotate {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes heroBackgroundShift {
+  0% { transform: scale(1); filter: brightness(1) saturate(1); }
+  50% { transform: scale(1.05); filter: brightness(1.1) saturate(1.2); }
+  100% { transform: scale(1.02); filter: brightness(0.95) saturate(1.1); }
 }
 
 /* ==== UTILITY CLASSES ==== */
@@ -777,16 +864,6 @@ main.secondary-main > section:last-child {
 }
 
 /* ==== ENHANCED HERO SECTION ==== */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(6rem, 12vw, 10rem) 0 clamp(8rem, 15vw, 12rem) 0;
-  text-align: center;
-}
-
 /* Secondary pages hero - full screen with proper spacing */
 .docs-page .hero,
 .status-page .hero,
@@ -826,7 +903,7 @@ main.secondary-main > section:last-child {
   flex-direction: column;
   gap: 2.5rem;
   position: relative;
-  z-index: 2;
+  z-index: 10;
 }
 
 .hero-badge {
