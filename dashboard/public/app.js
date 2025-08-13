@@ -178,6 +178,45 @@
     });
   }
 
+  // Activity feed
+  const activityList = document.getElementById('activityList');
+  const activityEmpty = document.getElementById('activityEmpty');
+  async function refreshActivity(){
+    if (!activityList) return;
+    try {
+      const r = await fetch('/api/activity', { cache: 'no-store' });
+      const json = await r.json();
+      const items = Array.isArray(json?.items) ? json.items.slice(-20).reverse() : [];
+      activityList.innerHTML = '';
+      if (!items.length) {
+        if (activityEmpty) activityEmpty.style.display = '';
+        return;
+      }
+      if (activityEmpty) activityEmpty.style.display = 'none';
+      for (const it of items) {
+        const li = document.createElement('li');
+        li.className = 'card';
+        li.style.padding = '10px';
+        li.style.borderRadius = '10px';
+        li.style.border = '1px solid var(--border)';
+        li.innerHTML = `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+            <div style="display:flex; gap:8px; align-items:center">
+              <span class="badge">${(it.type||'info').toUpperCase()}</span>
+              <span>${(it.message||'').toString().slice(0,200)}</span>
+            </div>
+            <time class="muted" datetime="${it.ts||''}">${new Date(it.ts||Date.now()).toLocaleString()}</time>
+          </div>
+        `;
+        activityList.appendChild(li);
+      }
+    } catch {}
+  }
+  if (activityList) {
+    refreshActivity();
+    setInterval(refreshActivity, 20000);
+  }
+
   // Command explorer search and chips
   const input = document.getElementById('cmdSearch');
   const chips = document.getElementById('cmdChips');

@@ -89,6 +89,12 @@ body {
 .hero { position: relative; padding: 32px 0 20px; overflow: hidden }
 .hero-advanced { min-height: 72vh; display: grid; align-items: center }
 .hero-bg, .hero-overlay, .hero-mark { display: none }
+/* Opt-in background for hero when a section has .with-bg */
+.with-bg .hero-bg { display:block; position:absolute; inset:0; background-size:cover; background-position:center; filter:saturate(.95) brightness(.9) }
+.with-bg .hero-overlay { display:block; position:absolute; inset:0; background:
+	radial-gradient(900px 450px at 10% 0%, rgba(88,101,242,.28), transparent 60%),
+	radial-gradient(1200px 600px at 100% 0%, rgba(0,0,0,.45), transparent 50%),
+	linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.75)); }
 .hero-grid { position: relative; display: grid; gap: 20px; grid-template-columns: 1fr; align-items: center }
 .hero-left { display: grid; gap: 14px; text-align: left }
 .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted)) }

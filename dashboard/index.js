@@ -14,6 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 const computedInvite = (() => {
@@ -49,6 +50,20 @@ function readStatus() {
     }
   } catch {}
   return { online: false, guilds: 0, users: 0 };
+}
+
+// In-memory extras for demo; replace with real data sources as needed
+let ACTIVITY = [];
+let METRICS = { latencyMs: [], memoryMB: [], cpu: [] };
+
+// optional bearer token auth for mutating endpoints
+const API_TOKEN = process.env.API_TOKEN || null;
+function requireToken(req, res, next) {
+  if (!API_TOKEN) return next();
+  const hdr = req.headers.authorization || '';
+  const token = hdr.startsWith('Bearer ') ? hdr.slice(7) : null;
+  if (token && token === API_TOKEN) return next();
+  return res.status(401).json({ error: 'Unauthorized' });
 }
 
 function loadCommands() {
@@ -115,6 +130,44 @@ app.get('/dashboard', (req, res) => {
 
 app.get('/api/status', (req, res) => {
   res.json(readStatus());
+});
+
+// Bot metrics (time-series, capped)
+app.get('/api/metrics', (req, res) => {
+  res.json({
+    latencyMs: METRICS.latencyMs.slice(-120),
+    memoryMB: METRICS.memoryMB.slice(-120),
+    cpu: METRICS.cpu.slice(-120),
+    updatedAt: new Date().toISOString(),
+  });
+});
+
+app.post('/api/metrics', requireToken, (req, res) => {
+  const { latencyMs, memoryMB, cpu } = req.body || {};
+  const push = (arr, v) => { if (typeof v === 'number' && !Number.isNaN(v)) { arr.push(v); if (arr.length > 300) arr.splice(0, arr.length - 300); } };
+  push(METRICS.latencyMs, Number(latencyMs));
+  push(METRICS.memoryMB, Number(memoryMB));
+  push(METRICS.cpu, Number(cpu));
+  res.json({ ok: true, sizes: { latency: METRICS.latencyMs.length, memory: METRICS.memoryMB.length, cpu: METRICS.cpu.length } });
+});
+
+// Recent activity feed
+app.get('/api/activity', (req, res) => {
+  res.json({ items: ACTIVITY.slice(-50) });
+});
+
+// Push activity (example; secure with token)
+app.post('/api/activity', requireToken, (req, res) => {
+  const { type, message, meta } = req.body || {};
+  const item = { id: Date.now().toString(36), type: type || 'info', message: message || '', meta: meta || null, ts: new Date().toISOString() };
+  ACTIVITY.push(item);
+  if (ACTIVITY.length > 200) ACTIVITY = ACTIVITY.slice(-200);
+  res.json({ ok: true, item });
+});
+
+// Commands list (re-uses loadCommands)
+app.get('/api/commands', (req, res) => {
+  res.json({ commands: loadCommands() });
 });
 
 // Invite redirect if available
