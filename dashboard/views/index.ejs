@@ -39,59 +39,57 @@
     </header>
 
     <main class="dash2">
-      <section class="dash2-row stats">
-        <div class="stat">
-          <div class="stat-label">Servers</div>
-          <div class="stat-value" id="d2Guilds"><%= guilds %></div>
+      <!-- Health section: metrics + key stats -->
+      <section class="panel" style="margin-bottom:18px">
+        <div class="panel-head">
+          <h3>Health</h3>
+          <div class="panel-actions">
+            <button id="d2Refresh" class="btn small">Refresh</button>
+            <label class="muted" style="display:inline-flex; gap:6px; align-items:center"><input id="d2Auto" type="checkbox" checked /> Auto</label>
+          </div>
         </div>
-        <div class="stat">
-          <div class="stat-label">Users</div>
-          <div class="stat-value" id="d2Users"><%= users %></div>
+        <div class="metric-row">
+          <div class="metric-card">
+            <div class="metric-label">Latency</div>
+            <div class="metric-value" id="mLatency">— ms</div>
+            <svg id="spLatency" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Memory</div>
+            <div class="metric-value" id="mMemory">— MB</div>
+            <svg id="spMemory" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">CPU</div>
+            <div class="metric-value" id="mCpu">— %</div>
+            <svg id="spCpu" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
+          </div>
         </div>
-        <div class="stat">
-          <div class="stat-label">Updated</div>
-          <div class="stat-value" id="d2Updated"><%= updatedAt || '—' %></div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Bot</div>
-          <div class="stat-value" id="d2Bot"><%= botName %></div>
+        <div class="dash2-row stats" style="margin-top:14px">
+          <div class="stat">
+            <div class="stat-label">Servers</div>
+            <div class="stat-value" id="d2Guilds"><%= guilds %></div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Users</div>
+            <div class="stat-value" id="d2Users"><%= users %></div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Updated</div>
+            <div class="stat-value" id="d2Updated"><%= updatedAt || '—' %></div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Bot</div>
+            <div class="stat-value" id="d2Bot"><%= botName %></div>
+          </div>
         </div>
       </section>
 
+      <!-- Two-column: Activity and Quick Actions -->
       <section class="dash2-grid">
-        <div class="panel metrics">
-          <div class="panel-head">
-            <h3>Metrics</h3>
-            <div class="panel-actions">
-              <button id="d2Refresh" class="btn small">Refresh</button>
-              <label class="muted" style="display:inline-flex; gap:6px; align-items:center"><input id="d2Auto" type="checkbox" checked /> Auto</label>
-            </div>
-          </div>
-          <div class="metric-row">
-            <div class="metric-card">
-              <div class="metric-label">Latency</div>
-              <div class="metric-value" id="mLatency">— ms</div>
-              <svg id="spLatency" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Memory</div>
-              <div class="metric-value" id="mMemory">— MB</div>
-              <svg id="spMemory" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">CPU</div>
-              <div class="metric-value" id="mCpu">— %</div>
-              <svg id="spCpu" viewBox="0 0 160 44" preserveAspectRatio="none"></svg>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel commands">
-          <div class="panel-head">
-            <h3>Commands</h3>
-            <input id="cmdFilter" class="input-lite" placeholder="Filter" />
-          </div>
-          <div id="cmdList" class="cmd-list"></div>
+        <div class="panel activity">
+          <div class="panel-head"><h3>Recent Activity</h3></div>
+          <ul id="d2Activity" class="activity-list"></ul>
         </div>
 
         <div class="panel actions">
@@ -135,11 +133,15 @@
             <ul id="d2Actions" class="actions-list"></ul>
           </div>
         </div>
+      </section>
 
-        <div class="panel activity">
-          <div class="panel-head"><h3>Recent Activity</h3></div>
-          <ul id="d2Activity" class="activity-list"></ul>
+      <!-- Commands full-width -->
+      <section class="panel" style="margin-top:18px">
+        <div class="panel-head">
+          <h3>Commands</h3>
+          <input id="cmdFilter" class="input-lite" placeholder="Filter" />
         </div>
+        <div id="cmdList" class="cmd-list"></div>
       </section>
     </main>
 
