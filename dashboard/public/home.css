@@ -387,7 +387,7 @@ main.secondary-main > section:last-child {
   right: 0;
   bottom: 0;
   background: 
-    linear-gradient(135deg, rgba(4, 8, 16, 0.40) 0%, rgba(7, 11, 20, 0.50) 100%),
+    linear-gradient(135deg, rgba(4, 8, 16, 0.40) 0%, rgba(7, 11, 20, 0.2) 100%),
     url('https://w.wallhaven.cc/full/rq/rq2v8j.jpg') center center / cover no-repeat;
   z-index: 1;
   animation: heroBackgroundShift 60s ease-in-out infinite alternate;
