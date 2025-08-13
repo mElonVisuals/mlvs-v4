@@ -2,6 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as DiscordStrategy } from 'passport-discord';
 import { fileURLToPath } from 'url';
 // global fetch exists in Node 18+. If missing, dynamically import node-fetch.
 if (typeof fetch === 'undefined') {
@@ -15,8 +18,14 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
+// Sessions for OAuth2
+const SESSION_SECRET = process.env.SESSION_SECRET || 'dev_session_secret_change_me';
+app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 const PORT = process.env.PORT || 3001;
+const DASH_URL = process.env.DASHBOARD_URL || `http://localhost:${PORT}`;
 const computedInvite = (() => {
   const direct = process.env.INVITE_URL;
   if (direct) return direct;
@@ -36,6 +45,38 @@ const BRAND = {
   githubUrl: process.env.GITHUB_URL || 'https://github.com/mElonVisuals/mlvs-v4',
   inviteUrl: computedInvite,
 };
+
+// Passport Discord OAuth2
+const DISCORD_CLIENT_ID = process.env.CLIENT_ID || process.env.DISCORD_CLIENT_ID || '';
+const DISCORD_CLIENT_SECRET = process.env.CLIENT_SECRET || process.env.DISCORD_CLIENT_SECRET || '';
+const DISCORD_CALLBACK_URL = process.env.CALLBACK_URL || `${DASH_URL}/auth/callback`;
+
+if (DISCORD_CLIENT_ID && DISCORD_CLIENT_SECRET) {
+  passport.use(new DiscordStrategy({
+    clientID: DISCORD_CLIENT_ID,
+    clientSecret: DISCORD_CLIENT_SECRET,
+    callbackURL: DISCORD_CALLBACK_URL,
+    scope: ['identify', 'guilds'],
+  }, (accessToken, refreshToken, profile, done) => {
+    // Minimal user object in session
+    const user = {
+      id: profile.id,
+      username: profile.username,
+      discriminator: profile.discriminator,
+      avatar: profile.avatar,
+      guilds: (profile.guilds || []).map(g => ({ id: g.id, name: g.name, permissions: g.permissions, icon: g.icon }))
+    };
+    return done(null, user);
+  }));
+  passport.serializeUser((user, done) => done(null, user));
+  passport.deserializeUser((user, done) => done(null, user));
+}
+
+function ensureAuth(req, res, next) {
+  if (!DISCORD_CLIENT_ID) return next(); // if OAuth not configured, don't block during dev
+  if (req.isAuthenticated && req.isAuthenticated()) return next();
+  return res.redirect('/auth/discord');
+}
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -118,7 +159,7 @@ app.get('/', (req, res) => {
 });
 
 // Dashboard (stats)
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', ensureAuth, (req, res) => {
   const status = readStatus();
   res.render('index', {
     brand: BRAND,
@@ -172,6 +213,12 @@ app.get('/api/commands', (req, res) => {
   res.json({ commands: loadCommands() });
 });
 
+// Me (authenticated user + guilds)
+app.get('/api/me', (req, res) => {
+  if (!(req.isAuthenticated && req.isAuthenticated())) return res.status(401).json({ error: 'Unauthorized' });
+  res.json({ user: req.user || null });
+});
+
 // Presence endpoints
 app.get('/api/presence', (req, res) => {
   res.json({ presence: PRESENCE });
@@ -199,6 +246,20 @@ app.get('/api/actions', (req, res) => {
   res.json({ items: ACTIONS });
 });
 
+app.patch('/api/actions/:id', requireToken, (req, res) => {
+  const { id } = req.params;
+  const { status, result } = req.body || {};
+  const item = ACTIONS.find(a => a.id === id);
+  if (!item) return res.status(404).json({ error: 'Not found' });
+  if (!['queued','processing','done','failed'].includes(status)) return res.status(400).json({ error: 'Bad status' });
+  item.status = status;
+  if (result !== undefined) item.result = result;
+  item.updatedAt = new Date().toISOString();
+  ACTIVITY.push({ id: `${id}-ack`, type: 'action', message: `Action ${id} -> ${status}`, ts: item.updatedAt });
+  if (ACTIVITY.length > 200) ACTIVITY = ACTIVITY.slice(-200);
+  res.json({ ok: true, item });
+});
+
 // Invite redirect if available
 app.get('/invite', (req, res) => {
   if (BRAND.inviteUrl) return res.redirect(BRAND.inviteUrl);
@@ -217,6 +278,24 @@ app.get('/logo.png', async (req, res) => {
     res.status(404).end();
   }
 });
+
+// OAuth routes
+if (DISCORD_CLIENT_ID) {
+  app.get('/auth/discord', passport.authenticate('discord'));
+  app.get('/auth/callback', passport.authenticate('discord', { failureRedirect: '/' }), (req, res) => {
+    res.redirect('/dashboard');
+  });
+  app.get('/logout', (req, res, next) => {
+    if (req.logout) {
+      req.logout(err => {
+        if (err) return next(err);
+        res.redirect('/');
+      });
+    } else {
+      res.redirect('/');
+    }
+  });
+}
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[dash] Listening on 0.0.0.0:${PORT} (health: /api/status)`);

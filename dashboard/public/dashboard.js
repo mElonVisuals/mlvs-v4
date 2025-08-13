@@ -17,6 +17,12 @@
     const r = await fetch(url, { method:'POST', headers, body: JSON.stringify(body||{}) });
     if (!r.ok) throw new Error('HTTP '+r.status); return r.json();
   }
+  async function jpatch(url, body){
+    const headers = { 'Content-Type':'application/json' };
+    if (store.token) headers['Authorization'] = 'Bearer '+store.token;
+    const r = await fetch(url, { method:'PATCH', headers, body: JSON.stringify(body||{}) });
+    if (!r.ok) throw new Error('HTTP '+r.status); return r.json();
+  }
 
   // Status + stats
   async function refreshStatus(){
@@ -97,4 +103,22 @@
 
   // initial
   refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity();
+
+  // Actions list + ack
+  const actionsList = document.getElementById('d2Actions');
+  async function refreshActions(){
+    try{
+      const data = await jget('/api/actions');
+      if (!actionsList) return; actionsList.innerHTML='';
+      for(const a of (data?.items||[]).slice(-30).reverse()){
+        const li = document.createElement('li'); li.className='act-item';
+        li.innerHTML = `<span class="badge">${a.type}</span><span>${a.payload?.message||''}</span><span class="muted">${a.status}</span>`;
+  const btn = document.createElement('button'); btn.className='btn small'; btn.textContent='Ack done';
+  btn.addEventListener('click', async ()=>{ try{ await jpatch(`/api/actions/${a.id}`, { status:'done' }); refreshActions(); }catch{} });
+        li.appendChild(btn);
+        actionsList.appendChild(li);
+      }
+    }catch{}
+  }
+  refreshActions(); setInterval(refreshActions, 20000);
 })();
