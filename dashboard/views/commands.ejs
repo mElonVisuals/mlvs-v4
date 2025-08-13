@@ -1,4 +1,1407 @@
+<!-- ==== ULTRA-MODERN COMMANDS MANAGEMENT DASHBOARD ==== -->
 <section class="panel glass" id="secCommands">
-  <div class="panel-head"><h3>Commands</h3><input id="cmdFilter" class="input-lite" placeholder="Filter" aria-label="Filter commands" /></div>
-  <div id="cmdList" class="cmd-list" role="list"></div>
+  <div class="panel-head">
+    <h3>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: var(--space-3);">
+        <path d="M7 7l10 10M7 17l10-10"/>
+      </svg>
+      Command Center
+    </h3>
+    <div class="panel-actions">
+      <div class="command-stats">
+        <span class="stat-badge">
+          <span class="stat-number" id="totalCommands">0</span>
+          <span class="stat-label">Total</span>
+        </span>
+        <span class="stat-badge">
+          <span class="stat-number" id="enabledCommands">0</span>
+          <span class="stat-label">Active</span>
+        </span>
+        <span class="stat-badge">
+          <span class="stat-number" id="usageToday">0</span>
+          <span class="stat-label">Today</span>
+        </span>
+      </div>
+      <button class="btn small" id="refreshCommands" style="display: flex; align-items: center; gap: var(--space-2);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6"/>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+        </svg>
+        Refresh
+      </button>
+      <button class="btn primary small" id="addCommand" style="display: flex; align-items: center; gap: var(--space-2);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Add Command
+      </button>
+    </div>
+  </div>
+  
+  <!-- Enhanced Command Filters and Search -->
+  <div class="commands-controls" style="padding: var(--space-6) var(--space-8); border-bottom: 1px solid var(--glass-border-light); background: var(--glass-light);">
+    <div class="filter-row">
+      <div class="search-group">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="commandSearch" placeholder="Search commands..." class="search-input" />
+          <button class="search-clear" id="clearSearch" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-group">
+        <label for="categoryFilter" class="filter-label">Category</label>
+        <select id="categoryFilter" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="moderation">Moderation</option>
+          <option value="music">Music</option>
+          <option value="utility">Utility</option>
+          <option value="fun">Fun</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="statusFilter" class="filter-label">Status</label>
+        <select id="statusFilter" class="filter-select">
+          <option value="">All Status</option>
+          <option value="enabled">Enabled</option>
+          <option value="disabled">Disabled</option>
+          <option value="premium">Premium Only</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="sortBy" class="filter-label">Sort By</label>
+        <select id="sortBy" class="filter-select">
+          <option value="name">Name</option>
+          <option value="usage">Usage Count</option>
+          <option value="category">Category</option>
+          <option value="recent">Recently Used</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridView" title="Grid View">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </button>
+          <button class="view-btn" id="listView" title="List View">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Commands Container -->
+  <div class="commands-container">
+    <div id="commandsGrid" class="commands-grid">
+      <!-- Commands will be populated here -->
+    </div>
+    
+    <div id="commandsList" class="commands-list" style="display: none;">
+      <!-- List view will be populated here -->
+    </div>
+    
+    <!-- Empty State -->
+    <div class="commands-empty" id="commandsEmpty" style="display: none;">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 7l10 10M7 17l10-10"/>
+        </svg>
+      </div>
+      <h3>No Commands Found</h3>
+      <p>No commands match your current filters. Try adjusting your search or filters.</p>
+      <button class="btn" onclick="document.getElementById('clearSearch').click()">Clear Filters</button>
+    </div>
+    
+    <!-- Loading State -->
+    <div class="commands-loading" id="commandsLoading">
+      <div class="loading-spinner"></div>
+      <p>Loading command registry...</p>
+    </div>
+  </div>
 </section>
+
+<!-- Command Usage Analytics Panel -->
+<section class="panel glass" id="secCommandAnalytics" style="margin-top: var(--space-8);">
+  <div class="panel-head">
+    <h3>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: var(--space-3);">
+        <path d="M3 3v18h18"/>
+        <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+      </svg>
+      Usage Analytics
+    </h3>
+  </div>
+  
+  <div style="padding: var(--space-8);">
+    <div class="analytics-grid">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h4>Most Popular Commands</h4>
+          <div class="analytics-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+            </svg>
+          </div>
+        </div>
+        <div class="analytics-content">
+          <div class="command-ranking">
+            <div class="rank-item">
+              <span class="rank-position">#1</span>
+              <span class="rank-command">/help</span>
+              <span class="rank-count">2,847 uses</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-position">#2</span>
+              <span class="rank-command">/music play</span>
+              <span class="rank-count">1,923 uses</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-position">#3</span>
+              <span class="rank-command">/info</span>
+              <span class="rank-count">1,456 uses</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-position">#4</span>
+              <span class="rank-command">/poll create</span>
+              <span class="rank-count">892 uses</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-position">#5</span>
+              <span class="rank-command">/kick</span>
+              <span class="rank-count">634 uses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h4>Category Breakdown</h4>
+          <div class="analytics-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+        </div>
+        <div class="analytics-content">
+          <div class="category-chart">
+            <div class="category-item">
+              <div class="category-bar">
+                <div class="category-fill music" style="width: 85%;"></div>
+              </div>
+              <div class="category-info">
+                <span class="category-name">Music</span>
+                <span class="category-percentage">85%</span>
+              </div>
+            </div>
+            <div class="category-item">
+              <div class="category-bar">
+                <div class="category-fill moderation" style="width: 65%;"></div>
+              </div>
+              <div class="category-info">
+                <span class="category-name">Moderation</span>
+                <span class="category-percentage">65%</span>
+              </div>
+            </div>
+            <div class="category-item">
+              <div class="category-bar">
+                <div class="category-fill utility" style="width: 45%;"></div>
+              </div>
+              <div class="category-info">
+                <span class="category-name">Utility</span>
+                <span class="category-percentage">45%</span>
+              </div>
+            </div>
+            <div class="category-item">
+              <div class="category-bar">
+                <div class="category-fill fun" style="width: 30%;"></div>
+              </div>
+              <div class="category-info">
+                <span class="category-name">Fun</span>
+                <span class="category-percentage">30%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <h4>Performance Metrics</h4>
+          <div class="analytics-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="analytics-content">
+          <div class="performance-metrics">
+            <div class="metric-item">
+              <div class="metric-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12,6 12,12 16,14"/>
+                </svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-value">127ms</span>
+                <span class="metric-label">Avg Response Time</span>
+              </div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"/>
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-value">99.7%</span>
+                <span class="metric-label">Success Rate</span>
+              </div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 20V10"/>
+                  <path d="M18 20V4"/>
+                  <path d="M6 20v-4"/>
+                </svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-value">4.2k/hr</span>
+                <span class="metric-label">Peak Usage</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Command Editor Modal -->
+<div class="modal-overlay" id="commandModal" style="display: none;">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3 id="modalTitle">Edit Command</h3>
+      <button class="modal-close" id="closeModal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal-content">
+      <form id="commandForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="commandName">Command Name</label>
+            <input type="text" id="commandName" placeholder="e.g., /music" required />
+          </div>
+          <div class="form-group">
+            <label for="commandCategory">Category</label>
+            <select id="commandCategory" required>
+              <option value="moderation">Moderation</option>
+              <option value="music">Music</option>
+              <option value="utility">Utility</option>
+              <option value="fun">Fun</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="commandDescription">Description</label>
+          <textarea id="commandDescription" placeholder="Describe what this command does..." rows="3"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="commandCooldown">Cooldown (seconds)</label>
+            <input type="number" id="commandCooldown" min="0" value="0" />
+          </div>
+          <div class="form-group">
+            <label for="commandPermission">Required Permission</label>
+            <select id="commandPermission">
+              <option value="everyone">Everyone</option>
+              <option value="moderator">Moderator</option>
+              <option value="admin">Administrator</option>
+              <option value="owner">Server Owner</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="commandEnabled" checked />
+              <span class="checkbox-mark"></span>
+              Enabled
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="commandPremium" />
+              <span class="checkbox-mark"></span>
+              Premium Only
+            </label>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" id="cancelCommand">Cancel</button>
+          <button type="submit" class="btn primary">Save Command</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ==== COMMANDS DASHBOARD SPECIFIC STYLES ==== */
+  .command-stats {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  
+  .commands-controls {
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+  }
+  
+  .search-group {
+    flex: 1;
+    max-width: 400px;
+  }
+  
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    width: 100%;
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-3) var(--space-3) var(--space-10);
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: var(--space-3);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  
+  .search-clear {
+    position: absolute;
+    right: var(--space-3);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-md);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .search-clear:hover {
+    color: var(--text-primary);
+    background: var(--glass-light);
+  }
+  
+  .view-toggle {
+    display: flex;
+    gap: var(--space-1);
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-1);
+  }
+  
+  .view-btn {
+    padding: var(--space-2);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .view-btn:hover {
+    color: var(--text-primary);
+    background: var(--glass-light);
+  }
+  
+  .view-btn.active {
+    color: var(--primary-400);
+    background: var(--primary-500/10);
+  }
+  
+  .commands-container {
+    padding: var(--space-8);
+    min-height: 400px;
+  }
+  
+  .commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+  
+  .command-card {
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-3xl);
+    padding: var(--space-6);
+    transition: all var(--duration-300) var(--ease-out);
+    cursor: pointer;
+    animation: slideInUp 0.3s var(--ease-spring);
+  }
+  
+  .command-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    background: var(--glass-medium);
+  }
+  
+  .command-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+  
+  .command-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  .command-status {
+    display: flex;
+    gap: var(--space-2);
+  }
+  
+  .status-badge {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .status-badge.enabled {
+    background: var(--emerald-500/20);
+    color: var(--emerald-400);
+  }
+  
+  .status-badge.disabled {
+    background: var(--red-500/20);
+    color: var(--red-400);
+  }
+  
+  .status-badge.premium {
+    background: var(--amber-500/20);
+    color: var(--amber-400);
+  }
+  
+  .command-description {
+    color: var(--text-tertiary);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+  
+  .command-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  
+  .command-category {
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .command-usage {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  
+  .commands-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  .command-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-2xl);
+    transition: all var(--duration-200) var(--ease-out);
+    cursor: pointer;
+  }
+  
+  .command-row:hover {
+    background: var(--glass-medium);
+    transform: translateX(4px);
+  }
+  
+  .commands-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-20) var(--space-8);
+    text-align: center;
+  }
+  
+  .empty-icon {
+    margin-bottom: var(--space-6);
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+  
+  .commands-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--space-8);
+  }
+  
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-6);
+  }
+  
+  .analytics-card {
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-3xl);
+    padding: var(--space-6);
+    transition: all var(--duration-300) var(--ease-out);
+  }
+  
+  .analytics-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    background: var(--glass-medium);
+  }
+  
+  .analytics-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+  }
+  
+  .analytics-header h4 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  .analytics-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-400);
+  }
+  
+  .command-ranking {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3);
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .rank-item:hover {
+    background: var(--glass-heavy);
+    transform: translateX(4px);
+  }
+  
+  .rank-position {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--primary-400);
+    min-width: 32px;
+  }
+  
+  .rank-command {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+  }
+  
+  .rank-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+  
+  .category-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  .category-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  
+  .category-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--glass-medium);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  
+  .category-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width var(--duration-300) var(--ease-out);
+  }
+  
+  .category-fill.music {
+    background: linear-gradient(90deg, var(--purple-500), var(--purple-600));
+  }
+  
+  .category-fill.moderation {
+    background: linear-gradient(90deg, var(--red-500), var(--red-600));
+  }
+  
+  .category-fill.utility {
+    background: linear-gradient(90deg, var(--blue-500), var(--blue-600));
+  }
+  
+  .category-fill.fun {
+    background: linear-gradient(90deg, var(--emerald-500), var(--emerald-600));
+  }
+  
+  .category-info {
+    display: flex;
+    justify-content: space-between;
+    min-width: 120px;
+    font-size: var(--text-sm);
+  }
+  
+  .category-name {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .category-percentage {
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+  
+  .performance-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  .metric-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+  }
+  
+  .metric-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-500/20);
+    color: var(--primary-400);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .metric-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  
+  .metric-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s var(--ease-out);
+  }
+  
+  .modal-container {
+    background: var(--background-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-3xl);
+    width: 90vw;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: hidden;
+    animation: slideInScale 0.3s var(--ease-spring);
+  }
+  
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6) var(--space-8);
+    border-bottom: 1px solid var(--glass-border-light);
+    background: var(--glass-light);
+  }
+  
+  .modal-header h3 {
+    margin: 0;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--space-2);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .modal-close:hover {
+    color: var(--text-primary);
+    background: var(--glass-light);
+  }
+  
+  .modal-content {
+    padding: var(--space-8);
+    overflow-y: auto;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  
+  .form-group label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+  
+  .checkbox-group {
+    display: flex;
+    gap: var(--space-6);
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  
+  .checkbox-label input[type="checkbox"] {
+    display: none;
+  }
+  
+  .checkbox-mark {
+    width: 18px;
+    height: 18px;
+    background: var(--glass-medium);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .checkbox-mark::after {
+    content: '✓';
+    color: white;
+    font-size: var(--text-xs);
+    opacity: 0;
+    transition: opacity var(--duration-200) var(--ease-out);
+  }
+  
+  .checkbox-label input[type="checkbox"]:checked + .checkbox-mark {
+    background: var(--primary-500);
+    border-color: var(--primary-500);
+  }
+  
+  .checkbox-label input[type="checkbox"]:checked + .checkbox-mark::after {
+    opacity: 1;
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: end;
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--glass-border-light);
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .filter-row {
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    
+    .search-group,
+    .filter-group {
+      width: 100%;
+    }
+    
+    .commands-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .analytics-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    
+    .command-stats {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+  }
+</style>
+
+<script>
+  // Enhanced command management system with filtering, search, and analytics
+  document.addEventListener('DOMContentLoaded', function() {
+    let commandsData = [];
+    let filteredCommands = [];
+    let currentView = 'grid';
+    
+    const commandsGrid = document.getElementById('commandsGrid');
+    const commandsList = document.getElementById('commandsList');
+    const commandsEmpty = document.getElementById('commandsEmpty');
+    const commandsLoading = document.getElementById('commandsLoading');
+    const totalCommands = document.getElementById('totalCommands');
+    const enabledCommands = document.getElementById('enabledCommands');
+    const usageToday = document.getElementById('usageToday');
+    
+    // Command categories and their icons
+    const categoryIcons = {
+      moderation: '🔨',
+      music: '🎵',
+      utility: '🔧',
+      fun: '🎉',
+      admin: '👑'
+    };
+    
+    // Generate mock command data
+    function generateMockCommands() {
+      const commandTemplates = [
+        { name: '/help', category: 'utility', description: 'Display help information and command list', usage: 2847, enabled: true, premium: false },
+        { name: '/music play', category: 'music', description: 'Play music from various sources', usage: 1923, enabled: true, premium: false },
+        { name: '/info', category: 'utility', description: 'Display server or user information', usage: 1456, enabled: true, premium: false },
+        { name: '/poll create', category: 'utility', description: 'Create interactive polls with reactions', usage: 892, enabled: true, premium: false },
+        { name: '/kick', category: 'moderation', description: 'Kick a user from the server', usage: 634, enabled: true, premium: false },
+        { name: '/ban', category: 'moderation', description: 'Ban a user from the server', usage: 421, enabled: true, premium: false },
+        { name: '/music queue', category: 'music', description: 'Display and manage the music queue', usage: 387, enabled: true, premium: false },
+        { name: '/warn', category: 'moderation', description: 'Issue a warning to a user', usage: 298, enabled: true, premium: false },
+        { name: '/joke', category: 'fun', description: 'Tell a random joke to lighten the mood', usage: 234, enabled: true, premium: false },
+        { name: '/weather', category: 'utility', description: 'Get current weather information', usage: 187, enabled: true, premium: true },
+        { name: '/mute', category: 'moderation', description: 'Temporarily mute a user', usage: 156, enabled: true, premium: false },
+        { name: '/8ball', category: 'fun', description: 'Ask the magic 8-ball a question', usage: 134, enabled: true, premium: false },
+        { name: '/translate', category: 'utility', description: 'Translate text between languages', usage: 98, enabled: false, premium: true },
+        { name: '/avatar', category: 'utility', description: 'Display user or server avatar', usage: 87, enabled: true, premium: false },
+        { name: '/slowmode', category: 'moderation', description: 'Set channel slowmode restrictions', usage: 76, enabled: true, premium: false },
+        { name: '/remind', category: 'utility', description: 'Set reminders for future events', usage: 65, enabled: true, premium: true },
+        { name: '/trivia', category: 'fun', description: 'Start a trivia game session', usage: 54, enabled: true, premium: true },
+        { name: '/backup', category: 'admin', description: 'Create server configuration backup', usage: 23, enabled: true, premium: true },
+        { name: '/stats', category: 'utility', description: 'Display detailed server statistics', usage: 43, enabled: true, premium: false },
+        { name: '/color', category: 'utility', description: 'Assign color roles to users', usage: 32, enabled: false, premium: false }
+      ];
+      
+      return commandTemplates.map((template, index) => ({
+        id: index + 1,
+        ...template,
+        cooldown: Math.floor(Math.random() * 30),
+        permission: ['everyone', 'moderator', 'admin', 'owner'][Math.floor(Math.random() * 4)],
+        lastUsed: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+        responseTime: Math.floor(Math.random() * 500) + 50
+      }));
+    }
+    
+    // Create command card element
+    function createCommandCard(command) {
+      const card = document.createElement('div');
+      card.className = 'command-card';
+      card.dataset.id = command.id;
+      card.dataset.category = command.category;
+      card.dataset.status = command.enabled ? 'enabled' : 'disabled';
+      
+      const statusBadges = [];
+      if (command.enabled) {
+        statusBadges.push('<span class="status-badge enabled">Enabled</span>');
+      } else {
+        statusBadges.push('<span class="status-badge disabled">Disabled</span>');
+      }
+      if (command.premium) {
+        statusBadges.push('<span class="status-badge premium">Premium</span>');
+      }
+      
+      card.innerHTML = `
+        <div class="command-header">
+          <h4 class="command-name">${command.name}</h4>
+          <div class="command-status">
+            ${statusBadges.join('')}
+          </div>
+        </div>
+        <p class="command-description">${command.description}</p>
+        <div class="command-meta">
+          <span class="command-category">
+            ${categoryIcons[command.category] || '📁'} ${command.category}
+          </span>
+          <span class="command-usage">${command.usage.toLocaleString()} uses</span>
+        </div>
+      `;
+      
+      card.addEventListener('click', () => openCommandModal(command));
+      
+      return card;
+    }
+    
+    // Create command row element (for list view)
+    function createCommandRow(command) {
+      const row = document.createElement('div');
+      row.className = 'command-row';
+      row.dataset.id = command.id;
+      row.dataset.category = command.category;
+      row.dataset.status = command.enabled ? 'enabled' : 'disabled';
+      
+      const statusClass = command.enabled ? 'enabled' : 'disabled';
+      const statusText = command.enabled ? 'Enabled' : 'Disabled';
+      
+      row.innerHTML = `
+        <div style="flex: 2;">
+          <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-1);">
+            ${command.name}
+          </div>
+          <div style="font-size: var(--text-sm); color: var(--text-tertiary);">
+            ${command.description}
+          </div>
+        </div>
+        <div style="flex: 1; text-align: center;">
+          <span class="command-category">
+            ${categoryIcons[command.category] || '📁'} ${command.category}
+          </span>
+        </div>
+        <div style="flex: 1; text-align: center;">
+          <span class="status-badge ${statusClass}">${statusText}</span>
+          ${command.premium ? '<span class="status-badge premium" style="margin-left: var(--space-2);">Premium</span>' : ''}
+        </div>
+        <div style="flex: 1; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--text-muted);">
+          ${command.usage.toLocaleString()} uses
+        </div>
+      `;
+      
+      row.addEventListener('click', () => openCommandModal(command));
+      
+      return row;
+    }
+    
+    // Apply filters and search
+    function applyFilters() {
+      const searchTerm = document.getElementById('commandSearch').value.toLowerCase();
+      const categoryFilter = document.getElementById('categoryFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      const sortBy = document.getElementById('sortBy').value;
+      
+      let filtered = [...commandsData];
+      
+      // Apply search filter
+      if (searchTerm) {
+        filtered = filtered.filter(command => 
+          command.name.toLowerCase().includes(searchTerm) ||
+          command.description.toLowerCase().includes(searchTerm) ||
+          command.category.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      // Apply category filter
+      if (categoryFilter) {
+        filtered = filtered.filter(command => command.category === categoryFilter);
+      }
+      
+      // Apply status filter
+      if (statusFilter) {
+        if (statusFilter === 'enabled') {
+          filtered = filtered.filter(command => command.enabled);
+        } else if (statusFilter === 'disabled') {
+          filtered = filtered.filter(command => !command.enabled);
+        } else if (statusFilter === 'premium') {
+          filtered = filtered.filter(command => command.premium);
+        }
+      }
+      
+      // Apply sorting
+      switch (sortBy) {
+        case 'name':
+          filtered.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'usage':
+          filtered.sort((a, b) => b.usage - a.usage);
+          break;
+        case 'category':
+          filtered.sort((a, b) => a.category.localeCompare(b.category));
+          break;
+        case 'recent':
+          filtered.sort((a, b) => new Date(b.lastUsed) - new Date(a.lastUsed));
+          break;
+      }
+      
+      filteredCommands = filtered;
+      renderCommands();
+      updateStats();
+      
+      // Show/hide clear search button
+      const clearSearch = document.getElementById('clearSearch');
+      clearSearch.style.display = searchTerm ? 'block' : 'none';
+    }
+    
+    // Render commands based on current view
+    function renderCommands() {
+      commandsLoading.style.display = 'none';
+      
+      if (filteredCommands.length === 0) {
+        commandsGrid.style.display = 'none';
+        commandsList.style.display = 'none';
+        commandsEmpty.style.display = 'block';
+        return;
+      }
+      
+      commandsEmpty.style.display = 'none';
+      
+      if (currentView === 'grid') {
+        commandsList.style.display = 'none';
+        commandsGrid.style.display = 'grid';
+        commandsGrid.innerHTML = '';
+        
+        filteredCommands.forEach(command => {
+          const card = createCommandCard(command);
+          commandsGrid.appendChild(card);
+        });
+      } else {
+        commandsGrid.style.display = 'none';
+        commandsList.style.display = 'flex';
+        commandsList.innerHTML = '';
+        
+        filteredCommands.forEach(command => {
+          const row = createCommandRow(command);
+          commandsList.appendChild(row);
+        });
+      }
+    }
+    
+    // Update statistics
+    function updateStats() {
+      totalCommands.textContent = commandsData.length;
+      
+      const enabled = commandsData.filter(cmd => cmd.enabled).length;
+      enabledCommands.textContent = enabled;
+      
+      const todayUsage = commandsData.reduce((total, cmd) => total + cmd.usage, 0);
+      usageToday.textContent = (todayUsage / 100).toFixed(1) + 'k';
+    }
+    
+    // Open command modal for editing
+    function openCommandModal(command = null) {
+      const modal = document.getElementById('commandModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const form = document.getElementById('commandForm');
+      
+      if (command) {
+        modalTitle.textContent = 'Edit Command';
+        document.getElementById('commandName').value = command.name;
+        document.getElementById('commandCategory').value = command.category;
+        document.getElementById('commandDescription').value = command.description;
+        document.getElementById('commandCooldown').value = command.cooldown;
+        document.getElementById('commandPermission').value = command.permission;
+        document.getElementById('commandEnabled').checked = command.enabled;
+        document.getElementById('commandPremium').checked = command.premium;
+        form.dataset.commandId = command.id;
+      } else {
+        modalTitle.textContent = 'Add New Command';
+        form.reset();
+        form.removeAttribute('data-command-id');
+      }
+      
+      modal.style.display = 'flex';
+    }
+    
+    // Close command modal
+    function closeCommandModal() {
+      document.getElementById('commandModal').style.display = 'none';
+    }
+    
+    // Event listeners
+    document.getElementById('commandSearch').addEventListener('input', applyFilters);
+    document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+    document.getElementById('statusFilter').addEventListener('change', applyFilters);
+    document.getElementById('sortBy').addEventListener('change', applyFilters);
+    
+    document.getElementById('clearSearch').addEventListener('click', () => {
+      document.getElementById('commandSearch').value = '';
+      applyFilters();
+    });
+    
+    document.getElementById('gridView').addEventListener('click', () => {
+      currentView = 'grid';
+      document.getElementById('gridView').classList.add('active');
+      document.getElementById('listView').classList.remove('active');
+      renderCommands();
+    });
+    
+    document.getElementById('listView').addEventListener('click', () => {
+      currentView = 'list';
+      document.getElementById('listView').classList.add('active');
+      document.getElementById('gridView').classList.remove('active');
+      renderCommands();
+    });
+    
+    document.getElementById('addCommand').addEventListener('click', () => openCommandModal());
+    document.getElementById('refreshCommands').addEventListener('click', () => {
+      commandsLoading.style.display = 'flex';
+      setTimeout(() => {
+        commandsData = generateMockCommands();
+        applyFilters();
+        commandsLoading.style.display = 'none';
+      }, 500);
+    });
+    
+    // Modal event listeners
+    document.getElementById('closeModal').addEventListener('click', closeCommandModal);
+    document.getElementById('cancelCommand').addEventListener('click', closeCommandModal);
+    
+    document.getElementById('commandModal').addEventListener('click', (e) => {
+      if (e.target.id === 'commandModal') {
+        closeCommandModal();
+      }
+    });
+    
+    document.getElementById('commandForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const commandData = {
+        name: document.getElementById('commandName').value,
+        category: document.getElementById('commandCategory').value,
+        description: document.getElementById('commandDescription').value,
+        cooldown: parseInt(document.getElementById('commandCooldown').value),
+        permission: document.getElementById('commandPermission').value,
+        enabled: document.getElementById('commandEnabled').checked,
+        premium: document.getElementById('commandPremium').checked
+      };
+      
+      const commandId = e.target.dataset.commandId;
+      
+      if (commandId) {
+        // Edit existing command
+        const index = commandsData.findIndex(cmd => cmd.id == commandId);
+        if (index !== -1) {
+          commandsData[index] = { ...commandsData[index], ...commandData };
+        }
+      } else {
+        // Add new command
+        const newCommand = {
+          id: commandsData.length + 1,
+          ...commandData,
+          usage: 0,
+          lastUsed: new Date(),
+          responseTime: 100
+        };
+        commandsData.push(newCommand);
+      }
+      
+      applyFilters();
+      closeCommandModal();
+    });
+    
+    // Initialize with mock data
+    commandsData = generateMockCommands();
+    applyFilters();
+    
+    console.log('✅ Commands management dashboard initialized');
+  });
+</script>

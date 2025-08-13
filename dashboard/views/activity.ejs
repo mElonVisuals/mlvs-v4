@@ -1,4 +1,999 @@
+<!-- ==== ULTRA-MODERN ACTIVITY MONITORING DASHBOARD ==== -->
 <section class="panel glass" id="secActivity">
-  <div class="panel-head"><h3>Recent Activity</h3><div class="panel-actions"><button class="btn small" id="actRefresh">Refresh</button></div></div>
-  <ul id="d2Activity" class="activity-list" aria-live="polite"></ul>
+  <div class="panel-head">
+    <h3>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: var(--space-3);">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+      Live Activity Stream
+    </h3>
+    <div class="panel-actions">
+      <div class="activity-stats">
+        <span class="stat-badge">
+          <span class="stat-number" id="activityCount">0</span>
+          <span class="stat-label">Events</span>
+        </span>
+        <span class="stat-badge">
+          <span class="stat-number" id="activityRate">0/min</span>
+          <span class="stat-label">Rate</span>
+        </span>
+      </div>
+      <button class="btn small" id="actRefresh" style="display: flex; align-items: center; gap: var(--space-2);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6"/>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+        </svg>
+        Refresh
+      </button>
+      <button class="btn small" id="clearActivity" style="display: flex; align-items: center; gap: var(--space-2);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18"/>
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+        </svg>
+        Clear
+      </button>
+    </div>
+  </div>
+  
+  <!-- Real-time Activity Filters -->
+  <div class="activity-controls" style="padding: var(--space-6) var(--space-8); border-bottom: 1px solid var(--glass-border-light); background: var(--glass-light);">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="activityFilter" class="filter-label">Filter Events</label>
+        <select id="activityFilter" class="filter-select">
+          <option value="">All Activities</option>
+          <option value="command">Commands</option>
+          <option value="join">User Joins</option>
+          <option value="leave">User Leaves</option>
+          <option value="message">Messages</option>
+          <option value="error">Errors</option>
+          <option value="warning">Warnings</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="serverFilter" class="filter-label">Server</label>
+        <select id="serverFilter" class="filter-select">
+          <option value="">All Servers</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label for="timeRange" class="filter-label">Time Range</label>
+        <select id="timeRange" class="filter-select">
+          <option value="1h">Last Hour</option>
+          <option value="6h">Last 6 Hours</option>
+          <option value="24h" selected>Last 24 Hours</option>
+          <option value="7d">Last 7 Days</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <div class="toggle-group">
+          <label class="toggle-label">
+            <input type="checkbox" id="autoScroll" checked />
+            <span class="toggle-slider"></span>
+            Auto-scroll
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="showTimestamps" checked />
+            <span class="toggle-slider"></span>
+            Timestamps
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Enhanced Activity List -->
+  <div class="activity-container">
+    <ul id="d2Activity" class="activity-list" aria-live="polite" aria-label="Real-time activity feed">
+      <!-- Activity items will be populated here -->
+    </ul>
+    
+    <!-- Empty State -->
+    <div class="activity-empty" id="activityEmpty" style="display: none;">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+          <line x1="9" y1="9" x2="9.01" y2="9"/>
+          <line x1="15" y1="9" x2="15.01" y2="9"/>
+        </svg>
+      </div>
+      <h3>No Activity Found</h3>
+      <p>No recent activity matches your current filters. Try adjusting the filters or check back later.</p>
+      <button class="btn" onclick="document.getElementById('actRefresh').click()">Refresh Activity</button>
+    </div>
+    
+    <!-- Loading State -->
+    <div class="activity-loading" id="activityLoading">
+      <div class="loading-spinner"></div>
+      <p>Loading activity stream...</p>
+    </div>
+  </div>
 </section>
+
+<!-- Activity Pattern Analysis Panel -->
+<section class="panel glass" id="secActivityAnalysis" style="margin-top: var(--space-8);">
+  <div class="panel-head">
+    <h3>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: var(--space-3);">
+        <path d="M3 3v18h18"/>
+        <path d="M9 9l1.5-1.5L16 13"/>
+      </svg>
+      Activity Analysis
+    </h3>
+  </div>
+  
+  <div style="padding: var(--space-8);">
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <div class="analysis-header">
+          <h4>Peak Hours</h4>
+          <div class="analysis-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12,6 12,12 16,14"/>
+            </svg>
+          </div>
+        </div>
+        <div class="analysis-content">
+          <div class="peak-time">
+            <span class="time-value">2:00 PM - 6:00 PM</span>
+            <span class="time-label">Most Active</span>
+          </div>
+          <div class="peak-chart">
+            <div class="hour-bar" data-hour="0" style="height: 20%;"></div>
+            <div class="hour-bar" data-hour="1" style="height: 15%;"></div>
+            <div class="hour-bar" data-hour="2" style="height: 10%;"></div>
+            <div class="hour-bar" data-hour="3" style="height: 25%;"></div>
+            <div class="hour-bar" data-hour="4" style="height: 45%;"></div>
+            <div class="hour-bar" data-hour="5" style="height: 80%;"></div>
+            <div class="hour-bar" data-hour="6" style="height: 100%;"></div>
+            <div class="hour-bar" data-hour="7" style="height: 85%;"></div>
+            <div class="hour-bar" data-hour="8" style="height: 90%;"></div>
+            <div class="hour-bar" data-hour="9" style="height: 70%;"></div>
+            <div class="hour-bar" data-hour="10" style="height: 60%;"></div>
+            <div class="hour-bar" data-hour="11" style="height: 40%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analysis-card">
+        <div class="analysis-header">
+          <h4>Top Commands</h4>
+          <div class="analysis-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4"/>
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+          </div>
+        </div>
+        <div class="analysis-content">
+          <div class="command-list">
+            <div class="command-item">
+              <span class="command-name">/help</span>
+              <span class="command-count">1,247</span>
+            </div>
+            <div class="command-item">
+              <span class="command-name">/music play</span>
+              <span class="command-count">892</span>
+            </div>
+            <div class="command-item">
+              <span class="command-name">/info</span>
+              <span class="command-count">634</span>
+            </div>
+            <div class="command-item">
+              <span class="command-name">/poll</span>
+              <span class="command-count">423</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analysis-card">
+        <div class="analysis-header">
+          <h4>Server Activity</h4>
+          <div class="analysis-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+        </div>
+        <div class="analysis-content">
+          <div class="server-stats">
+            <div class="server-stat">
+              <span class="stat-value">23.4k</span>
+              <span class="stat-label">Total Events</span>
+            </div>
+            <div class="server-stat">
+              <span class="stat-value">142</span>
+              <span class="stat-label">Active Users</span>
+            </div>
+            <div class="server-stat">
+              <span class="stat-value">7.2/min</span>
+              <span class="stat-label">Avg Rate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ==== ACTIVITY DASHBOARD SPECIFIC STYLES ==== */
+  .activity-stats {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  
+  .stat-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    min-width: 60px;
+  }
+  
+  .stat-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--primary-400);
+    line-height: 1;
+  }
+  
+  .stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .activity-controls {
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+  }
+  
+  .filter-row {
+    display: flex;
+    gap: var(--space-6);
+    align-items: end;
+    flex-wrap: wrap;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 120px;
+  }
+  
+  .filter-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .filter-select {
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+  
+  .toggle-group {
+    display: flex;
+    gap: var(--space-4);
+  }
+  
+  .toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  
+  .toggle-slider {
+    position: relative;
+    width: 32px;
+    height: 16px;
+    background: var(--glass-border);
+    border-radius: var(--radius-full);
+    transition: background var(--duration-200) var(--ease-out);
+  }
+  
+  .toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    background: var(--text-primary);
+    border-radius: 50%;
+    transition: transform var(--duration-200) var(--ease-out);
+  }
+  
+  input[type="checkbox"] {
+    display: none;
+  }
+  
+  input[type="checkbox"]:checked + .toggle-slider {
+    background: var(--primary-500);
+  }
+  
+  input[type="checkbox"]:checked + .toggle-slider::after {
+    transform: translateX(16px);
+  }
+  
+  .activity-container {
+    position: relative;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  
+  .activity-list {
+    list-style: none;
+    padding: var(--space-6) var(--space-8);
+    margin: 0;
+  }
+  
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-2xl);
+    transition: all var(--duration-300) var(--ease-out);
+    animation: slideInActivity 0.3s var(--ease-spring);
+  }
+  
+  .activity-item:hover {
+    background: var(--glass-medium);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: var(--text-sm);
+  }
+  
+  .activity-icon.command {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+  }
+  
+  .activity-icon.join {
+    background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+    color: white;
+  }
+  
+  .activity-icon.leave {
+    background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+    color: white;
+  }
+  
+  .activity-icon.message {
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+    color: white;
+  }
+  
+  .activity-icon.error {
+    background: linear-gradient(135deg, var(--red-500), var(--red-600));
+    color: white;
+  }
+  
+  .activity-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .activity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-1);
+  }
+  
+  .activity-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+  }
+  
+  .activity-time {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .activity-description {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    line-height: 1.4;
+  }
+  
+  .activity-meta {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  
+  .activity-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-20) var(--space-8);
+    text-align: center;
+  }
+  
+  .empty-icon {
+    margin-bottom: var(--space-6);
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+  
+  .activity-empty h3 {
+    font-size: var(--text-xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+  
+  .activity-empty p {
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-6);
+    max-width: 400px;
+  }
+  
+  .activity-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--space-8);
+  }
+  
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--glass-border);
+    border-top: 3px solid var(--primary-500);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--space-4);
+  }
+  
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+  }
+  
+  .analysis-card {
+    background: var(--glass-light);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-3xl);
+    padding: var(--space-6);
+    transition: all var(--duration-300) var(--ease-out);
+  }
+  
+  .analysis-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    background: var(--glass-medium);
+  }
+  
+  .analysis-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+  }
+  
+  .analysis-header h4 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  .analysis-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-400);
+  }
+  
+  .peak-time {
+    text-align: center;
+    margin-bottom: var(--space-5);
+  }
+  
+  .time-value {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+  
+  .time-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .peak-chart {
+    display: flex;
+    align-items: end;
+    gap: 2px;
+    height: 60px;
+    padding: var(--space-2) 0;
+  }
+  
+  .hour-bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--primary-600), var(--primary-400));
+    border-radius: var(--radius-sm);
+    min-height: 4px;
+    transition: all var(--duration-300) var(--ease-out);
+    cursor: pointer;
+  }
+  
+  .hour-bar:hover {
+    background: linear-gradient(to top, var(--primary-500), var(--primary-300));
+    transform: scaleY(1.1);
+  }
+  
+  .command-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .command-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3);
+    background: var(--glass-medium);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .command-item:hover {
+    background: var(--glass-heavy);
+    transform: translateX(4px);
+  }
+  
+  .command-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .command-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-sm);
+    color: var(--primary-400);
+    font-weight: 700;
+  }
+  
+  .server-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    text-align: center;
+  }
+  
+  .server-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  
+  .server-stat .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  
+  .server-stat .stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  @keyframes slideInActivity {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @media (max-width: 768px) {
+    .filter-row {
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    
+    .filter-group {
+      width: 100%;
+    }
+    
+    .analysis-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .activity-stats {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    
+    .server-stats {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+  }
+</style>
+
+<script>
+  // Enhanced activity monitoring with real-time updates and filtering
+  document.addEventListener('DOMContentLoaded', function() {
+    let activityData = [];
+    let filteredData = [];
+    let activityInterval;
+    
+    const activityList = document.getElementById('d2Activity');
+    const activityEmpty = document.getElementById('activityEmpty');
+    const activityLoading = document.getElementById('activityLoading');
+    const activityCount = document.getElementById('activityCount');
+    const activityRate = document.getElementById('activityRate');
+    
+    // Activity type configuration
+    const activityTypes = {
+      command: {
+        icon: '⚡',
+        color: 'primary',
+        title: 'Command Executed'
+      },
+      join: {
+        icon: '👋',
+        color: 'emerald',
+        title: 'User Joined'
+      },
+      leave: {
+        icon: '👋',
+        color: 'orange',
+        title: 'User Left'
+      },
+      message: {
+        icon: '💬',
+        color: 'purple',
+        title: 'Message Sent'
+      },
+      error: {
+        icon: '⚠️',
+        color: 'red',
+        title: 'Error Occurred'
+      },
+      warning: {
+        icon: '⚠️',
+        color: 'yellow',
+        title: 'Warning'
+      }
+    };
+    
+    // Generate mock activity data
+    function generateMockActivity() {
+      const types = Object.keys(activityTypes);
+      const servers = ['General Server', 'Gaming Hub', 'Study Group', 'Art Community'];
+      const users = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank'];
+      const commands = ['/help', '/play', '/info', '/poll', '/kick', '/ban'];
+      
+      const type = types[Math.floor(Math.random() * types.length)];
+      const server = servers[Math.floor(Math.random() * servers.length)];
+      const user = users[Math.floor(Math.random() * users.length)];
+      
+      let description = '';
+      switch(type) {
+        case 'command':
+          const command = commands[Math.floor(Math.random() * commands.length)];
+          description = `${user} executed ${command}`;
+          break;
+        case 'join':
+          description = `${user} joined the server`;
+          break;
+        case 'leave':
+          description = `${user} left the server`;
+          break;
+        case 'message':
+          description = `${user} sent a message in #general`;
+          break;
+        case 'error':
+          description = `Database connection failed for ${user}`;
+          break;
+        case 'warning':
+          description = `Rate limit approached for ${user}`;
+          break;
+      }
+      
+      return {
+        id: Date.now() + Math.random(),
+        type: type,
+        title: activityTypes[type].title,
+        description: description,
+        server: server,
+        user: user,
+        timestamp: new Date(),
+        severity: type === 'error' ? 'high' : type === 'warning' ? 'medium' : 'low'
+      };
+    }
+    
+    // Create activity item element
+    function createActivityItem(activity) {
+      const item = document.createElement('li');
+      item.className = 'activity-item';
+      item.dataset.type = activity.type;
+      item.dataset.server = activity.server;
+      
+      const config = activityTypes[activity.type];
+      
+      item.innerHTML = `
+        <div class="activity-icon ${activity.type}">
+          ${config.icon}
+        </div>
+        <div class="activity-content">
+          <div class="activity-header">
+            <span class="activity-title">${activity.title}</span>
+            <span class="activity-time" title="${activity.timestamp.toLocaleString()}">
+              ${formatTimeAgo(activity.timestamp)}
+            </span>
+          </div>
+          <div class="activity-description">${activity.description}</div>
+          <div class="activity-meta">
+            <span>Server: ${activity.server}</span>
+            <span>User: ${activity.user}</span>
+            ${activity.severity !== 'low' ? `<span class="severity-${activity.severity}">Priority: ${activity.severity}</span>` : ''}
+          </div>
+        </div>
+      `;
+      
+      return item;
+    }
+    
+    // Format time ago
+    function formatTimeAgo(timestamp) {
+      const now = new Date();
+      const diff = now - timestamp;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (days > 0) return `${days}d ago`;
+      if (hours > 0) return `${hours}h ago`;
+      if (minutes > 0) return `${minutes}m ago`;
+      return 'Just now';
+    }
+    
+    // Add new activity
+    function addActivity(activity) {
+      activityData.unshift(activity);
+      
+      // Keep only recent activities
+      if (activityData.length > 100) {
+        activityData = activityData.slice(0, 100);
+      }
+      
+      applyFilters();
+      updateStats();
+    }
+    
+    // Apply filters to activity data
+    function applyFilters() {
+      const typeFilter = document.getElementById('activityFilter').value;
+      const serverFilter = document.getElementById('serverFilter').value;
+      const timeRange = document.getElementById('timeRange').value;
+      
+      let filtered = [...activityData];
+      
+      // Apply type filter
+      if (typeFilter) {
+        filtered = filtered.filter(activity => activity.type === typeFilter);
+      }
+      
+      // Apply server filter
+      if (serverFilter) {
+        filtered = filtered.filter(activity => activity.server === serverFilter);
+      }
+      
+      // Apply time range filter
+      const now = new Date();
+      const timeRanges = {
+        '1h': 60 * 60 * 1000,
+        '6h': 6 * 60 * 60 * 1000,
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000
+      };
+      
+      const cutoff = new Date(now - timeRanges[timeRange]);
+      filtered = filtered.filter(activity => activity.timestamp >= cutoff);
+      
+      filteredData = filtered;
+      renderActivityList();
+    }
+    
+    // Render activity list
+    function renderActivityList() {
+      activityLoading.style.display = 'none';
+      
+      if (filteredData.length === 0) {
+        activityList.style.display = 'none';
+        activityEmpty.style.display = 'block';
+        return;
+      }
+      
+      activityEmpty.style.display = 'none';
+      activityList.style.display = 'block';
+      activityList.innerHTML = '';
+      
+      filteredData.forEach(activity => {
+        const item = createActivityItem(activity);
+        activityList.appendChild(item);
+      });
+      
+      // Auto-scroll if enabled
+      if (document.getElementById('autoScroll').checked) {
+        activityList.scrollTop = 0;
+      }
+    }
+    
+    // Update statistics
+    function updateStats() {
+      activityCount.textContent = filteredData.length;
+      
+      // Calculate rate (events per minute over last hour)
+      const now = new Date();
+      const oneHourAgo = new Date(now - 60 * 60 * 1000);
+      const recentActivities = activityData.filter(activity => activity.timestamp >= oneHourAgo);
+      const rate = Math.round(recentActivities.length / 60 * 10) / 10;
+      
+      activityRate.textContent = `${rate}/min`;
+    }
+    
+    // Start real-time updates
+    function startRealTimeUpdates() {
+      if (activityInterval) clearInterval(activityInterval);
+      
+      activityInterval = setInterval(() => {
+        // Add new activity occasionally
+        if (Math.random() < 0.7) {
+          const newActivity = generateMockActivity();
+          addActivity(newActivity);
+        }
+        
+        // Update timestamps
+        document.querySelectorAll('.activity-time').forEach(timeElement => {
+          const item = timeElement.closest('.activity-item');
+          const activity = filteredData.find(a => a.id.toString() === item.dataset.id);
+          if (activity) {
+            timeElement.textContent = formatTimeAgo(activity.timestamp);
+          }
+        });
+      }, 3000);
+    }
+    
+    // Event listeners
+    document.getElementById('actRefresh').addEventListener('click', () => {
+      activityLoading.style.display = 'flex';
+      setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+          addActivity(generateMockActivity());
+        }
+        activityLoading.style.display = 'none';
+      }, 500);
+    });
+    
+    document.getElementById('clearActivity').addEventListener('click', () => {
+      activityData = [];
+      filteredData = [];
+      renderActivityList();
+      updateStats();
+    });
+    
+    // Filter change listeners
+    ['activityFilter', 'serverFilter', 'timeRange'].forEach(id => {
+      document.getElementById(id).addEventListener('change', applyFilters);
+    });
+    
+    // Populate server filter
+    const serverFilter = document.getElementById('serverFilter');
+    const servers = ['General Server', 'Gaming Hub', 'Study Group', 'Art Community'];
+    servers.forEach(server => {
+      const option = document.createElement('option');
+      option.value = server;
+      option.textContent = server;
+      serverFilter.appendChild(option);
+    });
+    
+    // Initialize with some mock data
+    for (let i = 0; i < 15; i++) {
+      const mockActivity = generateMockActivity();
+      // Vary timestamps for realistic data
+      mockActivity.timestamp = new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000);
+      activityData.push(mockActivity);
+    }
+    
+    // Sort by timestamp (newest first)
+    activityData.sort((a, b) => b.timestamp - a.timestamp);
+    
+    // Initial render
+    applyFilters();
+    startRealTimeUpdates();
+    
+    console.log('✅ Activity monitoring dashboard initialized');
+  });
+</script>
