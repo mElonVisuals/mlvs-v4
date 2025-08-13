@@ -17,6 +17,7 @@ export default function loadEvents(client) {
       if (!name || !execute) return;
       if (once) client.once(name, (...args) => execute(...args, client));
       else client.on(name, (...args) => execute(...args, client));
+      console.log(`[events] Registered ${name}${once ? ' (once)' : ''}`);
     });
   }
 }
