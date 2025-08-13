@@ -1,19 +1,4 @@
-/* Two-column hero layout (refactored from inline styles) */
-.hero-grid-two { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); align-items:start; text-align:left; gap: var(--space-16); }
-.hero-left-col { display:flex; flex-direction:column; gap: var(--space-8); }
-.hero-actions-ultra.justify-start { justify-content:flex-start; }
-.hero-features-ultra.start { justify-content:flex-start; }
-
-/* Adjusted hero title size to prevent clipping */
-.hero-title-ultra { font-size: clamp(2.5rem, 6vw, 4.5rem) !important; }
-html { scroll-behavior:smooth; }
-.
-/* Inline stats row */
-.stats-inline { position:static; display:flex; gap: var(--space-4); transform:none; }
-
-@media (max-width: 640px){
-	.hero-title-ultra { font-size: clamp(2.2rem, 8vw, 3.4rem) !important; }
-}
+/* (Reverted: removed temporary helper classes and smooth scrolling) */
 /* Homepage theme refactor using global design tokens */
 :root { --home-accent: var(--clr-primary); --home-accent-b: 210 90% 70%; }
 

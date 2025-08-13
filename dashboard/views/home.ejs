@@ -4,8 +4,7 @@
   <!-- Page end: cleaned -->
 </body>
 </html>
-<!-- END OF HOMEPAGE -->
-<!-- Truncated: removed duplicate legacy sections -->
+<!-- (Reversion note: prior extended sections may need manual reintegration if desired) -->
       --primary-700: #0369a1;
       --primary-800: #075985;
       --primary-900: #0c4a6e;
@@ -970,12 +969,12 @@
 
   <!-- Hero Section with two-column layout placing stats panel left of feature list -->
   <section class="hero-ultra">
-    <div class="hero-container-ultra hero-grid-two">
-      <div class="hero-left hero-left-col">
+    <div class="hero-container-ultra" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start;text-align:left;gap:var(--space-16);">
+      <div class="hero-left" style="display:flex;flex-direction:column;gap:var(--space-8);">
         <div class="hero-badge-ultra"><span>Next-Generation Discord Bot Platform</span></div>
         <h1 class="hero-title-ultra" style="text-align:left;">Revolutionize Your Discord</h1>
         <p class="hero-subtitle-ultra" style="text-align:left;max-width:640px;">Experience the future of Discord bot management with our cutting-edge platform featuring advanced automation, real-time analytics, and seamless integration.</p>
-  <div class="hero-actions-ultra justify-start">
+  <div class="hero-actions-ultra" style="justify-content:flex-start;">
           <a href="/dashboard" class="btn-ultra btn-primary-ultra"><span>Launch Dashboard</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
           </a>
@@ -986,7 +985,7 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7L12 12L22 7L12 2Z"/><path d="M2 17L12 22L22 17"/><path d="M2 12L12 17L22 12"/></svg>
           </a>
         </div>
-  <div class="hero-features-ultra start">
+  <div class="hero-features-ultra" style="justify-content:flex-start;">
           <span class="feature-pill-ultra"><span>🚀</span> Lightning Fast</span>
           <span class="feature-pill-ultra"><span>🛡️</span> Ultra Secure</span>
           <span class="feature-pill-ultra"><span>⚡</span> Real-time Analytics</span>
@@ -994,7 +993,7 @@
           <span class="feature-pill-ultra"><span>🔧</span> No-Code Setup</span>
         </div>
       </div>
-  <div class="hero-right hero-left-col" style="position:relative;">
+  <div class="hero-right" style="display:flex;flex-direction:column;gap:var(--space-8);position:relative;">
         <div class="dashboard-preview-ultra" style="margin:0;">
           <div class="preview-header">
             <div class="preview-logo">
@@ -1010,7 +1009,7 @@
             <div class="preview-card"><div class="card-title">Response Time</div><div class="card-value">23ms</div><div class="card-chart"></div></div>
           </div>
         </div>
-  <div class="floating-stats-ultra stats-inline">
+  <div class="floating-stats-ultra" style="position:static;display:flex;gap:var(--space-4);transform:none;">
           <div class="stat-bubble-ultra"><span class="stat-number-ultra">99.9%</span><span class="stat-label-ultra">Uptime</span></div>
           <div class="stat-bubble-ultra"><span class="stat-number-ultra">24/7</span><span class="stat-label-ultra">Support</span></div>
           <div class="stat-bubble-ultra"><span class="stat-number-ultra">500K+</span><span class="stat-label-ultra">Users</span></div>
