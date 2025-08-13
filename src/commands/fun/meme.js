@@ -1,4 +1,4 @@
-import { baseEmbed } from '../../utils/embed.js';
+import { baseEmbed, EMOJI } from '../../utils/embed.js';
 
 export const name = 'meme';
 export const description = 'Send a random meme (placeholder).';
@@ -12,7 +12,7 @@ const memes = [
 
 export async function execute(message) {
   const embed = baseEmbed(message)
-    .setTitle('Random Meme')
+  .setTitle(`${EMOJI.sparkle} Random Meme`)
     .setImage(memes[Math.floor(Math.random()*memes.length)]);
   await message.channel.send({ embeds: [embed] });
 }

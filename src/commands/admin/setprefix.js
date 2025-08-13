@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { PermissionsBitField } from 'discord.js';
+import { errorEmbed, successEmbed, EMOJI } from '../../utils/embed.js';
 
 export const name = 'setprefix';
 export const description = 'Set a new command prefix (admin).';
@@ -8,7 +9,8 @@ export const usage = 'setprefix <newPrefix>';
 
 export async function execute(message, args) {
   if (!message.member?.permissions?.has?.(PermissionsBitField.Flags.Administrator)) {
-    return message.reply('You need Administrator permission.');
+  const embed = errorEmbed(message, 'Permission Denied', 'You need Administrator permission.');
+  return message.channel.send({ embeds: [embed] });
   }
   const newPrefix = args[0];
   if (!newPrefix) return message.reply('Provide a new prefix.');
@@ -28,5 +30,6 @@ export async function execute(message, args) {
   } catch {}
 
   process.env.PREFIX = newPrefix;
-  return message.channel.send(`Prefix set to \`${newPrefix}\``);
+  const embed = successEmbed(message, `${EMOJI.hammer} Prefix Updated`, `Prefix set to \`${newPrefix}\``);
+  return message.channel.send({ embeds: [embed] });
 }

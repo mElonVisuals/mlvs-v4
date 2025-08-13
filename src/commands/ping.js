@@ -1,13 +1,12 @@
+import { baseEmbed, addLatency, EMOJI, withFooterNote } from '../utils/embed.js';
+
 export const data = { name: 'ping' };
 
 export async function execute(message) {
-  const sent = await message.channel.send({
-    embeds: [{
-      color: 0x5865F2,
-      title: '🏓 Pong!',
-      description: `Latency: **${Date.now() - message.createdTimestamp}ms**`,
-      footer: { text: 'Discord.js Bot', icon_url: message.client.user.displayAvatarURL() },
-      timestamp: new Date().toISOString()
-    }]
-  });
+  const embed = baseEmbed(message)
+    .setTitle(`${EMOJI.ping} Pong!`)
+    .setDescription('Here are your latency metrics:');
+  addLatency(embed, message);
+  withFooterNote(embed, 'Latency numbers are approximate');
+  await message.channel.send({ embeds: [embed] });
 }

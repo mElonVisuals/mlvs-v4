@@ -1,4 +1,4 @@
-import { baseEmbed } from '../../utils/embed.js';
+import { baseEmbed, addBotMetrics, EMOJI } from '../../utils/embed.js';
 
 export const name = 'stats';
 export const description = 'Show bot statistics.';
@@ -10,13 +10,7 @@ function formatUptime(ms){
 }
 
 export async function execute(message, args, client) {
-  const mem = process.memoryUsage();
-  const embed = baseEmbed(message)
-    .setTitle('Bot Stats')
-    .addFields(
-      { name: 'Uptime', value: formatUptime(process.uptime()*1000), inline: true },
-      { name: 'Servers', value: `${client.guilds.cache.size}`, inline: true },
-      { name: 'RAM', value: `${(mem.rss/1024/1024).toFixed(1)} MB`, inline: true },
-    );
+  const embed = baseEmbed(message).setTitle(`${EMOJI.bot} Bot Stats`);
+  addBotMetrics(embed, client);
   await message.channel.send({ embeds: [embed] });
 }
