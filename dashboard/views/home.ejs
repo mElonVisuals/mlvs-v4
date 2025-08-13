@@ -985,121 +985,53 @@
     <div class="floating-element element-3"></div>
   </div>
 
-  <!-- Hero Section with Next-Gen Design -->
+  <!-- Hero Section with two-column layout placing stats panel left of feature list -->
   <section class="hero-ultra">
-    <div class="hero-container-ultra">
-      <!-- Status Badge -->
-      <div class="hero-badge-ultra">
-        <span>Next-Generation Discord Bot Platform</span>
-      </div>
-      
-      <!-- Main Title -->
-      <h1 class="hero-title-ultra">
-        Revolutionize Your Discord
-      </h1>
-      
-      <!-- Subtitle -->
-      <p class="hero-subtitle-ultra">
-        Experience the future of Discord bot management with our cutting-edge platform featuring advanced automation, real-time analytics, and seamless integration.
-      </p>
-      
-      <!-- Feature Pills -->
-      <div class="hero-features-ultra">
-        <span class="feature-pill-ultra">
-          <span>🚀</span> Lightning Fast
-        </span>
-        <span class="feature-pill-ultra">
-          <span>🛡️</span> Ultra Secure
-        </span>
-        <span class="feature-pill-ultra">
-          <span>⚡</span> Real-time Analytics
-        </span>
-        <span class="feature-pill-ultra">
-          <span>🎯</span> AI-Powered
-        </span>
-        <span class="feature-pill-ultra">
-          <span>🔧</span> No-Code Setup
-        </span>
-      </div>
-      
-      <!-- Action Buttons -->
-      <div class="hero-actions-ultra">
-        <a href="/dashboard" class="btn-ultra btn-primary-ultra">
-          <span>Launch Dashboard</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M7 17L17 7M17 7H7M17 7V17"/>
-          </svg>
-        </a>
-        <a href="/invite" class="btn-ultra btn-secondary-ultra">
-          <span>Invite Bot</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-          </svg>
-        </a>
-        <a href="#features" class="btn-ultra btn-ghost-ultra">
-          <span>Explore Features</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
-            <path d="M2 17L12 22L22 17"/>
-            <path d="M2 12L12 17L22 12"/>
-          </svg>
-        </a>
-      </div>
-      
-      <!-- Dashboard Preview -->
-      <div class="dashboard-preview-ultra">
-        <div class="preview-header">
-          <div class="preview-logo">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.211.375-.444.865-.608 1.25a18.566 18.566 0 0 0-5.487 0c-.164-.385-.398-.875-.61-1.25a.077.077 0 0 0-.078-.036A19.89 19.89 0 0 0 3.677 4.492a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 14.09 14.09 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.107 13.107 0 0 1-1.872-.882.075.075 0 0 1-.008-.125 10.2 10.2 0 0 0 .372-.292.072.072 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.072.072 0 0 1 .079.009c.12.098.246.195.373.293a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.884a.075.075 0 0 0-.041.103c.36.687.772 1.341 1.225 1.964a.077.077 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-2.981.076.076 0 0 0 .032-.056c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.027z"/>
-            </svg>
-            <span>mlvs.me</span>
-          </div>
-          <div class="preview-controls">
-            <div class="control-dot"></div>
-            <div class="control-dot"></div>
-            <div class="control-dot"></div>
-          </div>
+    <div class="hero-container-ultra" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start;text-align:left;gap:var(--space-16);">
+      <div class="hero-left" style="display:flex;flex-direction:column;gap:var(--space-8);">
+        <div class="hero-badge-ultra"><span>Next-Generation Discord Bot Platform</span></div>
+        <h1 class="hero-title-ultra" style="text-align:left;">Revolutionize Your Discord</h1>
+        <p class="hero-subtitle-ultra" style="text-align:left;max-width:640px;">Experience the future of Discord bot management with our cutting-edge platform featuring advanced automation, real-time analytics, and seamless integration.</p>
+        <div class="hero-actions-ultra" style="justify-content:flex-start;">
+          <a href="/dashboard" class="btn-ultra btn-primary-ultra"><span>Launch Dashboard</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </a>
+          <a href="/invite" class="btn-ultra btn-secondary-ultra"><span>Invite Bot</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
+          </a>
+          <a href="#features" class="btn-ultra btn-ghost-ultra"><span>Explore Features</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7L12 12L22 7L12 2Z"/><path d="M2 17L12 22L22 17"/><path d="M2 12L12 17L22 12"/></svg>
+          </a>
         </div>
-        
-        <div class="preview-content">
-          <div class="preview-card">
-            <div class="card-title">Active Users</div>
-            <div class="card-value">24,847</div>
-            <div class="card-chart"></div>
-          </div>
-          <div class="preview-card">
-            <div class="card-title">Commands/Hour</div>
-            <div class="card-value">15,293</div>
-            <div class="card-chart"></div>
-          </div>
-          <div class="preview-card">
-            <div class="card-title">Servers</div>
-            <div class="card-value">1,245</div>
-            <div class="card-chart"></div>
-          </div>
-          <div class="preview-card">
-            <div class="card-title">Response Time</div>
-            <div class="card-value">23ms</div>
-            <div class="card-chart"></div>
-          </div>
+        <div class="hero-features-ultra" style="justify-content:flex-start;">
+          <span class="feature-pill-ultra"><span>🚀</span> Lightning Fast</span>
+          <span class="feature-pill-ultra"><span>🛡️</span> Ultra Secure</span>
+          <span class="feature-pill-ultra"><span>⚡</span> Real-time Analytics</span>
+          <span class="feature-pill-ultra"><span>🎯</span> AI-Powered</span>
+          <span class="feature-pill-ultra"><span>🔧</span> No-Code Setup</span>
         </div>
       </div>
-    </div>
-    
-    <!-- Floating Stats -->
-    <div class="floating-stats-ultra">
-      <div class="stat-bubble-ultra">
-        <span class="stat-number-ultra">99.9%</span>
-        <span class="stat-label-ultra">Uptime</span>
-      </div>
-      <div class="stat-bubble-ultra">
-        <span class="stat-number-ultra">24/7</span>
-        <span class="stat-label-ultra">Support</span>
-      </div>
-      <div class="stat-bubble-ultra">
-        <span class="stat-number-ultra">500K+</span>
-        <span class="stat-label-ultra">Users</span>
+      <div class="hero-right" style="display:flex;flex-direction:column;gap:var(--space-8);position:relative;">
+        <div class="dashboard-preview-ultra" style="margin:0;">
+          <div class="preview-header">
+            <div class="preview-logo">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.211.375-.444.865-.608 1.25a18.566 18.566 0 0 0-5.487 0c-.164-.385-.398-.875-.61-1.25a.077.077 0 0 0-.078-.036A19.89 19.89 0 0 0 3.677 4.492a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 14.09 14.09 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.107 13.107 0 0 1-1.872-.882.075.075 0 0 1-.008-.125 10.2 10.2 0 0 0 .372-.292.072.072 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.072.072 0 0 1 .079.009c.12.098.246.195.373.293a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.884a.075.075 0 0 0-.041.103c.36.687.772 1.341 1.225 1.964a.077.077 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-2.981.076.076 0 0 0 .032-.056c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.027z"/></svg>
+              <span>mlvs.me</span>
+            </div>
+            <div class="preview-controls"><div class="control-dot"></div><div class="control-dot"></div><div class="control-dot"></div></div>
+          </div>
+          <div class="preview-content">
+            <div class="preview-card"><div class="card-title">Active Users</div><div class="card-value">24,847</div><div class="card-chart"></div></div>
+            <div class="preview-card"><div class="card-title">Commands/Hour</div><div class="card-value">15,293</div><div class="card-chart"></div></div>
+            <div class="preview-card"><div class="card-title">Servers</div><div class="card-value">1,245</div><div class="card-chart"></div></div>
+            <div class="preview-card"><div class="card-title">Response Time</div><div class="card-value">23ms</div><div class="card-chart"></div></div>
+          </div>
+        </div>
+        <div class="floating-stats-ultra" style="position:static;display:flex;gap:var(--space-4);transform:none;">
+          <div class="stat-bubble-ultra"><span class="stat-number-ultra">99.9%</span><span class="stat-label-ultra">Uptime</span></div>
+          <div class="stat-bubble-ultra"><span class="stat-number-ultra">24/7</span><span class="stat-label-ultra">Support</span></div>
+          <div class="stat-bubble-ultra"><span class="stat-number-ultra">500K+</span><span class="stat-label-ultra">Users</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -1257,27 +1189,11 @@
     </div>
   </footer>
 
-  <!-- Enhanced JavaScript for Ultra-Modern Interactions -->
-  <script>
-    // Ultra-modern homepage interactions and animations
-    document.addEventListener('DOMContentLoaded', function() {
-      // Smooth scrolling for anchor links with easing
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        });
-      });
-
-      // Advanced parallax effects for floating elements
-      const floatingElements = document.querySelectorAll('.floating-element');
-      let ticking = false;
+  <!-- Removed trailing scripts for cleanliness per user request -->
+  
+  <!-- (Interactive scripts removed to prevent post-footer content visibility) -->
+  
+  
 
       function updateParallax() {
         const scrollTop = window.pageYOffset;
