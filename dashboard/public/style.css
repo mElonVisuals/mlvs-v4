@@ -42,6 +42,19 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+/* Section breaks */
+section + section { position:relative; }
+section + section::before { content:""; position:absolute; left:50%; top:-1px; transform:translateX(-50%); width: min(960px,92%); height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent); }
+/* Larger visual divider for major groups (apply .major-break to a section) */
+.major-break { position:relative; }
+.major-break::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); pointer-events:none; }
+.major-break::after { content:""; position:absolute; left:50%; top:0; transform:translate(-50%,-50%); width:140px; height:36px; background:radial-gradient(circle at 50% 50%, rgba(88,101,242,.45), transparent 70%); filter:blur(18px); opacity:.35; }
+
+@media (max-width:860px){
+	section { padding: 44px 0 32px; }
+	.modules { padding:50px 0 34px; }
+}
+
 /* Utilities */
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px }
 .muted { color: hsl(var(--muted)) }
