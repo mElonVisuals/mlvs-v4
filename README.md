@@ -52,6 +52,8 @@ Use `!help` to see an auto-generated categorized list, or `!help command` for de
 - Embeds use your logo as thumbnail and banner as image across commands for a consistent look.
 - The dashboard reads live stats from `data/status.json` written by the bot when it starts and on key events.
 - Change styles in `dashboard/public/style.css` and the view in `dashboard/views/index.ejs`.
+- GitHub commit notifier: set `GITHUB_REPO=owner/name` and `GITHUB_UPDATES_CHANNEL_ID=123456789012345678` (a text channel) to auto-post new commits every 5 minutes (configurable with `GITHUB_POLL_INTERVAL_MS`). Optionally provide `GITHUB_TOKEN` for private or higher rate limit access.
+- Dashboard OAuth (Discord): set `CLIENT_ID`, `CLIENT_SECRET`, optionally `CALLBACK_URL` to enable login + per-guild filtering and gated dashboard access.
 
 ## Deploy to Dokploy
 
@@ -65,6 +67,8 @@ Option A: Build from Git repo (recommended)
 	- `PREFIX` (default `!`)
 	- `PORT` (default `3005`)
 	- `LOGO_URL` and `BANNER_URL` (optional)
+	- `GITHUB_REPO`, `GITHUB_UPDATES_CHANNEL_ID` (optional commit notifications)
+	- `API_TOKEN` (optional bearer for metrics/activity writes)
 5. Expose port 3005 and map it to your domain.
 
 Option B: Build locally and push image

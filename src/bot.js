@@ -57,6 +57,8 @@ client.on('ready', () => {
   ]);
   // Start metrics heartbeat
   startMetricsLoop();
+  // Start GitHub update notifier if configured
+  try { startGithubNotifier(); } catch (e) { logger.error('github', `Notifier init failed: ${e?.message||e}`); }
 });
 client.on('guildCreate', () => writeStatus());
 client.on('guildDelete', () => writeStatus());
@@ -90,6 +92,48 @@ function startMetricsLoop(){
       writeStatus();
     }catch{}
   }, Number(process.env.METRICS_INTERVAL_MS || 15000));
+}
+
+// GitHub update notifier
+async function startGithubNotifier(){
+  const repo = process.env.GITHUB_REPO; // e.g. owner/name
+  const channelId = process.env.GITHUB_UPDATES_CHANNEL_ID; // target channel
+  if (!repo || !channelId) return;
+  const intervalMs = Number(process.env.GITHUB_POLL_INTERVAL_MS || 300000); // 5m default
+  let lastSha = null;
+  const headers = { 'Accept':'application/vnd.github+json' };
+  if (process.env.GITHUB_TOKEN) headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
+  async function poll(){
+    try {
+      const res = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=5`, { headers });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+      // newest first
+      const newest = data[0];
+      if (!newest?.sha) return;
+      if (!lastSha) { lastSha = newest.sha; return; } // seed without sending
+      // find new commits since lastSha (reverse chronological)
+      const idx = data.findIndex(c => c.sha === lastSha);
+      const fresh = idx === -1 ? data : data.slice(0, idx);
+      if (fresh.length){
+        const channel = await client.channels.fetch(channelId).catch(()=>null);
+        if (channel){
+          for (const commit of fresh.reverse()){ // oldest first when sending
+            const msg = `📦 New commit in ${repo}: **${commit.commit.message.split('\n')[0].slice(0,120)}**\n${commit.html_url}`;
+            channel.send({ content: msg }).catch(()=>{});
+          }
+        }
+        lastSha = newest.sha;
+      }
+    } catch (e) {
+      logger.warn('github', `Poll failed: ${e?.message||e}`);
+    }
+  }
+  setInterval(poll, intervalMs);
+  // initial after slight delay to allow ready state
+  setTimeout(poll, 10000);
+  logger.info('github', `GitHub notifier active for ${repo} -> channel ${channelId} every ${intervalMs}ms`);
 }
 
 function osLoad(){
