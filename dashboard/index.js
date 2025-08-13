@@ -255,7 +255,12 @@ app.get('/api/presence', (req, res) => {
   res.json({ presence: PRESENCE });
 });
 app.post('/api/presence', requireToken, (req, res) => {
-  const { status, activity } = req.body || {};
+  const { status, activity, guildId } = req.body || {};
+  // If authenticated (OAuth) and guildId provided, ensure user has that guild
+  if (guildId && DISCORD_CLIENT_ID && req.isAuthenticated && req.isAuthenticated()) {
+    const has = (req.user?.guilds||[]).some(g=>g.id===guildId);
+    if (!has) return res.status(403).json({ error: 'Forbidden guild' });
+  }
   if (status) PRESENCE.status = String(status);
   if (typeof activity === 'string') PRESENCE.activity = activity;
   ACTIVITY.push({ id: Date.now().toString(36), type: 'presence', message: `Presence set: ${PRESENCE.status} ${PRESENCE.activity||''}`.trim(), ts: new Date().toISOString() });
@@ -266,6 +271,10 @@ app.post('/api/presence', requireToken, (req, res) => {
 // Actions queue (announce example)
 app.post('/api/actions/announce', requireToken, (req, res) => {
   const { guildId, channelId, message } = req.body || {};
+  if (DISCORD_CLIENT_ID && req.isAuthenticated && req.isAuthenticated()) {
+    const has = (req.user?.guilds||[]).some(g=>g.id===guildId);
+    if (!has) return res.status(403).json({ error: 'Forbidden guild' });
+  }
   if (!guildId || !channelId || !message) return res.status(400).json({ error: 'Missing guildId/channelId/message' });
   const action = { id: Date.now().toString(36), type: 'announce', payload: { guildId, channelId, message }, ts: new Date().toISOString(), status: 'queued' };
   ACTIONS.push(action);

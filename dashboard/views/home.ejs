@@ -75,21 +75,49 @@
           </div>
         </div>
         <div class="hero-right">
-      <div class="tile kpi-tile">
-            <div class="tile-head">
-              <img src="/logo.png" alt="" class="tile-logo" />
-        <div class="tile-title">Live Overview</div>
-            </div>
-            <div class="tile-body">
-              <div class="kpi-row">
-                <div class="kpi-item"><span>Guilds</span><strong><%= guilds %></strong></div>
-                <div class="kpi-item"><span>Users</span><strong><%= users %></strong></div>
+          <div class="tile" style="display:grid; gap:14px; position:relative; overflow:hidden">
+            <div style="display:flex; align-items:center; gap:10px">
+              <div style="position:relative">
+                <img src="/logo.png" alt="Bot" style="width:56px;height:56px;border-radius:18px; border:1px solid hsl(var(--border))" />
+                <span id="liveDot" data-state="<%= status %>" style="position:absolute; right:4px; bottom:4px; width:14px; height:14px; border:2px solid hsl(var(--card)); border-radius:50%; box-shadow:0 0 0 4px rgba(0,0,0,.35)"></span>
               </div>
-              <div class="kpi-foot">
-                <span class="badge <%= status==='Online'?'green':'red' %>"><%= status %></span>
-                <a href="/api/status" target="_blank" class="pill small">Health API</a>
+              <div style="display:flex; flex-direction:column">
+                <strong style="font-size:18px; line-height:1"><%= botName %></strong>
+                <span class="muted" style="font-size:12px">Live Bot Card</span>
+              </div>
+              <div style="margin-left:auto; display:flex; gap:6px; flex-wrap:wrap">
+                <span class="badge" id="heroStatus"><%= status %></span>
+                <span class="badge" id="heroGuilds"><%= guilds %> guilds</span>
+                <span class="badge" id="heroUsers"><%= users %> users</span>
               </div>
             </div>
+            <div style="display:grid; gap:12px">
+              <div style="display:flex; align-items:center; gap:12px">
+                <div style="flex:1">
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px">
+                    <span class="muted" style="font-size:12px; letter-spacing:.08em">LATENCY</span>
+                    <span id="heroLatency" style="font-size:12px">— ms</span>
+                  </div>
+                  <svg id="heroLatencySpark" viewBox="0 0 160 40" preserveAspectRatio="none" style="width:100%; height:40px"></svg>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:10px">
+                <div style="padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)/.6); display:grid; gap:4px">
+                  <span class="muted" style="font-size:11px; letter-spacing:.08em">MEMORY</span>
+                  <strong id="heroMem" style="font-size:14px">— MB</strong>
+                </div>
+                <div style="padding:10px; border:1px solid hsl(var(--border)); border-radius:12px; background:hsl(var(--card)/.6); display:grid; gap:4px">
+                  <span class="muted" style="font-size:11px; letter-spacing:.08em">CPU</span>
+                  <strong id="heroCpu" style="font-size:14px">— %</strong>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap">
+              <a href="/api/status" target="_blank" class="pill small">Health JSON</a>
+              <a href="/dashboard" class="pill small">Open Dashboard</a>
+              <% if (brand.inviteUrl) { %><a href="/invite" class="pill small">Invite</a><% } %>
+            </div>
+            <canvas id="miniMetric" width="220" height="80" style="position:absolute; inset:auto -40px -40px auto; opacity:.08; pointer-events:none"></canvas>
           </div>
           <div class="tile note">
             <div class="note-title">Tip</div>
@@ -98,6 +126,28 @@
         </div>
       </div>
   </section>
+  <script>
+    (function(){
+      const dot = document.getElementById('liveDot');
+      if (dot){
+        const st = dot.getAttribute('data-state');
+        dot.style.background = st === 'Online' ? '#10b981' : '#ef4444';
+      }
+      // hero mini metrics
+      const latSvg = document.getElementById('heroLatencySpark');
+      const latArr = []; const w=160,h=40;
+      function drawSpark(){
+        if(!latSvg) return; const max = Math.max(10,...latArr,50); const step = latArr.length>1? w/(latArr.length-1):w; const d = latArr.map((v,i)=>`${i?'L':'M'}${(i*step).toFixed(2)},${(h-(v/max)*h).toFixed(2)}`).join(' '); latSvg.innerHTML = `<path d="${d}" fill="none" stroke="currentColor" stroke-width="2" opacity="0.7"/>`; }
+      async function pull(){
+        try{ const r = await fetch('/api/metrics',{cache:'no-store'}); const j = await r.json(); const lat = j.latencyMs||[]; const mem=j.memoryMB||[]; const cpu=j.cpu||[]; if(lat.length){ const v=lat[lat.length-1]; latArr.push(v); while(latArr.length>50) latArr.shift(); document.getElementById('heroLatency').textContent = v+ ' ms'; }
+          if(mem.length) document.getElementById('heroMem').textContent = mem[mem.length-1] + ' MB';
+          if(cpu.length) document.getElementById('heroCpu').textContent = cpu[cpu.length-1] + ' %';
+          drawSpark();
+        }catch{}
+      }
+      pull(); setInterval(pull,15000);
+    })();
+  </script>
 
     <!-- Capabilities -->
     <section class="capabilities">
