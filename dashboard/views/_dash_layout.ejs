@@ -7,188 +7,291 @@
   <meta name="description" content="Ultra-modern Discord bot dashboard with advanced glassmorphism design and real-time analytics" />
   <meta name="robots" content="noindex, nofollow" />
   
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="stylesheet" href="/neon.css" />
   <link rel="stylesheet" href="/dashboard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png">
 </head>
-<body class="dash-body">
-  <div class="dash-shell" id="dashShell">
-    <aside class="dash-sidebar" id="dashSidebar" aria-label="Primary Navigation" data-store="<%= sessionStoreType %>">
-      <div class="side-top">
-        <div class="brand-mini">
-          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&" alt="mlvs.me Logo" />
-          <span class="brand-text">mlvs.me</span>
+<body>
+  <!-- Dashboard Background -->
+  <div class="dashboard-background"></div>
+
+  <!-- Dashboard Shell -->
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar glass">
+      <div class="sidebar-inner">
+        <!-- Brand Section -->
+        <div class="brand glass-strong">
+          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png" alt="mlvs.me Logo" class="brand-logo" />
+          <div class="brand-text">
+            <div class="brand-title text-gradient-primary">mlvs.me</div>
+            <div class="brand-subtitle">Dashboard</div>
+          </div>
         </div>
+        
+        <!-- Navigation -->
+        <nav class="nav">
+          <div class="nav-section">
+            <div class="nav-section-title">Analytics</div>
+            <a href="/dashboard/health" class="nav-link <%= page==='health'?'active':'' %>">
+              <span class="nav-icon">●</span>
+              <span class="nav-text">Health</span>
+            </a>
+            <a href="/dashboard/activity" class="nav-link <%= page==='activity'?'active':'' %>">
+              <span class="nav-icon">⚡</span>
+              <span class="nav-text">Activity</span>
+            </a>
+            <a href="/dashboard/system" class="nav-link <%= page==='system'?'active':'' %>">
+              <span class="nav-icon">◐</span>
+              <span class="nav-text">System</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title">Management</div>
+            <a href="/dashboard/commands" class="nav-link <%= page==='commands'?'active':'' %>">
+              <span class="nav-icon">◆</span>
+              <span class="nav-text">Commands</span>
+            </a>
+            <a href="/dashboard/settings" class="nav-link <%= page==='settings'?'active':'' %>">
+              <span class="nav-icon">◈</span>
+              <span class="nav-text">Settings</span>
+            </a>
+          </div>
+        </nav>
       </div>
-      <nav class="side-nav" aria-label="Dashboard Navigation">
-        <div class="side-section">
-          <div class="side-label">Analytics</div>
-          <a href="/dashboard/health" class="side-link <%= page==='health'?'active':'' %>">
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header glass">
+        <div class="header-info">
+          <h1 class="header-title text-gradient-primary"><%= page.charAt(0).toUpperCase()+page.slice(1) %></h1>
+          <p class="header-subtitle">Dashboard monitoring and management</p>
+        </div>
+        <div class="header-actions">
+          <a href="/logout" class="btn btn-primary">
+            <span>Logout</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content">
+        <%- body %>
+      </div>
+    </main>
+  </div>
+</body>
+</html>>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
             <span>Health Monitor</span>
           </a>
-          <a href="/dashboard/activity" class="side-link <%= page==='activity'?'active':'' %>">
+          <a href="/dashboard/activity" class="side-link glass-morphism <%= page==='activity'?'active':'' %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
             <span>Live Activity</span>
           </a>
-          <a href="/dashboard/telemetry" class="side-link <%= page==='telemetry'?'active':'' %>">
+          <a href="/dashboard/telemetry" class="side-link glass-morphism <%= page==='telemetry'?'active':'' %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
             <span>Telemetry</span>
           </a>
         </div>
+        
         <div class="side-section">
-          <div class="side-label">Management</div>
-          <a href="/dashboard/actions" class="side-link <%= page==='actions'?'active':'' %>">
+          <div class="side-label gradient-text">Management</div>
+          <a href="/dashboard/actions" class="side-link glass-morphism <%= page==='actions'?'active':'' %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
             <span>Actions</span>
           </a>
-          <a href="/dashboard/commands" class="side-link <%= page==='commands'?'active':'' %>">
+          <a href="/dashboard/commands" class="side-link glass-morphism <%= page==='commands'?'active':'' %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <polyline points="4,17 10,11 4,5"/>
+              <line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
             <span>Commands</span>
           </a>
-          <a href="/dashboard/system" class="side-link <%= page==='system'?'active':'' %>">
+          <a href="/dashboard/system" class="side-link glass-morphism <%= page==='system'?'active':'' %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
             <span>System</span>
           </a>
         </div>
+
         <div class="side-section">
-          <div class="side-label">Resources</div>
-          <a href="/dashboard/about" class="side-link <%= page==='about'?'active':'' %>">
+          <div class="side-label gradient-text">Resources</div>
+          <a href="/dashboard/about" class="side-link glass-morphism <%= page==='about'?'active':'' %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4"/>
+              <path d="M12 8h.01"/>
+            </svg>
             <span>About</span>
           </a>
-          <a href="/" class="side-link">
+          <a href="/" class="side-link glass-morphism">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9,22 9,12 15,12 15,22"/>
+            </svg>
             <span>Homepage</span>
           </a>
-          <a href="/api/status" class="side-link" target="_blank">
-            <span>API Status</span>
-          </a>
-          <% if (brand.githubUrl) { %><a href="<%= brand.githubUrl %>" target="_blank" class="side-link">
-            <span>GitHub</span>
-          </a><% } %>
-          <% if (brand.inviteUrl) { %><a href="<%= brand.inviteUrl %>" target="_blank" class="side-link">
+          <% if (brand.inviteUrl) { %><a href="<%= brand.inviteUrl %>" target="_blank" class="side-link glass-morphism">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
             <span>Invite Bot</span>
           </a><% } %>
         </div>
       </nav>
-      <div class="side-footer">
-        <div class="guild-box">
-          <label for="guildSelect">Server Selection</label>
-          <select id="guildSelect">
-            <option value="">All Servers</option>
-          </select>
+      
+      <div class="side-footer glass-morphism">
+        <div class="status-indicator">
+          <div class="status-dot <%= status==='Online'?'online':'offline' %>"></div>
+          <span class="status-text">Bot <%= status %></span>
         </div>
-        <div class="token-box">
-          <label for="apiToken">API Authentication</label>
-          <div style="display: flex; gap: var(--space-2);">
-            <input id="apiToken" type="password" placeholder="Enter API token" />
-            <button id="saveToken" class="btn small">Save</button>
-          </div>
-        </div>
-        <div style="font-size: var(--text-xs); color: var(--text-muted); text-align: center;">
-          Store: <%= sessionStoreType %>
+        <div class="session-info">
+          <span class="session-label">Session Store</span>
+          <span class="session-type"><%= sessionStoreType %></span>
         </div>
       </div>
     </aside>
+
     <div class="dash-main">
-      <header class="dash2-header glass">
-        <div class="dash2-brand">
-          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&" alt="mlvs.me Dashboard" />
-          <div class="dash2-title">
-            <strong>mlvs.me Dashboard</strong>
-            <span><%= page.charAt(0).toUpperCase()+page.slice(1) %> Analytics</span>
+      <header class="dash-header glass-morphism">
+        <div class="dash-brand">
+          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&" alt="mlvs.me Dashboard" class="dash-logo" />
+          <div class="dash-title">
+            <h1 class="gradient-text">mlvs.me Dashboard</h1>
+            <span class="page-subtitle"><%= page.charAt(0).toUpperCase()+page.slice(1) %> Analytics</span>
           </div>
         </div>
-        <div class="dash2-meta">
-          <span id="d2Status" class="badge <%= status==='Online'? 'green':'red' %>">
-            <%= status %>
-          </span>
-          <span class="badge" id="storeBadge">
-            <%= sessionStoreType %>
-          </span>
-          <button id="d2Refresh" class="btn small">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        
+        <div class="dash-actions">
+          <div class="status-badge glass-morphism <%= status==='Online'?'status-online':'status-offline' %>">
+            <div class="status-dot"></div>
+            <span><%= status %></span>
+          </div>
+          
+          <button id="dashRefresh" class="btn btn-secondary glass-morphism">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
               <path d="M23 4v6h-6M1 20v-6h6"/>
               <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
             </svg>
             Refresh
           </button>
-          <label class="btn small" style="cursor: pointer; margin: 0;">
-            <input id="d2Auto" type="checkbox" checked style="margin-right: 6px;" />
-            Auto-Refresh
+          
+          <label class="auto-refresh-toggle glass-morphism">
+            <input id="autoRefresh" type="checkbox" checked />
+            <span class="toggle-text">Auto-Refresh</span>
           </label>
         </div>
       </header>
-      <main id="dashContent" class="dash2">
+
+      <main id="dashContent" class="dash-content">
         <%- body %>
-        <footer class="footer dash-footer">
-          <div class="footer-row">
-            <div>
-              © <%= new Date().getFullYear() %> mlvs.me Platform - Advanced Discord Bot Analytics
+      </main>
+
+      <footer class="dash-footer glass-morphism">
+        <div class="footer-content">
+          <div class="footer-info">
+            <span>© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %> — Advanced Discord Analytics</span>
+          </div>
+          <div class="footer-stats">
+            <div class="stat-item glass-morphism">
+              <span class="stat-label">Status</span>
+              <span class="stat-value <%= status==='Online'?'online':'offline' %>"><%= status %></span>
             </div>
-            <div style="display:flex;gap:var(--space-2);align-items:center">
-              <span class="badge <%= status==='Online'?'green':'red' %>">
-                <%= status %>
-              </span>
-              <span class="badge">
-                <%= sessionStoreType %>
-              </span>
-              <span style="font-size: var(--text-xs); color: var(--text-muted);">
-                Last Updated: <%= new Date().toLocaleTimeString() %>
-              </span>
+            <div class="stat-item glass-morphism">
+              <span class="stat-label">Updated</span>
+              <span class="stat-value" id="lastUpdate"><%= new Date().toLocaleTimeString() %></span>
             </div>
           </div>
-        </footer>
-      </main>
+        </div>
+      </footer>
     </div>
   </div>
   
   <!-- Enhanced Dashboard JavaScript -->
   <script>
-    // Ultra-modern dashboard interactions and real-time updates
+    // Ultra-modern dashboard interactions - Compatible version
     document.addEventListener('DOMContentLoaded', function() {
-      // Enhanced auto-refresh system with visual feedback
-      let autoRefreshInterval;
-      const autoCheckbox = document.getElementById('d2Auto');
-      const refreshBtn = document.getElementById('d2Refresh');
-      const statusBadge = document.getElementById('d2Status');
-      
-      function startAutoRefresh() {
-        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
-        autoRefreshInterval = setInterval(() => {
-          if (autoCheckbox.checked) {
-            refreshDashboard();
-          }
-        }, 30000); // 30 seconds
-      }
-      
-      function refreshDashboard() {
-        // Add loading state
-        refreshBtn.classList.add('loading');
-        refreshBtn.disabled = true;
-        
-        // Simulate refresh (replace with actual refresh logic)
-        setTimeout(() => {
-          refreshBtn.classList.remove('loading');
-          refreshBtn.disabled = false;
-          updateLastUpdatedTime();
-        }, 1000);
-      }
-      
-      function updateLastUpdatedTime() {
-        const timeElement = document.querySelector('.footer-row span:last-child');
-        if (timeElement) {
-          timeElement.textContent = `Last Updated: ${new Date().toLocaleTimeString()}`;
-        }
-      }
-      
-      // Enhanced sidebar navigation with smooth transitions
-      const sideLinks = document.querySelectorAll('.side-link');
-      sideLinks.forEach(link => {
+      // Enhanced navigation hover effects
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
         link.addEventListener('mouseenter', function() {
-          this.style.transform = 'translateX(8px)';
+          if (!this.classList.contains('active')) {
+            this.style.transform = 'translateX(6px)';
+          }
         });
         
         link.addEventListener('mouseleave', function() {
           if (!this.classList.contains('active')) {
             this.style.transform = 'translateX(0)';
           }
+        });
+      });
+      
+      // Smooth scroll effects for panels
+      const panels = document.querySelectorAll('.panel, .card, .metric-card');
+      
+      // Enhanced glassmorphism effects on scroll
+      let scrollTimeout;
+      window.addEventListener('scroll', function() {
+        if (!scrollTimeout) {
+          scrollTimeout = setTimeout(() => {
+            const header = document.querySelector('.header');
+            
+            if (header) {
+              if (window.scrollY > 30) {
+                header.style.backdropFilter = 'blur(32px)';
+                header.style.background = 'var(--glass-strong)';
+              } else {
+                header.style.backdropFilter = 'blur(24px)';
+                header.style.background = 'var(--glass-strong)';
+              }
+            }
+            
+            scrollTimeout = null;
+          }, 16);
+        }
+      });
+      
+      // Add loading states to buttons
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (this.disabled) return;
+          
+          const originalText = this.textContent;
+          this.classList.add('loading');
+          this.disabled = true;
+          
+          setTimeout(() => {
+            this.classList.remove('loading');
+            this.disabled = false;
+          }, 1000);
+        });
+      });
+
+      console.log('Dashboard enhanced interactions loaded');
+    });
         });
       });
       
@@ -291,16 +394,18 @@
         observer.observe(el);
       });
       
-      // Real-time status monitoring
-      function updateStatus() {
+      // Real-time status monitoring (layout-specific)
+      function updateStatusEmbedded() {
         // Simulate status check (replace with actual API call)
         fetch('/api/status')
           .then(response => response.json())
           .then(data => {
-            const statusBadges = document.querySelectorAll('#d2Status, .badge.green, .badge.red');
+            const statusBadges = document.querySelectorAll('.badge.green, .badge.red');
             statusBadges.forEach(badge => {
-              badge.textContent = data.status || 'Online';
-              badge.className = badge.className.replace(/green|red/, data.status === 'Online' ? 'green' : 'red');
+              if (!badge.id || badge.id !== 'd2Status') {
+                badge.textContent = data.status || 'Online';
+                badge.className = badge.className.replace(/green|red/, data.status === 'Online' ? 'green' : 'red');
+              }
             });
           })
           .catch(() => {
@@ -332,7 +437,7 @@
       // Initialize systems
       startAutoRefresh();
       animateMetrics();
-      updateStatus();
+      updateStatusEmbedded();
       
       // Progressive enhancement for mobile
       if (window.innerWidth <= 1024) {

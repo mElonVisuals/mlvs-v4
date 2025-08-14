@@ -1,4 +1,6 @@
+console.log('🚀 Dashboard.js file loaded!');
 (function(){
+  console.log('🔧 IIFE starting...');
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
   // Sidebar interactivity
@@ -89,34 +91,118 @@
   });
 
   // Status + stats
+  let latencySeries = [];
+  let memorySeries = [];
+  let cpuSeries = [];
+  
   async function refreshStatus(){
+    console.log('Refreshing status...');
     try{
       const s = await jget('/api/status');
-      const online = !!s?.online; $('#d2Status')?.classList.toggle('green', online); $('#d2Status')?.classList.toggle('red', !online); $('#d2Status').textContent = online ? 'Online' : 'Offline';
-      $('#d2Guilds').textContent = String(s?.guilds ?? 0);
-      $('#d2Users').textContent = String(s?.users ?? 0);
-      $('#d2Updated').textContent = s?.updatedAt || '—';
-      $('#d2Bot').textContent = s?.bot?.tag || '—';
-  ['d2Guilds','d2Users','d2Updated'].forEach(id=>{ const el = $('#'+id); if(el){ el.classList.add('flash-update'); setTimeout(()=>el.classList.remove('flash-update'),900); }});
-    }catch{}
+      console.log('Status response:', s);
+      
+      // Bot online status
+      const online = !!s?.online; 
+      const statusEl = $('#d2Status');
+      if (statusEl) {
+        statusEl.classList.toggle('green', online); 
+        statusEl.classList.toggle('red', !online); 
+        statusEl.textContent = online ? 'Online' : 'Offline';
+      }
+      
+      // Update guild and user counts
+      const guildsEl = $('#d2Guilds');
+      const usersEl = $('#d2Users');
+      const updatedEl = $('#d2Updated');
+      const botEl = $('#d2Bot');
+      
+      if (guildsEl) guildsEl.textContent = String(s?.guilds ?? 0);
+      if (usersEl) usersEl.textContent = String(s?.users ?? 0);
+      if (updatedEl) updatedEl.textContent = s?.updatedAt || '—';
+      if (botEl) botEl.textContent = s?.bot?.tag || '—';
+      
+      // Update latency if available
+      const latencyEl = $('#mLatency');
+      if (latencyEl && s?.latency) {
+        latencyEl.textContent = `${s.latency}ms`;
+        latencyEl.className = s.latency < 100 ? 'metric-value green' : s.latency > 300 ? 'metric-value red' : 'metric-value';
+        
+        // Update sparkline data
+        latencySeries.push(s.latency);
+        if (latencySeries.length > 80) latencySeries.shift();
+        const sparkEl = document.querySelector('#spLatency');
+        if (sparkEl) renderSpark(sparkEl, latencySeries);
+      }
+      
+      // Flash update animation
+      ['d2Guilds','d2Users','d2Updated','d2Bot','d2Status','mLatency'].forEach(id=>{
+        const el = $('#'+id); 
+        if(el){ 
+          el.classList.add('flash-update'); 
+          setTimeout(()=>el.classList.remove('flash-update'),900); 
+        }
+      });
+    }catch(error){
+      console.error('Error in refreshStatus:', error);
+    }
   }
+
+  // Make functions globally available
+  window.refreshStatus = refreshStatus;
 
   // Metrics
   const sLatency = $('#spLatency'), sMemory = $('#spMemory'), sCpu = $('#spCpu');
   function renderSpark(svg, arr){ if (!svg) return; const w=160,h=44; const max=Math.max(1, ...arr, 10); const step = arr.length>1 ? w/(arr.length-1) : w; const d = arr.map((v,i)=>`${i?'L':'M'}${(i*step).toFixed(2)},${(h-(v/max)*h).toFixed(2)}`).join(' '); svg.innerHTML = `<path d="${d}" fill="none" stroke="currentColor" opacity="0.7" stroke-width="2"/>`; }
   async function refreshMetrics(){
+    console.log('Refreshing metrics...');
     try{
       const m = await jget('/api/metrics');
+      console.log('Metrics response:', m);
+      
       const lat = m?.latencyMs || [], mem = m?.memoryMB || [], cpu = m?.cpu || [];
-      $('#mLatency').textContent = lat.length? `${lat[lat.length-1]} ms` : '— ms';
-      $('#mMemory').textContent = mem.length? `${mem[mem.length-1]} MB` : '— MB';
-      $('#mCpu').textContent = cpu.length? `${cpu[cpu.length-1]} %` : '— %';
-      renderSpark(sLatency, lat.slice(-80));
-      renderSpark(sMemory, mem.slice(-80));
-      renderSpark(sCpu, cpu.slice(-80));
-  ['mLatency','mMemory','mCpu'].forEach(id=>{ const el = $('#'+id); if(el){ el.classList.add('flash-update'); setTimeout(()=>el.classList.remove('flash-update'),900); }});
-    }catch{}
+      
+      // Update metric values
+      const latencyEl = $('#mLatency');
+      const memoryEl = $('#mMemory');
+      const cpuEl = $('#mCpu');
+      
+      if (latencyEl) latencyEl.textContent = lat.length? `${lat[lat.length-1]}ms` : '— ms';
+      if (memoryEl) memoryEl.textContent = mem.length? `${mem[mem.length-1]}MB` : '— MB';
+      if (cpuEl) cpuEl.textContent = cpu.length? `${cpu[cpu.length-1]}%` : '— %';
+      
+      // Update sparklines
+      const spLatency = document.querySelector('#spLatency');
+      const spMemory = document.querySelector('#spMemory');
+      const spCpu = document.querySelector('#spCpu');
+      
+      if (spLatency && lat.length) {
+        memorySeries = lat.slice(-80);
+        renderSpark(spLatency, memorySeries);
+      }
+      if (spMemory && mem.length) {
+        memorySeries = mem.slice(-80);
+        renderSpark(spMemory, memorySeries);
+      }
+      if (spCpu && cpu.length) {
+        cpuSeries = cpu.slice(-80);
+        renderSpark(spCpu, cpuSeries);
+      }
+      
+      // Flash update animation
+      ['mLatency','mMemory','mCpu'].forEach(id=>{
+        const el = $('#'+id); 
+        if(el){ 
+          el.classList.add('flash-update'); 
+          setTimeout(()=>el.classList.remove('flash-update'),900); 
+        }
+      });
+    }catch(error){
+      console.error('Error in refreshMetrics:', error);
+    }
   }
+
+  // Make refreshMetrics globally available
+  window.refreshMetrics = refreshMetrics;
 
   // Commands
   async function refreshCommands(){
@@ -225,6 +311,47 @@
     }catch{}
   }
   // initial wiring
+  console.log('Dashboard JavaScript loaded, initializing...');
   loadMeAndGuilds();
   refreshActions(); setInterval(refreshActions, 20000);
+  
+  // Initialize health monitoring with error logging
+  console.log('Initializing health monitoring...');
+  try {
+    refreshStatus();
+  } catch (error) {
+    console.error('Error initializing status:', error);
+  }
+  
+  try {
+    refreshMetrics();
+  } catch (error) {
+    console.error('Error initializing metrics:', error);
+  }
+  
+  try {
+    refreshCommands();
+  } catch (error) {
+    console.error('Error initializing commands:', error);
+  }
+  
+  // Set up auto-refresh for health data every 15 seconds
+  setInterval(() => {
+    try {
+      refreshStatus();
+    } catch (error) {
+      console.error('Error refreshing status:', error);
+    }
+    
+    try {
+      refreshMetrics();
+    } catch (error) {
+      console.error('Error refreshing metrics:', error);
+    }
+  }, 15000);
+
+  // Expose functions globally for debugging and manual triggering
+  window.refreshStatus = refreshStatus;
+  window.refreshMetrics = refreshMetrics;
+  window.refreshCommands = refreshCommands;
 })();

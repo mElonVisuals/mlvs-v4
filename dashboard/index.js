@@ -61,7 +61,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3005;
 const DASH_URL = process.env.DASHBOARD_URL || `http://localhost:${PORT}`;
 const computedInvite = (() => {
   const direct = process.env.INVITE_URL;
