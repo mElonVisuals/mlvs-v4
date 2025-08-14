@@ -1,545 +1,160 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>mlvs.me Dashboard — <%= page.charAt(0).toUpperCase()+page.slice(1) %></title>
-  <meta name="description" content="Ultra-modern Discord bot dashboard with advanced glassmorphism design and real-time analytics" />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLVS Dashboard - <%= page.charAt(0).toUpperCase()+page.slice(1) %></title>
   
-  <link rel="stylesheet" href="/dashboard.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/dashboard.css">
+  
+  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png">
 </head>
 <body>
-  <!-- Dashboard Background -->
-  <div class="dashboard-background"></div>
+  <!-- Animated Background -->
+  <div class="dashboard-bg"></div>
 
-  <!-- Dashboard Shell -->
-  <div class="dashboard-container">
+  <!-- Dashboard Container -->
+  <div class="dashboard">
     <!-- Sidebar -->
-    <aside class="sidebar glass">
-      <div class="sidebar-inner">
-        <!-- Brand Section -->
-        <div class="brand glass-strong">
-          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png" alt="mlvs.me Logo" class="brand-logo" />
-          <div class="brand-text">
-            <div class="brand-title text-gradient-primary">mlvs.me</div>
-            <div class="brand-subtitle">Dashboard</div>
-          </div>
+    <aside class="sidebar">
+      <!-- Logo Section -->
+      <div class="sidebar-header">
+        <div class="logo brand-with-image">
+          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png" alt="MLVS Logo" class="logo-img" />
+          <span class="logo-text">MLVS.me</span>
+        </div>
+        <div class="logo-subtitle">Bot Dashboard</div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="nav">
+        <div class="nav-section">
+          <div class="nav-title nav-category">Overview</div>
+          <a href="/dashboard" class="nav-link <%= page==='dashboard'?'active':'' %>">
+            <span>Dashboard</span>
+          </a>
+          <a href="/dashboard/health" class="nav-link <%= page==='health'?'active':'' %>">
+            <span>Health Monitor</span>
+          </a>
         </div>
         
-        <!-- Navigation -->
-        <nav class="nav">
-          <div class="nav-section">
-            <div class="nav-section-title">Analytics</div>
-            <a href="/dashboard/health" class="nav-link <%= page==='health'?'active':'' %>">
-              <span class="nav-icon">●</span>
-              <span class="nav-text">Health</span>
-            </a>
-            <a href="/dashboard/activity" class="nav-link <%= page==='activity'?'active':'' %>">
-              <span class="nav-icon">⚡</span>
-              <span class="nav-text">Activity</span>
-            </a>
-            <a href="/dashboard/system" class="nav-link <%= page==='system'?'active':'' %>">
-              <span class="nav-icon">◐</span>
-              <span class="nav-text">System</span>
-            </a>
-          </div>
-          
-          <div class="nav-section">
-            <div class="nav-section-title">Management</div>
-            <a href="/dashboard/commands" class="nav-link <%= page==='commands'?'active':'' %>">
-              <span class="nav-icon">◆</span>
-              <span class="nav-text">Commands</span>
-            </a>
-            <a href="/dashboard/settings" class="nav-link <%= page==='settings'?'active':'' %>">
-              <span class="nav-icon">◈</span>
-              <span class="nav-text">Settings</span>
-            </a>
-          </div>
-        </nav>
+        <div class="nav-section">
+          <div class="nav-title nav-category category-accent">Analytics</div>
+          <a href="/dashboard/activity" class="nav-link <%= page==='activity'?'active':'' %>">
+            <span>Live Activity</span>
+          </a>
+          <a href="/dashboard/system" class="nav-link <%= page==='system'?'active':'' %>">
+            <span>System Stats</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-title nav-category">Management</div>
+          <a href="/dashboard/commands" class="nav-link <%= page==='commands'?'active':'' %>">
+            <span>Commands</span>
+          </a>
+          <a href="/dashboard/settings" class="nav-link <%= page==='settings'?'active':'' %>">
+            <span>Settings</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Status Footer -->
+      <div class="sidebar-footer">
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          <span class="status-text">Connecting...</span>
+        </div>
       </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="main-content">
       <!-- Header -->
-      <header class="header glass">
-        <div class="header-info">
-          <h1 class="header-title text-gradient-primary"><%= page.charAt(0).toUpperCase()+page.slice(1) %></h1>
-          <p class="header-subtitle">Dashboard monitoring and management</p>
-        </div>
+      <header class="header">
+        <h1 class="header-title"><%= page.charAt(0).toUpperCase()+page.slice(1) %></h1>
         <div class="header-actions">
-          <a href="/logout" class="btn btn-primary">
-            <span>Logout</span>
-          </a>
+          <button class="btn btn-secondary" data-refresh="all">Refresh</button>
+          <a href="/logout" class="btn btn-primary">Logout</a>
         </div>
       </header>
 
-      <!-- Content Area -->
+      <!-- Content -->
       <div class="content">
         <%- body %>
       </div>
     </main>
   </div>
-</body>
-</html>>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-            <span>Health Monitor</span>
-          </a>
-          <a href="/dashboard/activity" class="side-link glass-morphism <%= page==='activity'?'active':'' %>">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-            </svg>
-            <span>Live Activity</span>
-          </a>
-          <a href="/dashboard/telemetry" class="side-link glass-morphism <%= page==='telemetry'?'active':'' %>">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <line x1="18" y1="20" x2="18" y2="10"/>
-              <line x1="12" y1="20" x2="12" y2="4"/>
-              <line x1="6" y1="20" x2="6" y2="14"/>
-            </svg>
-            <span>Telemetry</span>
-          </a>
-        </div>
-        
-        <div class="side-section">
-          <div class="side-label gradient-text">Management</div>
-          <a href="/dashboard/actions" class="side-link glass-morphism <%= page==='actions'?'active':'' %>">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-            </svg>
-            <span>Actions</span>
-          </a>
-          <a href="/dashboard/commands" class="side-link glass-morphism <%= page==='commands'?'active':'' %>">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <polyline points="4,17 10,11 4,5"/>
-              <line x1="12" y1="19" x2="20" y2="19"/>
-            </svg>
-            <span>Commands</span>
-          </a>
-          <a href="/dashboard/system" class="side-link glass-morphism <%= page==='system'?'active':'' %>">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-              <line x1="8" y1="21" x2="16" y2="21"/>
-              <line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
-            <span>System</span>
-          </a>
-        </div>
 
-        <div class="side-section">
-          <div class="side-label gradient-text">Resources</div>
-          <a href="/dashboard/about" class="side-link glass-morphism <%= page==='about'?'active':'' %>">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 16v-4"/>
-              <path d="M12 8h.01"/>
-            </svg>
-            <span>About</span>
-          </a>
-          <a href="/" class="side-link glass-morphism">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9,22 9,12 15,12 15,22"/>
-            </svg>
-            <span>Homepage</span>
-          </a>
-          <% if (brand.inviteUrl) { %><a href="<%= brand.inviteUrl %>" target="_blank" class="side-link glass-morphism">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="nav-icon">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-              <rect x="2" y="9" width="4" height="12"/>
-              <circle cx="4" cy="4" r="2"/>
-            </svg>
-            <span>Invite Bot</span>
-          </a><% } %>
-        </div>
-      </nav>
-      
-      <div class="side-footer glass-morphism">
-        <div class="status-indicator">
-          <div class="status-dot <%= status==='Online'?'online':'offline' %>"></div>
-          <span class="status-text">Bot <%= status %></span>
-        </div>
-        <div class="session-info">
-          <span class="session-label">Session Store</span>
-          <span class="session-type"><%= sessionStoreType %></span>
-        </div>
-      </div>
-    </aside>
-
-    <div class="dash-main">
-      <header class="dash-header glass-morphism">
-        <div class="dash-brand">
-          <img src="https://cdn.discordapp.com/attachments/1335734480253747297/1402442222816989346/logoglow.png?ex=689d281a&is=689bd69a&hm=1acf86e244991b170fcbd1a9b0e68e1a0f25423845fc36e6e7381df4ec36b8eb&" alt="mlvs.me Dashboard" class="dash-logo" />
-          <div class="dash-title">
-            <h1 class="gradient-text">mlvs.me Dashboard</h1>
-            <span class="page-subtitle"><%= page.charAt(0).toUpperCase()+page.slice(1) %> Analytics</span>
-          </div>
-        </div>
-        
-        <div class="dash-actions">
-          <div class="status-badge glass-morphism <%= status==='Online'?'status-online':'status-offline' %>">
-            <div class="status-dot"></div>
-            <span><%= status %></span>
-          </div>
-          
-          <button id="dashRefresh" class="btn btn-secondary glass-morphism">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
-              <path d="M23 4v6h-6M1 20v-6h6"/>
-              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-            </svg>
-            Refresh
-          </button>
-          
-          <label class="auto-refresh-toggle glass-morphism">
-            <input id="autoRefresh" type="checkbox" checked />
-            <span class="toggle-text">Auto-Refresh</span>
-          </label>
-        </div>
-      </header>
-
-      <main id="dashContent" class="dash-content">
-        <%- body %>
-      </main>
-
-      <footer class="dash-footer glass-morphism">
-        <div class="footer-content">
-          <div class="footer-info">
-            <span>© <%= new Date().getFullYear() %> <%= brand?.short || 'mlvs.me' %> — Advanced Discord Analytics</span>
-          </div>
-          <div class="footer-stats">
-            <div class="stat-item glass-morphism">
-              <span class="stat-label">Status</span>
-              <span class="stat-value <%= status==='Online'?'online':'offline' %>"><%= status %></span>
-            </div>
-            <div class="stat-item glass-morphism">
-              <span class="stat-label">Updated</span>
-              <span class="stat-value" id="lastUpdate"><%= new Date().toLocaleTimeString() %></span>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  </div>
-  
-  <!-- Enhanced Dashboard JavaScript -->
+  <!-- Scripts -->
+  <script src="/dashboard.js"></script>
+  <script src="/dashboard-shared.js"></script>
   <script>
-    // Ultra-modern dashboard interactions - Compatible version
-    document.addEventListener('DOMContentLoaded', function() {
-      // Enhanced navigation hover effects
-      const navLinks = document.querySelectorAll('.nav-link');
-      navLinks.forEach(link => {
-        link.addEventListener('mouseenter', function() {
-          if (!this.classList.contains('active')) {
-            this.style.transform = 'translateX(6px)';
-          }
-        });
-        
-        link.addEventListener('mouseleave', function() {
-          if (!this.classList.contains('active')) {
-            this.style.transform = 'translateX(0)';
-          }
-        });
-      });
-      
-      // Smooth scroll effects for panels
-      const panels = document.querySelectorAll('.panel, .card, .metric-card');
-      
-      // Enhanced glassmorphism effects on scroll
-      let scrollTimeout;
-      window.addEventListener('scroll', function() {
-        if (!scrollTimeout) {
-          scrollTimeout = setTimeout(() => {
-            const header = document.querySelector('.header');
-            
-            if (header) {
-              if (window.scrollY > 30) {
-                header.style.backdropFilter = 'blur(32px)';
-                header.style.background = 'var(--glass-strong)';
-              } else {
-                header.style.backdropFilter = 'blur(24px)';
-                header.style.background = 'var(--glass-strong)';
-              }
-            }
-            
-            scrollTimeout = null;
-          }, 16);
-        }
-      });
-      
-      // Add loading states to buttons
-      const buttons = document.querySelectorAll('.btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          if (this.disabled) return;
-          
-          const originalText = this.textContent;
-          this.classList.add('loading');
-          this.disabled = true;
-          
-          setTimeout(() => {
-            this.classList.remove('loading');
-            this.disabled = false;
-          }, 1000);
-        });
-      });
-
-      console.log('Dashboard enhanced interactions loaded');
-    });
-        });
-      });
-      
-      // Advanced glassmorphism effects on scroll
-      let scrollTimeout;
-      window.addEventListener('scroll', function() {
-        if (!scrollTimeout) {
-          scrollTimeout = setTimeout(() => {
-            const header = document.querySelector('.dash2-header');
-            const panels = document.querySelectorAll('.panel');
-            
-            if (window.scrollY > 50) {
-              header.style.backdropFilter = 'blur(30px)';
-              header.style.backgroundColor = 'var(--glass-strong)';
-            } else {
-              header.style.backdropFilter = 'blur(24px)';
-              header.style.backgroundColor = 'var(--glass-ultra)';
-            }
-            
-            // Parallax effect for panels
-            panels.forEach((panel, index) => {
-              const rect = panel.getBoundingClientRect();
-              const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-              
-              if (isVisible) {
-                const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
-                const translateY = (scrollPercent - 0.5) * 10;
-                panel.style.transform = `translateY(${translateY}px)`;
-              }
-            });
-            
-            scrollTimeout = null;
-          }, 16);
-        }
-      });
-      
-      // Enhanced token management
-      const apiTokenInput = document.getElementById('apiToken');
-      const saveTokenBtn = document.getElementById('saveToken');
-      
-      saveTokenBtn.addEventListener('click', function() {
-        const token = apiTokenInput.value.trim();
-        if (token) {
-          // Add success animation
-          this.style.background = 'linear-gradient(135deg, var(--emerald-500), var(--emerald-400))';
-          this.textContent = 'Saved!';
-          
-          setTimeout(() => {
-            this.style.background = '';
-            this.textContent = 'Save';
-          }, 2000);
-          
-          // Store token (implement actual storage logic)
-          localStorage.setItem('dashboard_token', token);
-        }
-      });
-      
-      // Load saved token
-      const savedToken = localStorage.getItem('dashboard_token');
-      if (savedToken) {
-        apiTokenInput.value = savedToken;
-      }
-      
-      // Enhanced metric animations
-      const metricValues = document.querySelectorAll('.metric-value, .stat-value');
-      const animateMetrics = () => {
-        metricValues.forEach(metric => {
-          if (!metric.dataset.animated) {
-            const rect = metric.getBoundingClientRect();
-            const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-            
-            if (isInViewport) {
-              metric.dataset.animated = 'true';
-              metric.style.animation = 'countUp 0.8s ease-out forwards';
-            }
-          }
-        });
-      };
-      
-      // Intersection Observer for advanced animations
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-          }
-        });
-      }, observerOptions);
-      
-      // Observe all panels and cards
-      document.querySelectorAll('.panel, .metric-card, .stat').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-        observer.observe(el);
-      });
-      
-      // Real-time status monitoring (layout-specific)
-      function updateStatusEmbedded() {
-        // Simulate status check (replace with actual API call)
-        fetch('/api/status')
-          .then(response => response.json())
-          .then(data => {
-            const statusBadges = document.querySelectorAll('.badge.green, .badge.red');
-            statusBadges.forEach(badge => {
-              if (!badge.id || badge.id !== 'd2Status') {
-                badge.textContent = data.status || 'Online';
-                badge.className = badge.className.replace(/green|red/, data.status === 'Online' ? 'green' : 'red');
-              }
-            });
-          })
-          .catch(() => {
-            // Handle error silently
-          });
-      }
-      
-      // Enhanced keyboard shortcuts
-      document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-          switch(e.key) {
-            case 'r':
-              e.preventDefault();
-              refreshDashboard();
-              break;
-            case 'k':
-              e.preventDefault();
-              document.getElementById('guildSelect').focus();
-              break;
-            case '/':
-              e.preventDefault();
-              const searchInput = document.querySelector('input[placeholder*="Filter"]');
-              if (searchInput) searchInput.focus();
-              break;
-          }
-        }
-      });
-      
-      // Initialize systems
-      startAutoRefresh();
-      animateMetrics();
-      updateStatusEmbedded();
-      
-      // Progressive enhancement for mobile
-      if (window.innerWidth <= 1024) {
-        const sidebar = document.getElementById('dashSidebar');
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        overlay.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(4px);
-          z-index: 99;
-          opacity: 0;
-          visibility: hidden;
-          transition: all 0.3s ease;
-        `;
-        
-        document.body.appendChild(overlay);
-        
-        // Mobile sidebar toggle
-        const toggleBtn = document.createElement('button');
-        toggleBtn.innerHTML = '☰';
-        toggleBtn.className = 'mobile-toggle';
-        toggleBtn.style.cssText = `
-          position: fixed;
-          top: 20px;
-          left: 20px;
-          z-index: 101;
-          background: var(--glass-ultra);
-          backdrop-filter: blur(12px);
-          border: 1px solid var(--glass-border);
-          border-radius: var(--radius-lg);
-          width: 44px;
-          height: 44px;
-          color: var(--text-primary);
-          font-size: 18px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        `;
-        
-        document.body.appendChild(toggleBtn);
-        
-        toggleBtn.addEventListener('click', () => {
-          sidebar.classList.toggle('active');
-          overlay.style.opacity = sidebar.classList.contains('active') ? '1' : '0';
-          overlay.style.visibility = sidebar.classList.contains('active') ? 'visible' : 'hidden';
-        });
-        
-        overlay.addEventListener('click', () => {
-          sidebar.classList.remove('active');
-          overlay.style.opacity = '0';
-          overlay.style.visibility = 'hidden';
-        });
-      }
-      
-      // Performance monitoring
-      if ('performance' in window) {
-        window.addEventListener('load', () => {
-          setTimeout(() => {
-            const perfData = performance.getEntriesByType('navigation')[0];
-            if (perfData) {
-              console.log('✅ Dashboard load performance:', {
-                loadTime: `${Math.round(perfData.loadEventEnd - perfData.loadEventStart)}ms`,
-                domReady: `${Math.round(perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart)}ms`
-              });
-            }
-          }, 0);
-        });
-      }
-    });
-    
-    // CSS animations for metrics
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes countUp {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
-      }
-      
-      .loading {
-        animation: pulse 1s ease-in-out infinite;
-      }
-    `;
-    document.head.appendChild(style);
+    window.ICONS = Object.assign({
+      'hand-wave':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M9 3l1 5"/><path d="M15 3l-1 5"/><path d="M5 8l2 4 2 8h6l2-8 2-4"/></svg>',
+      'guilds':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14"/><path d="M17 5v14"/></svg>',
+      'performance':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 12 17 7"/><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/></svg>',
+      'commands':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M8 7h8M8 12h8M8 17h5"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>',
+      'robot':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M9 8V5h6v3"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 18v3"/></svg>',
+      'stats':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M4 20V8"/><path d="M10 20V4"/><path d="M16 20v-6"/><path d="M22 20v-2"/></svg>',
+      'settings':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 2.09 14H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 .33 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.48.48-.61 1.19-.33 1.82.28.63.89 1.04 1.56 1.07H22a2 2 0 0 1 0 4h-.09c-.67.03-1.28.44-1.56 1.07Z"/></svg>',
+      'rocket':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M4 15s1-4 5-8 8-5 8-5 1 4-3 8-10 5-10 5Z"/><path d="M6 18c1.5-1.5 3.5-2 3.5-2s-.5 2-2 3.5S3 22 3 22s1.5-2 3-4Z"/></svg>',
+      'system':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8"/></svg>',
+      'palette':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9c0-.6-.4-1-1-1h-3.5a1.5 1.5 0 0 1-1.4-2 1.5 1.5 0 0 0-1.3-2H12Z"/><circle cx="6.5" cy="11.5" r="1"/><circle cx="9.5" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.5" cy="11.5" r="1"/></svg>',
+      'bell':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg>',
+  'lock':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  'warning':'<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8"><path d="M12 2 2 22h20L12 2Z"/><path d="M12 9v5"/><path d="M12 17h.01"/></svg>'
+    }, window.ICONS||{});
+    window.addEventListener('DOMContentLoaded',()=>{ document.querySelectorAll('.ui-icon').forEach(el=>{ const k=el.getAttribute('data-icon'); if(window.ICONS[k]) el.innerHTML=window.ICONS[k]; }); });
   </script>
-  
-  <script src="/dashboard.js" defer></script>
+  <style>
+    /* Brand logo styling */
+    .brand-with-image { display:flex; align-items:center; gap:.55rem; font-size:1rem; font-weight:600; letter-spacing:.5px; }
+    .logo-img { width:28px; height:28px; object-fit:contain; filter: drop-shadow(0 0 6px hsl(var(--primary) / 0.5)); }
+    .logo-text { background:linear-gradient(90deg,hsl(var(--foreground)),hsl(var(--primary))); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    /* Emoji / inline icon normalization */
+    .card-icon, .activity-avatar, .nav-link span, .overview-stat, .overview-badge { --emoji-size: 1em; }
+    .card-icon, .activity-avatar { font-size: clamp(.9rem,1.1vw,1.15rem); line-height:1; }
+    .card-icon:has(img), .activity-avatar:has(img) { display:flex; }
+    .content :is(h1,h2,h3,h4) span.emoji, .content .emoji { font-size:1em; line-height:1; display:inline-flex; align-items:center; }
+    /* Nav categories emphasis */
+    .nav-category { position:relative; font-weight:600; letter-spacing:.08em; font-size:.62rem; text-transform:uppercase; color:hsl(var(--muted-foreground)); padding-left:.75rem; margin-bottom:.4rem; }
+    .nav-category:before { content:""; position:absolute; left:0; top:50%; width:4px; height:10px; border-radius:2px; background:hsl(var(--primary)); transform:translateY(-50%); box-shadow:0 0 8px hsl(var(--primary) / 0.8); }
+    .category-accent { color:hsl(var(--primary)); }
+    .category-accent:before { background:linear-gradient(180deg,hsl(var(--primary)),hsl(var(--neon-accent))); }
+    /* Settings link badge spacing adjustment (BOT ONLINE) */
+    .sidebar-footer { margin-top:1.75rem; }
+    .sidebar-footer .status-indicator { padding:.55rem .9rem .55rem .6rem; border-radius: 16px; background: linear-gradient(135deg,hsl(var(--secondary)),hsl(var(--secondary) / 0.6)); border:1px solid hsl(var(--border)); gap:.55rem; position:relative; overflow:hidden; }
+    .sidebar-footer .status-indicator:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 30%,hsl(var(--primary) / 0.25),transparent 70%); opacity:.55; }
+    .sidebar-footer .status-text { font-size:.62rem; letter-spacing:.06em; font-weight:600; text-transform:uppercase; background:linear-gradient(90deg,hsl(var(--foreground)),hsl(var(--primary))); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .sidebar-footer .status-dot { box-shadow:0 0 0 0 hsl(var(--success)); animation: pulseStatus 2.4s ease-in-out infinite; }
+    @keyframes pulseStatus { 0%{ box-shadow:0 0 0 0 hsl(var(--success) / .5);} 70%{ box-shadow:0 0 0 8px hsl(var(--success) / 0);} 100%{ box-shadow:0 0 0 0 hsl(var(--success) / 0);} }
+    /* Light theme variant */
+    :root.theme-light { --background: 210 30% 98%; --foreground: 222 47% 11%; --muted: 210 40% 96%; --muted-foreground: 215 16% 46%; --card: 0 0% 100%; --card-foreground: 222 47% 11%; --border: 214 32% 91%; --secondary: 210 40% 96%; --secondary-foreground: 222 47% 11%; --accent: 210 40% 96%; --accent-foreground: 222 47% 11%; }
+    .theme-toggle { cursor:pointer; border:1px solid hsl(var(--border)); background:hsl(var(--secondary)); padding:.4rem .7rem; border-radius: var(--radius); font-size:.65rem; text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      const headerActions=document.querySelector('.header-actions');
+      if(headerActions){
+        const btn=document.createElement('button');
+        btn.className='theme-toggle';
+        btn.textContent='Light';
+        btn.addEventListener('click',()=>{
+          const root=document.documentElement; root.classList.toggle('theme-light');
+          btn.textContent = root.classList.contains('theme-light')? 'Dark':'Light';
+        });
+        headerActions.prepend(btn);
+      }
+    });
+  </script>
+  </style>
 </body>
 </html>

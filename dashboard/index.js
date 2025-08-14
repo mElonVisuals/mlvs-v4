@@ -258,8 +258,8 @@ app.get('/privacy', (req, res) => {
   });
 });
 
-// Dashboard redirect to health page (new multi-page layout)
-app.get('/dashboard', ensureAuth, (req, res) => res.redirect('/dashboard/health'));
+// Dashboard redirect to main dashboard page
+app.get('/dashboard', ensureAuth, (req, res) => renderDashPage('dashboard', req, res));
 
 function renderDashPage(page, req, res, extra = {}) {
   const status = readStatus();
@@ -275,6 +275,7 @@ function renderDashPage(page, req, res, extra = {}) {
     users: status?.users || 0,
     updatedAt: status?.updatedAt || null,
     sessionStoreType,
+  user: req.user || null, // ensure user is available to EJS templates
     ...extra
   };
   ejs.renderFile(pagePath, baseData, (err, str) => {
@@ -290,6 +291,7 @@ app.get('/dashboard/actions', ensureAuth, (req,res)=> renderDashPage('actions', 
 app.get('/dashboard/commands', ensureAuth, (req,res)=> renderDashPage('commands', req, res));
 app.get('/dashboard/telemetry', ensureAuth, (req,res)=> renderDashPage('telemetry', req, res));
 app.get('/dashboard/system', ensureAuth, (req,res)=> renderDashPage('system', req, res));
+app.get('/dashboard/settings', ensureAuth, (req,res)=> renderDashPage('settings', req, res));
 app.get('/dashboard/about', ensureAuth, (req,res)=> renderDashPage('about', req, res));
 
 app.get('/api/status', (req, res) => {

@@ -1,357 +1,738 @@
-console.log('🚀 Dashboard.js file loaded!');
-(function(){
-  console.log('🔧 IIFE starting...');
-  const $ = (sel, root=document) => root.querySelector(sel);
-  const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
-  // Sidebar interactivity
-  const sidebar = $('#dashSidebar');
-  const shell = $('#dashShell');
-  const toggleBtn = $('#sidebarToggle');
-  // Persist sidebar collapsed state
-  const sideStateKey = 'dashSidebarCollapsed';
-  function applySidebarState(){
-    try { const collapsed = localStorage.getItem(sideStateKey)==='1'; sidebar?.classList.toggle('collapsed', collapsed); toggleBtn?.setAttribute('aria-expanded', collapsed? 'false':'true'); }catch{}
-  }
-  applySidebarState();
-  toggleBtn?.addEventListener('click', ()=>{
-    const will = !sidebar?.classList.contains('collapsed');
-    sidebar?.classList.toggle('collapsed');
-    try { localStorage.setItem(sideStateKey, will? '1':'0'); }catch{}
-    toggleBtn?.setAttribute('aria-expanded', will? 'false':'true');
-  });
-  // Multipage layout now; anchor highlight logic removed.
-  const tokenInput = $('#apiToken');
-  const saveTokenBtn = $('#saveToken');
-  const guildSelect = $('#guildSelect');
-  const announceGuildInput = $('#announceForm')?.querySelector('[name="guildId"]');
-  const store = {
-    get token(){ try{ return localStorage.getItem('apiToken')||'' }catch{ return '' } },
-    set token(v){ try{ localStorage.setItem('apiToken', v||'') }catch{} }
-  };
-  // persist selected guild
-  Object.defineProperty(store, 'selectedGuild', {
-    get(){ try{ return localStorage.getItem('selectedGuild')||'' }catch{ return '' } },
-    set(v){ try{ localStorage.setItem('selectedGuild', v||'') }catch{} }
-  });
-  if (tokenInput) tokenInput.value = store.token;
-  if (saveTokenBtn) saveTokenBtn.addEventListener('click', ()=>{ store.token = tokenInput.value; saveTokenBtn.textContent='Saved'; setTimeout(()=>saveTokenBtn.textContent='Save', 900); });
+/*!
+ * MLVS Dashboard V5.0 - Ultimate Bot Dashboard JavaScript
+ * Advanced Real-Time Analytics & Modern Interactions
+ * Built with performance and user experience in mind
+ */
 
-  async function jget(url){ const h={ 'cache':'no-store' }; return fetch(url,h).then(r=>r.json()); }
-  async function jpost(url, body){
-    const headers = { 'Content-Type':'application/json' };
-    if (store.token) headers['Authorization'] = 'Bearer '+store.token;
-    const r = await fetch(url, { method:'POST', headers, body: JSON.stringify(body||{}) });
-    if (!r.ok) throw new Error('HTTP '+r.status); return r.json();
-  }
-  async function jpatch(url, body){
-    const headers = { 'Content-Type':'application/json' };
-    if (store.token) headers['Authorization'] = 'Bearer '+store.token;
-    const r = await fetch(url, { method:'PATCH', headers, body: JSON.stringify(body||{}) });
-    if (!r.ok) throw new Error('HTTP '+r.status); return r.json();
-  }
+console.log('🚀 MLVS Dashboard V5.0 Loading...');
 
-  // Me + guilds
-  let currentGuild = '';
-  async function loadMeAndGuilds(){
-    try{
-      const r = await fetch('/api/me', { cache:'no-store' });
-      if (!r.ok) return; const data = await r.json();
-      const guilds = data?.user?.guilds || [];
-      if (guildSelect && guilds.length){
-        // clear existing except first "All guilds"
-        [...guildSelect.querySelectorAll('option')].slice(1).forEach(o=>o.remove());
-        for(const g of guilds){
-          const opt = document.createElement('option'); opt.value = g.id; opt.textContent = g.name || g.id; guildSelect.appendChild(opt);
-        }
-        // restore persisted selection if applicable
-        const persisted = store.selectedGuild;
-        if (persisted && guilds.some(g=>g.id===persisted)){
-          guildSelect.value = persisted;
-          currentGuild = persisted;
+class MLVSDashboard {
+  constructor() {
+    this.config = {
+      updateIntervals: {
+        status: 5000,     // 5 seconds
+        metrics: 10000,   // 10 seconds
+        activity: 15000,  // 15 seconds
+        charts: 30000     // 30 seconds
+      },
+      animations: {
+        duration: 300,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+      },
+      api: {
+        base: '/api',
+        endpoints: {
+          status: '/status',
+          metrics: '/metrics',
+          commands: '/commands',
+          activity: '/activity',
+          system: '/system'
         }
       }
-    }catch{}
-    // sync announce form with selection
-    syncAnnounceGuild();
-    // refresh lists with filtering
-    refreshActions();
-  }
-
-  function syncAnnounceGuild(){
-    if (!announceGuildInput) return;
-    if (currentGuild){ announceGuildInput.value = currentGuild; }
-    else if (!announceGuildInput.value){ announceGuildInput.placeholder = 'Guild ID'; }
-  }
-
-  guildSelect?.addEventListener('change', ()=>{
-    currentGuild = guildSelect.value || '';
-    store.selectedGuild = currentGuild;
-    syncAnnounceGuild();
-    refreshActions();
-  });
-
-  // Status + stats
-  let latencySeries = [];
-  let memorySeries = [];
-  let cpuSeries = [];
-  
-  async function refreshStatus(){
-    console.log('Refreshing status...');
-    try{
-      const s = await jget('/api/status');
-      console.log('Status response:', s);
-      
-      // Bot online status
-      const online = !!s?.online; 
-      const statusEl = $('#d2Status');
-      if (statusEl) {
-        statusEl.classList.toggle('green', online); 
-        statusEl.classList.toggle('red', !online); 
-        statusEl.textContent = online ? 'Online' : 'Offline';
+    };
+    
+    this.state = {
+      isOnline: false,
+      lastUpdate: null,
+      updateTimers: {},
+      chartData: {
+        latency: [],
+        memory: [],
+        cpu: [],
+        users: [],
+        guilds: []
       }
-      
-      // Update guild and user counts
-      const guildsEl = $('#d2Guilds');
-      const usersEl = $('#d2Users');
-      const updatedEl = $('#d2Updated');
-      const botEl = $('#d2Bot');
-      
-      if (guildsEl) guildsEl.textContent = String(s?.guilds ?? 0);
-      if (usersEl) usersEl.textContent = String(s?.users ?? 0);
-      if (updatedEl) updatedEl.textContent = s?.updatedAt || '—';
-      if (botEl) botEl.textContent = s?.bot?.tag || '—';
-      
-      // Update latency if available
-      const latencyEl = $('#mLatency');
-      if (latencyEl && s?.latency) {
-        latencyEl.textContent = `${s.latency}ms`;
-        latencyEl.className = s.latency < 100 ? 'metric-value green' : s.latency > 300 ? 'metric-value red' : 'metric-value';
-        
-        // Update sparkline data
-        latencySeries.push(s.latency);
-        if (latencySeries.length > 80) latencySeries.shift();
-        const sparkEl = document.querySelector('#spLatency');
-        if (sparkEl) renderSpark(sparkEl, latencySeries);
-      }
-      
-      // Flash update animation
-      ['d2Guilds','d2Users','d2Updated','d2Bot','d2Status','mLatency'].forEach(id=>{
-        const el = $('#'+id); 
-        if(el){ 
-          el.classList.add('flash-update'); 
-          setTimeout(()=>el.classList.remove('flash-update'),900); 
-        }
-      });
-    }catch(error){
-      console.error('Error in refreshStatus:', error);
-    }
+    };
+
+    this.init();
   }
 
-  // Make functions globally available
-  window.refreshStatus = refreshStatus;
-
-  // Metrics
-  const sLatency = $('#spLatency'), sMemory = $('#spMemory'), sCpu = $('#spCpu');
-  function renderSpark(svg, arr){ if (!svg) return; const w=160,h=44; const max=Math.max(1, ...arr, 10); const step = arr.length>1 ? w/(arr.length-1) : w; const d = arr.map((v,i)=>`${i?'L':'M'}${(i*step).toFixed(2)},${(h-(v/max)*h).toFixed(2)}`).join(' '); svg.innerHTML = `<path d="${d}" fill="none" stroke="currentColor" opacity="0.7" stroke-width="2"/>`; }
-  async function refreshMetrics(){
-    console.log('Refreshing metrics...');
-    try{
-      const m = await jget('/api/metrics');
-      console.log('Metrics response:', m);
-      
-      const lat = m?.latencyMs || [], mem = m?.memoryMB || [], cpu = m?.cpu || [];
-      
-      // Update metric values
-      const latencyEl = $('#mLatency');
-      const memoryEl = $('#mMemory');
-      const cpuEl = $('#mCpu');
-      
-      if (latencyEl) latencyEl.textContent = lat.length? `${lat[lat.length-1]}ms` : '— ms';
-      if (memoryEl) memoryEl.textContent = mem.length? `${mem[mem.length-1]}MB` : '— MB';
-      if (cpuEl) cpuEl.textContent = cpu.length? `${cpu[cpu.length-1]}%` : '— %';
-      
-      // Update sparklines
-      const spLatency = document.querySelector('#spLatency');
-      const spMemory = document.querySelector('#spMemory');
-      const spCpu = document.querySelector('#spCpu');
-      
-      if (spLatency && lat.length) {
-        memorySeries = lat.slice(-80);
-        renderSpark(spLatency, memorySeries);
-      }
-      if (spMemory && mem.length) {
-        memorySeries = mem.slice(-80);
-        renderSpark(spMemory, memorySeries);
-      }
-      if (spCpu && cpu.length) {
-        cpuSeries = cpu.slice(-80);
-        renderSpark(spCpu, cpuSeries);
-      }
-      
-      // Flash update animation
-      ['mLatency','mMemory','mCpu'].forEach(id=>{
-        const el = $('#'+id); 
-        if(el){ 
-          el.classList.add('flash-update'); 
-          setTimeout(()=>el.classList.remove('flash-update'),900); 
-        }
-      });
-    }catch(error){
-      console.error('Error in refreshMetrics:', error);
-    }
-  }
-
-  // Make refreshMetrics globally available
-  window.refreshMetrics = refreshMetrics;
-
-  // Commands
-  async function refreshCommands(){
-    try{
-      const data = await jget('/api/commands');
-      const list = $('#cmdList'); if (!list) return; list.innerHTML='';
-      const filter = ($('#cmdFilter')?.value || '').toLowerCase();
-      const cmds = data?.commands || {}; const cats = Object.keys(cmds).sort();
-      for(const c of cats){
-        const group = document.createElement('div'); group.className='cmd-group';
-        group.innerHTML = `<div class="cmd-cat">${c}</div>`;
-        for(const item of cmds[c]){
-          const name = item.name || ''; const desc = item.description || ''; if (filter && !(name.toLowerCase().includes(filter)||desc.toLowerCase().includes(filter))) continue;
-          const row = document.createElement('div'); row.className='cmd-row';
-          row.innerHTML = `<code>${name}</code><span class="muted">${desc}</span><button class="btn small copy">Copy usage</button>`;
-          row.querySelector('.copy').addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(item.usage||name); }catch{} });
-          group.appendChild(row);
-        }
-        list.appendChild(group);
-      }
-    }catch{}
-  }
-  $('#cmdFilter')?.addEventListener('input', refreshCommands);
-
-  // Actions: presence + announcement (queued)
-  $('#presenceForm')?.addEventListener('submit', async (e)=>{
-    e.preventDefault(); const fd = new FormData(e.target); const body = { status: fd.get('status'), activity: fd.get('activity') };
-    try{ await jpost('/api/presence', body); e.target.reset(); }catch{}
-  });
-  $('#announceForm')?.addEventListener('submit', async (e)=>{
-    e.preventDefault(); const fd = new FormData(e.target); const body = { guildId: fd.get('guildId'), channelId: fd.get('channelId'), message: fd.get('message') };
-  // fallback to selected guild if input empty
-  if ((!body.guildId || String(body.guildId).trim()==='') && currentGuild){ body.guildId = currentGuild; }
-    try{ await jpost('/api/actions/announce', body); e.target.reset(); }catch{}
-  });
-
-  // Activity
-  async function refreshActivity(){
-    try{
-      const r = await jget('/api/activity'); const items = r?.items || []; const ul = $('#d2Activity'); ul.innerHTML='';
-      for(const it of items.slice(-30).reverse()){
-        const li = document.createElement('li'); li.className='act-item';
-        li.innerHTML = `<span class="badge">${(it.type||'info').toUpperCase()}</span><span>${(it.message||'').toString().slice(0,200)}</span><time class="muted">${new Date(it.ts||Date.now()).toLocaleString()}</time>`;
-        ul.appendChild(li);
-      }
-    }catch{}
-  }
-
-  // Controls
-  $('#d2Refresh')?.addEventListener('click', ()=>{ refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity(); refreshActions(); });
-  if ($('#d2Auto')){ setInterval(()=>{ if ($('#d2Auto').checked){ refreshStatus(); refreshMetrics(); refreshActivity(); } }, 15000); }
-
-  // initial
-  refreshStatus(); refreshMetrics(); refreshCommands(); refreshActivity();
-  // derive command stats after first load
-  (async()=>{ try { const data = await jget('/api/commands'); const cmds=data?.commands||{}; const groups=Object.keys(cmds); const total=groups.reduce((a,g)=>a+cmds[g].length,0); $('#cmdGroupCount')?.textContent=groups.length; $('#cmdTotalCount')?.textContent=total; }catch{} })();
-
-  // Telemetry page logic
-  async function refreshTelemetry(){
-    const latSvg = $('#telLatency'), memSvg = $('#telMemory'), cpuSvg = $('#telCpu');
-    try {
-      const t = await jget('/api/telemetry');
-      if (t.latency) {
-        $('#telLatAvg')?.textContent = t.latency.avg ?? '—';
-        $('#telLatP50')?.textContent = t.latency.p50 ?? '—';
-        $('#telLatP95')?.textContent = t.latency.p95 ?? '—';
-        $('#telLatP99')?.textContent = t.latency.p99 ?? '—';
-        drawLine(latSvg, collectSeries(METRICS?.latencyMsCache||[],160,80));
-      }
-      if (t.memory) { $('#telMemAvg')?.textContent = t.memory.avg ?? '—'; }
-      if (t.cpu) { $('#telCpuAvg')?.textContent = t.cpu.avg ?? '—'; }
-      // build simple series from metrics endpoint for visuals
-      try { const m = await jget('/api/metrics'); METRICS.latencyMsCache = m.latencyMs||[]; METRICS.memoryCache=m.memoryMB||[]; METRICS.cpuCache=m.cpu||[]; drawLine(latSvg, METRICS.latencyMsCache); drawLine(memSvg, METRICS.memoryCache); drawLine(cpuSvg, METRICS.cpuCache); }catch{}
-    }catch{}
-  }
-  function drawLine(svg, arr){ if(!svg||!arr||!arr.length) return; const w=300,h=80; const max=Math.max(...arr,1); const step=arr.length>1?w/(arr.length-1):w; const d=arr.map((v,i)=>`${i?'L':'M'}${(i*step).toFixed(2)},${(h-(v/max)*h).toFixed(2)}`).join(' '); svg.innerHTML=`<path d="${d}" fill="none" stroke="currentColor" stroke-width="2" opacity="0.8"/>`; }
-  function collectSeries(a){ return a.slice(-80); }
-  $('#telRefresh')?.addEventListener('click', refreshTelemetry);
-  if (document.getElementById('secTelemetry')) { refreshTelemetry(); setInterval(()=>{ if($('#d2Auto')?.checked) refreshTelemetry(); }, 20000); }
-
-  // System page logic
-  async function refreshSystem(){
-    try { const s = await jget('/api/system'); if(!s) return; const upMin = Math.floor((s.uptimeMs||0)/60000); $('#sysUptime')?.textContent = upMin + 'm'; $('#sysDone')?.textContent = s.actionsProcessed; $('#sysQueued')?.textContent = s.queue?.queued ?? 0; $('#sysStore')?.textContent = s.sessionStore || ''; $('#sysPresence')?.textContent = `${s.presence?.status||''} ${s.presence?.activity||''}`.trim(); $('#sysQueueDetails')?.textContent = Object.entries(s.queue||{}).map(([k,v])=>`${k}:${v}`).join(' • '); }catch{}
-  }
-  $('#sysRefresh')?.addEventListener('click', refreshSystem);
-  if (document.getElementById('secSystem')) { refreshSystem(); setInterval(()=>{ if($('#d2Auto')?.checked) refreshSystem(); }, 25000); }
-
-  // Actions list + ack
-  const actionsList = document.getElementById('d2Actions');
-  async function refreshActions(){
-    try{
-      const data = await jget('/api/actions');
-      if (!actionsList) return; actionsList.innerHTML='';
-  // filter by selected guild if set
-  const src = (data?.items||[]);
-  const filtered = currentGuild ? src.filter(a=>a?.payload?.guildId===currentGuild) : src;
-  for(const a of filtered.slice(-30).reverse()){
-        const li = document.createElement('li'); li.className='act-item';
-    const gtag = a?.payload?.guildId ? ` <span class="muted">(${a.payload.guildId})</span>` : '';
-    li.innerHTML = `<span class="badge">${a.type}</span><span>${a.payload?.message||''}${gtag}</span><span class="muted">${a.status}</span>`;
-  const btn = document.createElement('button'); btn.className='btn small'; btn.textContent='Ack done';
-  btn.addEventListener('click', async ()=>{ try{ await jpatch(`/api/actions/${a.id}`, { status:'done' }); refreshActions(); }catch{} });
-        li.appendChild(btn);
-        actionsList.appendChild(li);
-      }
-    }catch{}
-  }
-  // initial wiring
-  console.log('Dashboard JavaScript loaded, initializing...');
-  loadMeAndGuilds();
-  refreshActions(); setInterval(refreshActions, 20000);
-  
-  // Initialize health monitoring with error logging
-  console.log('Initializing health monitoring...');
-  try {
-    refreshStatus();
-  } catch (error) {
-    console.error('Error initializing status:', error);
-  }
-  
-  try {
-    refreshMetrics();
-  } catch (error) {
-    console.error('Error initializing metrics:', error);
-  }
-  
-  try {
-    refreshCommands();
-  } catch (error) {
-    console.error('Error initializing commands:', error);
-  }
-  
-  // Set up auto-refresh for health data every 15 seconds
-  setInterval(() => {
-    try {
-      refreshStatus();
-    } catch (error) {
-      console.error('Error refreshing status:', error);
-    }
+  // ==================== INITIALIZATION ====================
+  async init() {
+    console.log('🔧 Initializing Dashboard Systems...');
     
     try {
-      refreshMetrics();
+      this.setupDOM();
+      this.setupEventListeners();
+      this.setupAnimations();
+      
+      // Initial data load
+      await this.loadInitialData();
+      
+      // Start update cycles
+      this.startUpdateCycles();
+      
+      // Setup mobile responsive features
+      this.setupMobileFeatures();
+      
+      console.log('✅ Dashboard initialization complete!');
     } catch (error) {
-      console.error('Error refreshing metrics:', error);
+      console.error('❌ Dashboard initialization failed:', error);
+      this.showError('Failed to initialize dashboard');
     }
-  }, 15000);
+  }
 
-  // Expose functions globally for debugging and manual triggering
-  window.refreshStatus = refreshStatus;
-  window.refreshMetrics = refreshMetrics;
-  window.refreshCommands = refreshCommands;
-})();
+  setupDOM() {
+    this.elements = {
+      // Navigation
+      sidebar: document.querySelector('.sidebar'),
+      mobileToggle: document.querySelector('.mobile-toggle'),
+      
+      // Status indicators
+      statusDot: document.querySelector('.status-dot'),
+      statusText: document.querySelector('.status-text'),
+      
+      // Metrics
+      botStatus: document.querySelector('#bot-status'),
+      guildCount: document.querySelector('#guild-count'),
+      userCount: document.querySelector('#user-count'),
+      latency: document.querySelector('#latency'),
+      uptime: document.querySelector('#uptime'),
+      memory: document.querySelector('#memory-usage'),
+      cpu: document.querySelector('#cpu-usage'),
+      
+      // Charts
+      latencyChart: document.querySelector('#latency-chart'),
+      metricsChart: document.querySelector('#metrics-chart'),
+      activityChart: document.querySelector('#activity-chart'),
+      
+      // Activity feed
+      activityFeed: document.querySelector('#activity-feed'),
+      
+      // Loading states
+      loadingSpinners: document.querySelectorAll('.loading-spinner')
+    };
+  }
+
+  setupEventListeners() {
+    // Mobile menu toggle
+    if (this.elements.mobileToggle) {
+      this.elements.mobileToggle.addEventListener('click', this.toggleMobileMenu.bind(this));
+    }
+
+    // Refresh buttons
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('[data-refresh]')) {
+        e.preventDefault();
+        const type = e.target.dataset.refresh;
+        this.refreshData(type);
+      }
+    });
+
+    // Window resize handler
+    window.addEventListener('resize', this.debounce(this.handleResize.bind(this), 250));
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', this.handleKeyboard.bind(this));
+
+    // Visibility change (pause updates when tab is hidden)
+    document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
+  }
+
+  setupAnimations() {
+    // Intersection Observer for cards
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.animationPlayState = 'running';
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      document.querySelectorAll('.card').forEach(card => {
+        observer.observe(card);
+      });
+    }
+  }
+
+  // ==================== DATA MANAGEMENT ====================
+  async loadInitialData() {
+    console.log('📊 Loading initial dashboard data...');
+    
+    const loadPromises = [
+      this.updateStatus(),
+      this.updateMetrics(),
+      this.updateActivity(),
+      this.updateSystemInfo()
+    ];
+
+    await Promise.allSettled(loadPromises);
+  }
+
+  async fetchAPI(endpoint) {
+    try {
+      const response = await fetch(this.config.api.base + endpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`API Error (${endpoint}):`, error);
+      return null;
+    }
+  }
+
+  async updateStatus() {
+    console.log('📡 Updating bot status...');
+    
+    try {
+      const data = await this.fetchAPI(this.config.api.endpoints.status);
+      
+      if (data) {
+        this.state.isOnline = data.online || false;
+        this.state.lastUpdate = new Date();
+
+        // Update UI elements
+        this.updateStatusIndicator(this.state.isOnline);
+        this.updateElement('#bot-status', this.state.isOnline ? 'Online' : 'Offline');
+        this.updateElement('#guild-count', data.guilds || 0);
+        this.updateElement('#user-count', data.users || 0);
+        this.updateElement('#latency', data.latency ? `${data.latency}ms` : 'N/A');
+        
+        // Update charts
+        if (data.latency) {
+          this.addChartData('latency', data.latency);
+          this.updateChart('latency');
+        }
+
+        // Add to chart data
+        this.addChartData('guilds', data.guilds || 0);
+        this.addChartData('users', data.users || 0);
+      }
+    } catch (error) {
+      console.error('Status update failed:', error);
+      this.state.isOnline = false;
+      this.updateStatusIndicator(false);
+    }
+  }
+
+  async updateMetrics() {
+    console.log('📈 Updating system metrics...');
+    
+    try {
+      const data = await this.fetchAPI(this.config.api.endpoints.metrics);
+      
+      if (data) {
+        // Memory usage
+        if (data.memory) {
+          const memoryMB = Math.round(data.memory.used / 1024 / 1024);
+          this.updateElement('#memory-usage', `${memoryMB}MB`);
+          this.addChartData('memory', memoryMB);
+        }
+
+        // CPU usage
+        if (data.cpu) {
+          this.updateElement('#cpu-usage', `${data.cpu.toFixed(1)}%`);
+          this.addChartData('cpu', data.cpu);
+        }
+
+        // Update metrics chart
+        this.updateChart('metrics');
+      }
+    } catch (error) {
+      console.error('Metrics update failed:', error);
+    }
+  }
+
+  async updateActivity() {
+    console.log('🎯 Updating activity feed...');
+    
+    try {
+      const data = await this.fetchAPI(this.config.api.endpoints.activity);
+      
+      if (data && data.activities) {
+        this.renderActivityFeed(data.activities);
+      }
+    } catch (error) {
+      console.error('Activity update failed:', error);
+    }
+  }
+
+  async updateSystemInfo() {
+    console.log('⚙️ Updating system information...');
+    
+    try {
+      const data = await this.fetchAPI(this.config.api.endpoints.system);
+      
+      if (data) {
+        // Uptime
+        if (data.uptime) {
+          const uptimeFormatted = this.formatUptime(data.uptime);
+          this.updateElement('#uptime', uptimeFormatted);
+        }
+
+        // Additional system metrics
+        if (data.version) {
+          this.updateElement('#bot-version', data.version);
+        }
+      }
+    } catch (error) {
+      console.error('System info update failed:', error);
+    }
+  }
+
+  // ==================== UI UPDATES ====================
+  updateElement(selector, value, animate = true) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+
+    if (animate) {
+      element.classList.add('updating');
+      setTimeout(() => {
+        element.textContent = value;
+        element.classList.remove('updating');
+        element.classList.add('updated');
+        setTimeout(() => element.classList.remove('updated'), 1000);
+      }, 150);
+    } else {
+      element.textContent = value;
+    }
+  }
+
+  updateStatusIndicator(isOnline) {
+    if (this.elements.statusDot) {
+      this.elements.statusDot.className = `status-dot ${isOnline ? 'online' : 'offline'}`;
+    }
+    
+    if (this.elements.statusText) {
+      this.elements.statusText.textContent = isOnline ? 'Bot Online' : 'Bot Offline';
+    }
+
+    // Update favicon
+    this.updateFavicon(isOnline);
+  }
+
+  updateFavicon(isOnline) {
+    const favicon = document.querySelector('link[rel="icon"]');
+    if (favicon) {
+      // You could switch between different favicon images here
+      // For now, we'll just update the title to reflect status
+      document.title = `MLVS Dashboard - ${isOnline ? 'Online' : 'Offline'}`;
+    }
+  }
+
+  renderActivityFeed(activities) {
+    if (!this.elements.activityFeed) return;
+
+    const fragment = document.createDocumentFragment();
+
+    activities.slice(-10).reverse().forEach((activity, index) => {
+      const item = this.createActivityItem(activity, index);
+      fragment.appendChild(item);
+    });
+
+    // Replace content with animation
+    this.elements.activityFeed.style.opacity = '0';
+    setTimeout(() => {
+      this.elements.activityFeed.innerHTML = '';
+      this.elements.activityFeed.appendChild(fragment);
+      this.elements.activityFeed.style.opacity = '1';
+    }, 150);
+  }
+
+  createActivityItem(activity, index) {
+    const item = document.createElement('div');
+    item.className = 'activity-item';
+    item.style.animationDelay = `${index * 0.05}s`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'activity-avatar';
+    avatar.textContent = activity.type?.charAt(0) || '?';
+
+    const content = document.createElement('div');
+    content.className = 'activity-content';
+
+    const text = document.createElement('div');
+    text.className = 'activity-text';
+    text.textContent = activity.message || 'Unknown activity';
+
+    const time = document.createElement('div');
+    time.className = 'activity-time';
+    time.textContent = this.formatTime(activity.timestamp);
+
+    content.appendChild(text);
+    content.appendChild(time);
+    item.appendChild(avatar);
+    item.appendChild(content);
+
+    return item;
+  }
+
+  // ==================== CHART MANAGEMENT ====================
+  addChartData(type, value) {
+    if (!this.state.chartData[type]) {
+      this.state.chartData[type] = [];
+    }
+
+    this.state.chartData[type].push({
+      value: value,
+      timestamp: Date.now()
+    });
+
+    // Keep only last 50 data points
+    if (this.state.chartData[type].length > 50) {
+      this.state.chartData[type] = this.state.chartData[type].slice(-50);
+    }
+  }
+
+  updateChart(type) {
+    const chartElement = document.querySelector(`#${type}-chart`);
+    if (!chartElement) return;
+
+    const data = this.state.chartData[type] || [];
+    if (data.length < 2) return;
+
+    this.renderSparkline(chartElement, data);
+  }
+
+  renderSparkline(element, data) {
+    if (!data || data.length < 2) return;
+
+    const svg = element.querySelector('svg') || this.createSVG();
+    element.innerHTML = '';
+    element.appendChild(svg);
+
+    const width = 200;
+    const height = 60;
+    const padding = 4;
+
+    // Create path
+    const values = data.map(d => typeof d === 'object' ? d.value : d);
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    const range = max - min || 1;
+
+    const points = values.map((value, index) => {
+      const x = padding + (index / (values.length - 1)) * (width - 2 * padding);
+      const y = padding + (1 - (value - min) / range) * (height - 2 * padding);
+      return `${x},${y}`;
+    });
+
+    const pathD = `M${points.join(' L')}`;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathD);
+    path.setAttribute('stroke', 'var(--neon-primary)');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('fill', 'none');
+    path.style.filter = 'drop-shadow(0 0 6px var(--neon-primary))';
+
+    svg.appendChild(path);
+
+    // Animate path
+    const length = path.getTotalLength();
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
+    path.animate([
+      { strokeDashoffset: length },
+      { strokeDashoffset: 0 }
+    ], {
+      duration: 1000,
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+    });
+  }
+
+  createSVG() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 200 60');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    return svg;
+  }
+
+  // ==================== UPDATE CYCLES ====================
+  startUpdateCycles() {
+    console.log('⏰ Starting update cycles...');
+
+    // Clear existing timers
+    Object.values(this.state.updateTimers).forEach(timer => clearInterval(timer));
+
+    // Status updates
+    this.state.updateTimers.status = setInterval(
+      () => this.updateStatus(),
+      this.config.updateIntervals.status
+    );
+
+    // Metrics updates
+    this.state.updateTimers.metrics = setInterval(
+      () => this.updateMetrics(),
+      this.config.updateIntervals.metrics
+    );
+
+    // Activity updates
+    this.state.updateTimers.activity = setInterval(
+      () => this.updateActivity(),
+      this.config.updateIntervals.activity
+    );
+  }
+
+  stopUpdateCycles() {
+    console.log('⏸️ Stopping update cycles...');
+    Object.values(this.state.updateTimers).forEach(timer => clearInterval(timer));
+    this.state.updateTimers = {};
+  }
+
+  // ==================== MOBILE & RESPONSIVE ====================
+  setupMobileFeatures() {
+    // Touch gestures for mobile
+    if ('ontouchstart' in window) {
+      this.setupTouchGestures();
+    }
+
+    // Handle initial screen size
+    this.handleResize();
+  }
+
+  setupTouchGestures() {
+    let startX = 0;
+    let startY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!startX || !startY) return;
+
+      const deltaX = e.touches[0].clientX - startX;
+      const deltaY = e.touches[0].clientY - startY;
+
+      // Horizontal swipe to toggle sidebar
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0 && startX < 50) {
+          // Swipe right from left edge
+          this.openMobileMenu();
+        } else if (deltaX < 0 && this.elements.sidebar?.classList.contains('open')) {
+          // Swipe left when sidebar is open
+          this.closeMobileMenu();
+        }
+      }
+    });
+  }
+
+  toggleMobileMenu() {
+    if (this.elements.sidebar) {
+      this.elements.sidebar.classList.toggle('open');
+    }
+  }
+
+  openMobileMenu() {
+    if (this.elements.sidebar) {
+      this.elements.sidebar.classList.add('open');
+    }
+  }
+
+  closeMobileMenu() {
+    if (this.elements.sidebar) {
+      this.elements.sidebar.classList.remove('open');
+    }
+  }
+
+  handleResize() {
+    // Auto-close mobile menu on desktop
+    if (window.innerWidth > 768) {
+      this.closeMobileMenu();
+    }
+
+    // Update chart dimensions
+    this.redrawCharts();
+  }
+
+  redrawCharts() {
+    ['latency', 'metrics', 'activity'].forEach(type => {
+      this.updateChart(type);
+    });
+  }
+
+  // ==================== EVENT HANDLERS ====================
+  handleKeyboard(e) {
+    // Keyboard shortcuts
+    if (e.ctrlKey || e.metaKey) {
+      switch (e.key) {
+        case 'r':
+          e.preventDefault();
+          this.refreshAllData();
+          break;
+        case 'm':
+          e.preventDefault();
+          this.toggleMobileMenu();
+          break;
+      }
+    }
+
+    // ESC to close mobile menu
+    if (e.key === 'Escape') {
+      this.closeMobileMenu();
+    }
+  }
+
+  handleVisibilityChange() {
+    if (document.hidden) {
+      console.log('📱 Tab hidden - pausing updates');
+      this.stopUpdateCycles();
+    } else {
+      console.log('👁️ Tab visible - resuming updates');
+      this.startUpdateCycles();
+      // Immediate refresh when coming back
+      this.refreshAllData();
+    }
+  }
+
+  // ==================== UTILITY METHODS ====================
+  async refreshData(type) {
+    console.log(`🔄 Manual refresh: ${type}`);
+    
+    const refreshMap = {
+      status: () => this.updateStatus(),
+      metrics: () => this.updateMetrics(),
+      activity: () => this.updateActivity(),
+      system: () => this.updateSystemInfo(),
+      all: () => this.refreshAllData()
+    };
+
+    if (refreshMap[type]) {
+      await refreshMap[type]();
+      this.showNotification(`${type} refreshed`, 'success');
+    }
+  }
+
+  async refreshAllData() {
+    console.log('🔄 Refreshing all data...');
+    await this.loadInitialData();
+    this.showNotification('Dashboard refreshed', 'success');
+  }
+
+  formatUptime(seconds) {
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m`;
+    }
+  }
+
+  formatTime(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+
+    if (diff < 60000) { // Less than 1 minute
+      return 'Just now';
+    } else if (diff < 3600000) { // Less than 1 hour
+      return `${Math.floor(diff / 60000)}m ago`;
+    } else if (diff < 86400000) { // Less than 1 day
+      return `${Math.floor(diff / 3600000)}h ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  }
+
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func.apply(this, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  showNotification(message, type = 'info') {
+    console.log(`📢 ${type.toUpperCase()}: ${message}`);
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      color: white;
+      font-size: 14px;
+      z-index: 9999;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    `;
+
+    // Add to page
+    document.body.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => {
+      notification.style.transform = 'translateX(0)';
+    }, 10);
+
+    // Remove after delay
+    setTimeout(() => {
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => document.body.removeChild(notification), 300);
+    }, 3000);
+  }
+
+  showError(message) {
+    console.error('❌', message);
+    this.showNotification(message, 'error');
+  }
+
+  // ==================== PUBLIC API ====================
+  // Methods exposed globally for console access and debugging
+  getState() {
+    return { ...this.state };
+  }
+
+  getConfig() {
+    return { ...this.config };
+  }
+
+  async forceRefresh() {
+    await this.refreshAllData();
+  }
+
+  toggleDebugMode() {
+    document.body.classList.toggle('debug-mode');
+    console.log('Debug mode:', document.body.classList.contains('debug-mode') ? 'ON' : 'OFF');
+  }
+}
+
+// ==================== INITIALIZATION ====================
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDashboard);
+} else {
+  initDashboard();
+}
+
+function initDashboard() {
+  // Create global instance
+  window.dashboard = new MLVSDashboard();
+  
+  // Expose methods for console access
+  window.refreshDashboard = () => window.dashboard.forceRefresh();
+  window.toggleDebug = () => window.dashboard.toggleDebugMode();
+  
+  console.log('🎉 MLVS Dashboard V5.0 Ready!');
+  console.log('💡 Available commands: refreshDashboard(), toggleDebug()');
+}
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = MLVSDashboard;
+}
