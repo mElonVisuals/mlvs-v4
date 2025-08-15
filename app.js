@@ -33,8 +33,7 @@ printEnvSummary(REQUIRED);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd()));
-app.use(expressLayouts);
-app.set('layout', 'dashboard/layout'); // default; public pages can override per render
+app.use(expressLayouts); // we'll specify layout per-render for dashboard pages only
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
