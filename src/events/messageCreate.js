@@ -23,6 +23,7 @@ export async function execute(message, client) {
     return message.reply({ content: `⏳ Slow down — try again in ${left}s` }).catch(()=>{});
   }
 
+  const started = Date.now();
   try {
     await command.execute(message, args, client);
     if (!isAdmin) client.cooldowns?.set(key, now + cooldownMs);
@@ -32,11 +33,23 @@ export async function execute(message, client) {
         command: command.name,
         user: message.author?.tag || message.author?.username || message.author?.id,
         guild: message.guild?.name || 'DM',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        duration: Date.now() - started,
+        status: 'success'
       });
     } catch {}
   } catch (error) {
     console.error('Command error:', error);
     await message.reply({ content: 'There was an error executing that command.' }).catch(() => {});
+    try {
+      client._emitCommandActivity?.({
+        command: command.name,
+        user: message.author?.tag || message.author?.username || message.author?.id,
+        guild: message.guild?.name || 'DM',
+        timestamp: Date.now(),
+        duration: Date.now() - started,
+        status: 'error'
+      });
+    } catch {}
   }
 }

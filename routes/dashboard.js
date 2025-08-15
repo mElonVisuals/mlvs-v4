@@ -156,12 +156,12 @@ router.get('/api/activity', ensureApiAuth, async (req,res)=>{
 router.post('/api/activity/ingest', verifyMetricsSecret, activityIngestRateLimit, validateActivityEvent, async (req,res)=>{
   try {
     const evNorm = req.activityEventNormalized; // from validator
-    // Compose human-readable message
     let message = '';
     if (evNorm.type === 'command') {
-      message = `/${evNorm.command} by ${evNorm.user}${evNorm.guild ? ' in '+evNorm.guild : ''}`;
+      const base = `/${evNorm.command} by ${evNorm.user}${evNorm.guild ? ' in '+evNorm.guild : ''}`;
+      message = evNorm.status === 'error' ? `${base} ❌` : base;
     }
-    const meta = { command: evNorm.command, user: evNorm.user, guild: evNorm.guild, ts: evNorm.timestamp };
+  const meta = { command: evNorm.command, user: evNorm.user, guild: evNorm.guild, ts: evNorm.timestamp, status: evNorm.status, duration: evNorm.duration };
     const stored = await addEvent({ type: evNorm.type, message: message.slice(0,300), meta });
     try { req.app.get('io')?.emit('activity', [stored]); } catch {}
     res.json({ ok:true });

@@ -7,13 +7,13 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { logger } from './utils/logger.js';
 
 // Activity feed integration: POST command events to dashboard (fire-and-forget)
-async function emitCommandActivity({ command, user, guild, timestamp }){
+async function emitCommandActivity({ command, user, guild, timestamp, status, duration }){
   try {
     const urlBase = process.env.DASHBOARD_URL || `http://localhost:${process.env.PORT || 3001}`;
     const secret = process.env.METRICS_SECRET || process.env.API_TOKEN || '';
     const headers = { 'Content-Type': 'application/json' };
     if (secret) headers['Authorization'] = `Bearer ${secret}`;
-    const payload = { type:'command', command, user, guild, timestamp: timestamp || Date.now() };
+  const payload = { type:'command', command, user, guild, timestamp: timestamp || Date.now(), status: status==='error'?'error':'success', duration: typeof duration==='number'? duration : undefined };
     await fetch(`${urlBase}/api/activity/ingest`, { method:'POST', headers, body: JSON.stringify(payload) });
   } catch (e) {
     // Silently ignore to avoid impacting bot command flow

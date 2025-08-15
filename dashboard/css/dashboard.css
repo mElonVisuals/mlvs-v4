@@ -115,6 +115,20 @@ body { display:flex; }
 /* Activity stream */
 .activity-stream { min-height:400px; display:flex; flex-direction:column; gap:.65rem; overflow:auto; }
 .activity-item { font-size:.72rem; padding:.6rem .7rem .65rem; background:linear-gradient(130deg,rgba(255,255,255,0.08),rgba(255,255,255,0.035)); border:1px solid rgba(255,255,255,0.1); border-radius:12px; position:relative; animation:fadeIn .6s ease; }
+.activity-item.activity-error { border-color:rgba(239,68,68,0.5); background:linear-gradient(140deg,rgba(239,68,68,0.18),rgba(255,255,255,0.04)); box-shadow:0 0 0 1px rgba(239,68,68,0.35),0 0 18px -4px rgba(239,68,68,0.5); }
+.activity-item.activity-error::before { background:radial-gradient(circle at 95% 15%,rgba(239,68,68,0.45),transparent 60%); }
+.activity-item .activity-icon { opacity:.9; margin-right:.25rem; }
+.activity-item .activity-duration { display:inline-block; margin-left:.35rem; font-size:.58rem; letter-spacing:.5px; padding:.18rem .4rem; border-radius:6px; background:rgba(255,255,255,0.12); color:var(--fg-soft); font-weight:600; }
+.activity-item.activity-error .activity-duration { background:rgba(239,68,68,0.25); color:#fecaca; }
+.activity-item .activity-time { color:var(--fg-muted); }
+.activity-item.dur-fast .activity-duration { background:rgba(16,185,129,0.25); color:#bbf7d0; }
+.activity-item.dur-ok .activity-duration { background:rgba(6,182,212,0.25); color:#a5f3fc; }
+.activity-item.dur-warn .activity-duration { background:rgba(245,158,11,0.3); color:#fde68a; }
+.activity-item.dur-slow .activity-duration { background:rgba(239,68,68,0.35); color:#fecaca; }
+
+/* Tooltip (using data-tooltip attribute) */
+.activity-item[data-tooltip] { position:relative; }
+.activity-item[data-tooltip]:hover::after { content:attr(data-tooltip); white-space:pre; position:absolute; left:0; top:100%; margin-top:6px; z-index:40; background:rgba(15,23,42,0.92); backdrop-filter:blur(12px) saturate(160%); border:1px solid rgba(255,255,255,0.15); padding:.55rem .65rem; font-size:.58rem; line-height:1.25; letter-spacing:.4px; border-radius:8px; box-shadow:0 4px 24px -6px rgba(0,0,0,0.8); width:max-content; max-width:260px; pointer-events:none; }
 .activity-filters { display:flex; gap:.5rem; flex-wrap:wrap; margin:0 0 .75rem; }
 .chip { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); padding:.4rem .8rem; font-size:.6rem; letter-spacing:1px; text-transform:uppercase; border-radius:999px; cursor:pointer; font-weight:600; color:var(--fg-muted); backdrop-filter:blur(var(--blur)); transition:var(--transition); }
 .chip:hover { color:var(--fg); background:rgba(255,255,255,0.12); }

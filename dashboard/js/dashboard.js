@@ -167,13 +167,39 @@
   }
   function appendActivity(ev, appendEnd){
     const div = document.createElement('div');
-    div.className='activity-item';
+    const isError = ev.meta?.status === 'error' || /❌/.test(ev.message||'');
+    const durationRaw = (typeof ev.meta?.duration === 'number') ? ev.meta.duration : (typeof ev.duration === 'number' ? ev.duration : null);
+    const durClass = durationRaw != null ? durationClassFor(durationRaw) : '';
+    div.className='activity-item' + (isError ? ' activity-error' : '') + (durClass? ' '+durClass:'');
     const ts = new Date(ev.ts||Date.now()).toLocaleTimeString();
-    div.textContent = `[${ts}] ${ev.message || ev.type}`;
+    const icon = ev.type === 'command' ? (isError ? '⚠️' : '💬') : (ev.type === 'heartbeat' ? '💓' : '🛈');
+    const durationLabel = durationRaw != null ? `${durationRaw}ms` : '';
+    const tooltip = buildTooltip(ev, durationRaw, isError);
+    div.setAttribute('data-tooltip', tooltip);
+    div.innerHTML = `<span class="activity-time">[${ts}]</span> <span class="activity-icon">${icon}</span> <span class="activity-text">${escapeHtml(ev.message || ev.type)}</span>${durationLabel ? ` <span class="activity-duration">${durationLabel}</span>`:''}`;
     div.dataset.type = ev.type || 'unknown';
     if (appendEnd) activityEl.appendChild(div); else activityEl.prepend(div);
     while(activityEl.children.length > 150) activityEl.removeChild(activityEl.lastChild);
   }
+  function durationClassFor(ms){
+    if (ms < 50) return 'dur-fast';
+    if (ms < 150) return 'dur-ok';
+    if (ms < 400) return 'dur-warn';
+    return 'dur-slow';
+  }
+  function buildTooltip(ev, duration, isError){
+    try {
+      const parts = [];
+      parts.push(`Type: ${ev.type}`);
+      if (ev.meta?.command) parts.push(`Command: ${ev.meta.command}`);
+      if (ev.meta?.user) parts.push(`User: ${ev.meta.user}`);
+      if (ev.meta?.guild) parts.push(`Guild: ${ev.meta.guild}`);
+      if (duration != null) parts.push(`Duration: ${duration}ms`);
+      if (ev.meta?.status) parts.push(`Status: ${ev.meta.status}`);
+      return parts.join('\n');
+    } catch { return ''; }
+  }
+  function escapeHtml(str){ return String(str).replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
   function mergeActivity(arr){
     if (!activityEl) return;
     arr.forEach(ev=> { activityCache.push(ev); appendActivity(ev,false); });

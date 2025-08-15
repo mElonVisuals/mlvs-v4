@@ -71,7 +71,6 @@ export function validateActivityEvent(req, res, next){
   if (!p.type) errors.push('missing_type');
   const type = String(p.type || '').toLowerCase();
   if (type !== 'command') {
-    // Allow only command events for now (extend later as needed)
     errors.push('unsupported_type');
   }
   if (type === 'command') {
@@ -79,13 +78,15 @@ export function validateActivityEvent(req, res, next){
     if (!p.user) errors.push('missing_user');
   }
   if (errors.length) return res.status(400).json({ error:'invalid_event', details: errors });
-  // Normalize + sanitize
+  const status = (p.status === 'error') ? 'error' : 'success';
   const ev = {
     type,
+    status,
     command: p.command ? String(p.command).slice(0,100) : undefined,
     user: p.user ? String(p.user).slice(0,100) : undefined,
     guild: p.guild ? String(p.guild).slice(0,150) : undefined,
-    timestamp: (Number(p.timestamp) && Number(p.timestamp) > 0) ? Number(p.timestamp) : Date.now()
+  timestamp: (Number(p.timestamp) && Number(p.timestamp) > 0) ? Number(p.timestamp) : Date.now(),
+  duration: (p.duration != null && Number(p.duration) >= 0 && Number(p.duration) < 60_000) ? Math.round(Number(p.duration)) : undefined
   };
   req.activityEventNormalized = ev;
   next();
