@@ -15,16 +15,16 @@ function readStatus(){
 }
 
 router.get('/dashboard', ensureAuth, (req, res) => {
-  res.render('dashboard/dashboard', { layout: 'dashboard/layout', status: readStatus(), title: 'Overview' });
+  res.render('dashboard-overview', { layout: 'layout', status: readStatus(), title: 'Overview' });
 });
 router.get('/dashboard/activity', ensureAuth, (req, res) => {
-  res.render('dashboard/live-activity', { layout: 'dashboard/layout', title: 'Live Activity' });
+  res.render('dashboard-activity', { layout: 'layout', title: 'Live Activity' });
 });
 router.get('/dashboard/system', ensureAuth, (req, res) => {
-  res.render('dashboard/system-stats', { layout: 'dashboard/layout', title: 'System Stats' });
+  res.render('dashboard-system', { layout: 'layout', title: 'System Stats' });
 });
 router.get('/dashboard/commands', ensureAuth, (req, res) => {
-  res.render('dashboard/commands', { layout: 'dashboard/layout', title: 'Commands' });
+  res.render('dashboard-commands', { layout: 'layout', title: 'Commands' });
 });
 
 // API endpoints (sample)

@@ -1,0 +1,17 @@
+<header class="dash-header glass">
+  <div class="left">
+    <button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+    <h1 class="page-title"><%= title || '' %></h1>
+  </div>
+  <div class="right user-info">
+    <% if (user) { %>
+      <div class="user-avatar">
+        <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=64" alt="avatar" />
+      </div>
+      <div class="user-meta">
+        <div class="tag"><%= user.tag %></div>
+        <div class="id muted"><%= user.id %></div>
+      </div>
+    <% } %>
+  </div>
+</header>
