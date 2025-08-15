@@ -171,9 +171,9 @@ io.on('connection', (socket)=>{
 httpServer.listen(PORT, () => console.log(`[web] listening on ${PORT}`));
 
 // Periodic metrics emission (status + system) leveraging existing status.json + os module
+// Reuse existing top-level imports (path already imported). Add fs & os at top-level if not present.
 import fs from 'fs';
 import os from 'os';
-import path from 'path';
 const statusPath = path.join(process.cwd(), 'data', 'status.json');
 setInterval(()=>{
   try {
