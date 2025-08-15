@@ -1,0 +1,12 @@
+<% layout('dashboard/layout') %>
+<section class="panel glass full">
+  <h2>Command Center</h2>
+  <div class="command-runner">
+    <form id="command-form">
+      <input type="text" id="command-input" placeholder="Enter command (e.g. !ping)" />
+      <button class="btn btn-primary" type="submit">Run</button>
+    </form>
+    <pre id="command-output" class="output"></pre>
+  </div>
+  <div class="commands-list" id="commands-list"></div>
+</section>

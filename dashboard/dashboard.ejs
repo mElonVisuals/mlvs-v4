@@ -1,0 +1,20 @@
+<% layout('dashboard/layout') %>
+<section class="grid metrics">
+  <%- include('dashboard/partials/stats-cards', { status }) %>
+</section>
+<section class="panel-grid">
+  <div class="panel glass">
+    <h3>Recent Activity</h3>
+    <div id="recent-activity" class="scroll-area" data-live="activity"></div>
+  </div>
+  <div class="panel glass">
+    <h3>System Snapshot</h3>
+    <ul class="snapshot" id="sys-snapshot">
+      <li>Latency: <span data-metric="latency">--</span></li>
+      <li>Memory: <span data-metric="memory">--</span></li>
+      <li>CPU: <span data-metric="cpu">--</span></li>
+      <li>Guilds: <span data-metric="guilds"><%= status.guilds %></span></li>
+      <li>Users: <span data-metric="users"><%= status.users %></span></li>
+    </ul>
+  </div>
+</section>
