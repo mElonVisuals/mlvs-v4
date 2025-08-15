@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 import { Strategy as DiscordStrategy } from 'passport-discord';
+import crypto from 'crypto';
 
 const log = (...a)=>console.log('[auth]', ...a);
 
@@ -43,7 +44,13 @@ passport.use(new DiscordStrategy({
 
 router.get('/login', (req, res, next) => {
   log('Initiating OAuth login');
-  passport.authenticate('discord')(req, res, next);
+  // PKCE (generate code_verifier & code_challenge if we later move to authorization code with PKCE)
+  try {
+    const verifier = crypto.randomBytes(32).toString('base64url');
+    req.session.pkce_verifier = verifier;
+    // Passport-discord currently doesn't expose direct PKCE usage; placeholder for future custom flow.
+  } catch {}
+  passport.authenticate('discord', { state: crypto.randomBytes(8).toString('hex') })(req, res, next);
 });
 
 router.get('/callback', (req, res, next) => {

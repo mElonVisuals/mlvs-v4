@@ -22,6 +22,7 @@ import { sessionStore } from './config/sessionStore.js';
 import client from 'prom-client';
 import { protectMetricsScrape, metricsRateLimit } from './middleware/metrics.js';
 import { getRecent, addEvent } from './lib/activity.js';
+import crypto from 'crypto';
 
 dotenv.config();
 
@@ -65,16 +66,18 @@ app.use((req,res,next)=>{
   next();
 });
 app.use(compression());
+// Dynamic CSP nonce per response for future inline removal
+app.use((req,res,next)=>{ res.locals.cspNonce = Buffer.from(crypto.randomBytes(16)).toString('base64'); next(); });
 app.use(helmet({
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
       'default-src': ["'self'"],
       'script-src': ["'self'", 'cdn.jsdelivr.net'],
-      'style-src': ["'self'", 'fonts.googleapis.com', 'cdn.jsdelivr.net', "'unsafe-inline'"],
+      'style-src': ["'self'", 'fonts.googleapis.com', 'cdn.jsdelivr.net'],
       'font-src': ["'self'", 'fonts.gstatic.com', 'fonts.googleapis.com', 'data:'],
       'img-src': ["'self'", 'cdn.discordapp.com', 'data:'],
-      'connect-src': ["'self'"],
+      'connect-src': ["'self'", 'ws:', 'wss:'],
       'frame-ancestors': ["'none'"],
       'object-src': ["'none'"],
       'base-uri': ["'self'"],
@@ -134,6 +137,7 @@ app.use('/home/css', express.static(path.join(process.cwd(), 'home', 'css')));
 app.use('/home/js', express.static(path.join(process.cwd(), 'home', 'js')));
 app.use('/dashboard/css', express.static(path.join(process.cwd(), 'dashboard', 'css')));
 app.use('/dashboard/js', express.static(path.join(process.cwd(), 'dashboard', 'js')));
+app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 // Root redirect
 app.get('/', (req, res) => res.redirect('/home'));
