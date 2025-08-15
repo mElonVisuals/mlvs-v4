@@ -13,6 +13,7 @@ import authRoutes from './routes/auth.js';
 import dashboardRoutes from './routes/dashboard.js';
 import { attachUserLocals } from './middleware/auth.js';
 import { validateEnv, printEnvSummary } from './config/envCheck.js';
+import expressLayouts from 'express-ejs-layouts';
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ printEnvSummary(REQUIRED);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd()));
+app.use(expressLayouts);
+app.set('layout', 'dashboard/layout'); // default; public pages can override per render
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
