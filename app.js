@@ -70,6 +70,19 @@ app.use(session({
   }
 }));
 
+// Absolute session lifetime (24h)
+app.use((req,res,next)=>{
+  if (req.session) {
+    const now = Date.now();
+    if (!req.session.__issuedAt) req.session.__issuedAt = now;
+    else if (now - req.session.__issuedAt > 1000*60*60*24) { // >24h
+      req.session.destroy(()=>{});
+      return res.redirect('/login');
+    }
+  }
+  next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(attachUserLocals);
