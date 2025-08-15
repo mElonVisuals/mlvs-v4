@@ -4,6 +4,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import helmet from 'helmet';
+import csrf from 'csurf';
 import compression from 'compression';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
@@ -52,7 +53,23 @@ app.use((req,res,next)=>{
   next();
 });
 app.use(compression());
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      'default-src': ["'self'"],
+      'script-src': ["'self'", 'cdn.jsdelivr.net'],
+      'style-src': ["'self'", 'fonts.googleapis.com', 'cdn.jsdelivr.net', "'unsafe-inline'"],
+      'font-src': ["'self'", 'fonts.gstatic.com', 'fonts.googleapis.com', 'data:'],
+      'img-src': ["'self'", 'cdn.discordapp.com', 'data:'],
+      'connect-src': ["'self'"],
+      'frame-ancestors': ["'none'"],
+      'object-src': ["'none'"],
+      'base-uri': ["'self'"],
+      'upgrade-insecure-requests': []
+    }
+  }
+}));
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(',') || '*', credentials: true }));
 
 // Sessions (Redis in production, fallback MemoryStore in dev)
@@ -86,9 +103,19 @@ app.use((req,res,next)=>{
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(attachUserLocals);
+// CSRF protection (skip safe methods & OAuth callback path)
+const csrfProtection = csrf();
+app.use((req,res,next)=>{
+  if (['GET','HEAD','OPTIONS'].includes(req.method)) return next();
+  if (req.path === '/callback') return next();
+  return csrfProtection(req,res,next);
+});
+app.use((req,res,next)=>{ if (req.csrfToken) { try { res.locals.csrfToken = req.csrfToken(); } catch {} } next(); });
 
-// Rate limiter
-app.use('/api/', rateLimit({ windowMs: 60_000, max: 60 }));
+// Rate limiters
+app.use('/api/', rateLimit({ windowMs: 60_000, max: 60, standardHeaders: true, legacyHeaders: false }));
+app.use('/login', rateLimit({ windowMs: 60_000, max: 10 }));
+app.use('/callback', rateLimit({ windowMs: 60_000, max: 20 }));
 
 // Static assets
 app.use('/home/css', express.static(path.join(process.cwd(), 'home', 'css')));
