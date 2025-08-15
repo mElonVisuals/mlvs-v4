@@ -9,7 +9,6 @@ node src/bot.js &
 BOT_PID=$!
 echo "[entrypoint] Bot PID=$BOT_PID"
 
-# Start web (app.js)
 node app.js &
 WEB_PID=$!
 echo "[entrypoint] Web(app.js) PID=$WEB_PID"

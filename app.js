@@ -1,4 +1,3 @@
-import './src/bot.js'; // start bot process (can be separated if desired)
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
@@ -58,6 +57,9 @@ app.get('/', (req, res) => res.redirect('/home'));
 app.use(homeRoutes);
 app.use(authRoutes);
 app.use(dashboardRoutes);
+
+// Health (public, lightweight)
+app.get('/healthz', (req,res)=>res.json({ ok:true, uptime:process.uptime(), ts:Date.now() }));
 
 // 404
 app.use((req, res) => {
