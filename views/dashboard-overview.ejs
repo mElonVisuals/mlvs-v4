@@ -1,13 +1,58 @@
-<section class="grid metrics">
-  <%- include('partials/stats-cards', { status }) %>
-</section>
-<section class="panel-grid">
-  <div class="panel glass">
-    <h2>Bot Summary</h2>
-    <p>Status panels will go here.</p>
+<section class="stats-cards" id="metric-cards">
+  <div class="stat glass" data-card="guilds">
+    <div class="label">Guilds</div>
+    <div class="value" data-metric="guilds">--</div>
   </div>
-  <div class="panel glass">
-    <h2>Recent Activity</h2>
-    <div id="recent-activity">(stream)</div>
+  <div class="stat glass" data-card="users">
+    <div class="label">Users</div>
+    <div class="value" data-metric="users">--</div>
+  </div>
+  <div class="stat glass" data-card="commands">
+    <div class="label">Commands Run</div>
+    <div class="value" data-metric="commandsRun">--</div>
+  </div>
+  <div class="stat glass" data-card="latency">
+    <div class="label">Latency (ms)</div>
+    <div class="value" data-metric="latency">--</div>
+  </div>
+</section>
+
+<section class="panel-grid">
+  <div class="panel status-panel" id="bot-status">
+    <div class="panel-header">
+      <h2 class="panel-title">Bot Status</h2>
+      <div class="panel-actions">
+        <span class="status-dot" id="bot-online-dot"></span>
+      </div>
+    </div>
+    <div class="status-body">
+      <p class="muted">Connection: <strong data-metric="online">--</strong></p>
+      <p class="muted">Uptime: <span data-metric="botUptime">--</span></p>
+    </div>
+  </div>
+  <div class="panel activity-panel">
+    <div class="panel-header">
+      <h2 class="panel-title">Recent Activity</h2>
+    </div>
+    <div class="activity-stream" id="recent-activity"></div>
+  </div>
+  <div class="panel system-panel">
+    <div class="panel-header">
+      <h2 class="panel-title">System</h2>
+    </div>
+    <div class="system-grid">
+      <div class="sys-metric">
+        <div class="sys-label">CPU Load</div>
+        <div class="sys-value" data-metric="load1">--</div>
+      </div>
+      <div class="sys-metric">
+        <div class="sys-label">RAM Used</div>
+        <div class="sys-value" data-metric="memUsed">--</div>
+      </div>
+      <div class="sys-metric">
+        <div class="sys-label">RAM Total</div>
+        <div class="sys-value" data-metric="memTotal">--</div>
+      </div>
+    </div>
   </div>
 </section>

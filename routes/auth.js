@@ -99,10 +99,11 @@ router.post('/logout', (req, res, next) => {
       const oldId = req.sessionID;
       // Copy ref so we can still access store after destroy
       const store = req.sessionStore;
-      req.session.destroy(destroyErr => {
+      // Clear cookies early to instruct browser to drop session id
+      clearCookies();
+      const destroyFn = () => req.session.destroy(destroyErr => {
         if (destroyErr) debug('session destroy error', destroyErr.message);
         else debug('session destroyed', { oldId });
-        clearCookies();
         // Regenerate fresh session id BEFORE redirect to avoid browser caching of previous cookie
         try {
           store?.generate?.(req); // create empty session
@@ -111,6 +112,10 @@ router.post('/logout', (req, res, next) => {
         debug('redirecting', { elapsedMs: Date.now()-startTs });
         return res.redirect('/home');
       });
+      // Attempt explicit store destroy if available
+      try {
+        store?.destroy?.(oldId, (e)=>{ if (e) debug('store.destroy error', e.message); destroyFn(); });
+      } catch { destroyFn(); }
     });
   } catch (e) {
     debug('exception', e.message);
