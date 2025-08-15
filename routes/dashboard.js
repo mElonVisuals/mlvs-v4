@@ -28,7 +28,7 @@ router.get('/dashboard/commands', ensureAuth, (req, res) => {
 });
 
 // API endpoints (sample)
-router.get('/api/status', ensureApiAuth, (req, res) => {
+router.get('/api/status', (req, res) => {
   res.json(readStatus());
 });
 
