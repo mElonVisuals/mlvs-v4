@@ -10,7 +10,8 @@ const router = Router();
 
 // Debug session inspector (temporary; remove in production once logout verified)
 router.use((req,res,next)=>{
-  if (process.env.DEBUG_SESSIONS === '1') {
+  const debugEnabled = process.env.DEBUG_SESSIONS === '1' && process.env.NODE_ENV !== 'production';
+  if (debugEnabled) {
     console.log('[sessdbg]', {
       path: req.path,
       isAuth: req.isAuthenticated?.(),
