@@ -6,6 +6,19 @@ import { Server } from 'socket.io';
 
 const router = Router();
 
+// Ensure the /views directory is included in Express' view lookup paths (without editing app.js)
+router.use((req, res, next) => {
+  const rootViews = req.app.get('views');
+  const additional = path.join(process.cwd(), 'views');
+  if (Array.isArray(rootViews)) {
+    if (!rootViews.includes(additional)) req.app.set('views', [...rootViews, additional]);
+  } else {
+    // rootViews is a string (current single directory). Preserve it while adding our new one.
+    if (rootViews !== additional) req.app.set('views', [rootViews, additional]);
+  }
+  next();
+});
+
 function readStatus(){
   try {
     const p = path.join(process.cwd(), 'data', 'status.json');
