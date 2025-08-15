@@ -1,6 +1,8 @@
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
+import fs from 'fs';
+import os from 'os';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import helmet from 'helmet';
@@ -45,14 +47,19 @@ app.set('layout', 'layout');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Request logging
+// Prometheus metrics setup (must be before logging middleware uses them)
+client.collectDefaultMetrics();
+const httpRequestsTotal = new client.Counter({ name:'http_requests_total', help:'Total HTTP requests', labelNames:['method','status'] });
+const httpRequestDuration = new client.Histogram({ name:'http_request_duration_seconds', help:'Request duration', buckets:[0.01,0.05,0.1,0.3,0.5,1,2,5] });
+
+// Request logging + metrics recording
 app.use((req,res,next)=>{
   const start = process.hrtime.bigint();
   res.on('finish', ()=>{
     const durMs = Number(process.hrtime.bigint() - start)/1_000_000;
     logger.info({ method:req.method, url:req.originalUrl, status:res.statusCode, ms:durMs.toFixed(1) }, 'req');
-  httpRequestsTotal.inc({ method: req.method, status: res.statusCode });
-  httpRequestDuration.observe(durMs/1000);
+    httpRequestsTotal.inc({ method: req.method, status: String(res.statusCode) });
+    httpRequestDuration.observe(durMs/1000);
   });
   next();
 });
@@ -171,9 +178,6 @@ io.on('connection', (socket)=>{
 httpServer.listen(PORT, () => console.log(`[web] listening on ${PORT}`));
 
 // Periodic metrics emission (status + system) leveraging existing status.json + os module
-// Reuse existing top-level imports (path already imported). Add fs & os at top-level if not present.
-import fs from 'fs';
-import os from 'os';
 const statusPath = path.join(process.cwd(), 'data', 'status.json');
 setInterval(()=>{
   try {
@@ -194,10 +198,7 @@ setInterval(()=>{
   } catch {}
 }, Number(process.env.LIVE_METRICS_INTERVAL_MS || 10000));
 
-// Prometheus metrics setup
-client.collectDefaultMetrics();
-const httpRequestsTotal = new client.Counter({ name:'http_requests_total', help:'Total HTTP requests', labelNames:['method','status'] });
-const httpRequestDuration = new client.Histogram({ name:'http_request_duration_seconds', help:'Request duration', buckets:[0.01,0.05,0.1,0.3,0.5,1,2,5] });
+// Expose Prometheus metrics endpoint
 app.get('/metrics', metricsRateLimit, protectMetricsScrape, async (req,res)=>{
   try {
     res.set('Content-Type', client.register.contentType);
