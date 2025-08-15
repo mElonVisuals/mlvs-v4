@@ -16,6 +16,8 @@ router.use((req, res, next) => {
     // rootViews is a string (current single directory). Preserve it while adding our new one.
     if (rootViews !== additional) req.app.set('views', [rootViews, additional]);
   }
+  if (typeof res.locals.title === 'undefined') res.locals.title = 'Dashboard';
+  if (req.user && !res.locals.user) res.locals.user = req.user;
   next();
 });
 
