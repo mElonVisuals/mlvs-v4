@@ -74,12 +74,32 @@ router.get('/auth/failure', (req, res) => {
 });
 
 router.post('/logout', (req, res, next) => {
-  req.logout?.(err => {
-    if (err) return next(err);
-    req.session?.destroy(()=>{
-      res.redirect('/home');
+  const sidCookieName = (req.session?.cookieName) || (req.session?.name) || 'connect.sid';
+  // Passport logout (clears req.user)
+  try {
+    req.logout?.(err => {
+      if (err) return next(err);
+      // Destroy session in store
+      const oldSessionID = req.sessionID;
+      if (req.session) {
+        req.session.destroy(err2 => {
+          if (err2) console.warn('[auth] session destroy error', err2);
+          res.clearCookie(sidCookieName, { path: '/' });
+          // Regenerate a fresh anonymous session to avoid reusing the old id
+          req.session = null;
+          req.sessionStore?.generate?.(req); // some stores expose helper
+          return res.redirect('/home');
+        });
+      } else {
+        res.clearCookie(sidCookieName, { path: '/' });
+        return res.redirect('/home');
+      }
     });
-  });
+  } catch (e) {
+    console.warn('[auth] logout exception', e);
+    res.clearCookie('connect.sid', { path: '/' });
+    return res.redirect('/home');
+  }
 });
 
 export default router;
