@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ensureAuth, ensureApiAuth } from '../middleware/auth.js';
+import { ensureAuth, ensureApiAuth, requireAuth } from '../middleware/auth.js';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -7,6 +7,21 @@ import url from 'url';
 import { verifyMetricsSecret, validateHeartbeatPayload } from '../middleware/metrics.js';
 
 const router = Router();
+
+// Debug session inspector (temporary; remove in production once logout verified)
+router.use((req,res,next)=>{
+  if (process.env.DEBUG_SESSIONS === '1') {
+    console.log('[sessdbg]', {
+      path: req.path,
+      isAuth: req.isAuthenticated?.(),
+      userId: req.user?.id,
+      sessionId: req.sessionID,
+      hasSession: !!req.session,
+      issuedAt: req.session?.__issuedAt
+    });
+  }
+  next();
+});
 
 // Ensure the /views directory is included in Express' view lookup paths (without editing app.js)
 router.use((req, res, next) => {
@@ -45,7 +60,7 @@ router.get('/dashboard/commands', ensureAuth, (req, res) => {
 });
 
 // API endpoints (sample)
-router.get('/api/status', (req, res) => {
+router.get('/api/status', ensureApiAuth, (req, res) => {
   res.json(readStatus());
 });
 
@@ -64,43 +79,14 @@ router.post('/api/metrics', verifyMetricsSecret, validateHeartbeatPayload, (req,
   }
 });
 
-router.get('/api/commands', (req, res) => {
+router.get('/api/commands', ensureApiAuth, (req, res) => {
   try {
     const cmdsRoot = path.join(process.cwd(), 'src', 'commands');
     if (!fs.existsSync(cmdsRoot)) return res.json([]);
     const results = [];
-    function walk(dir){
-      for (const entry of fs.readdirSync(dir)) {
-        const full = path.join(dir, entry);
-        const stat = fs.statSync(full);
-        if (stat.isDirectory()) walk(full);
-        else if (/\.m?js$/.test(entry)) {
-          try {
-            const modUrl = url.pathToFileURL(full).href;
-            // Dynamic import metadata (cached by Node). NOTE: executes module; safe since bot already does.
-            // We only read exported fields (name, description, usage, category).
-            // eslint-disable-next-line no-await-in-loop
-            const mod = requireLike(modUrl);
-            const name = mod.name || path.basename(entry, path.extname(entry));
-            results.push({
-              name,
-              description: mod.description || '',
-              usage: mod.usage || name,
-              category: deriveCategory(full, cmdsRoot)
-            });
-          } catch {}
-        }
-      }
-    }
     function deriveCategory(file, root){
       const rel = path.relative(root, file).split(path.sep);
       return rel.length > 1 ? rel[0] : 'root';
-    }
-    function requireLike(href){
-      // Using dynamic import sync wrapper is complex; for simplicity we use cached Node module via eval import sync barrier.
-      // We'll use dynamic import (async) with deasync-like pattern by accumulating promises then respond.
-      // Here we just return an empty object; replaced below.
-      return {};
     }
     // Async dynamic collects
     const promises = [];
@@ -132,7 +118,7 @@ router.get('/api/commands', (req, res) => {
   }
 });
 
-router.get('/api/system', (req, res) => {
+router.get('/api/system', ensureApiAuth, (req, res) => {
   const load = os.loadavg?.() || [];
   const memTotal = os.totalmem();
   const memFree = os.freemem();

@@ -21,3 +21,6 @@ export function attachUserLocals(req, res, next){
   res.locals.user = req.user || null;
   next();
 }
+
+// Alias for clarity in routes
+export const requireAuth = ensureAuth;
