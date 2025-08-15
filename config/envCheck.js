@@ -16,6 +16,11 @@ export function printEnvSummary(keys){
     const val = process.env[k];
     if (val) console.log(` - ${k}=${mask(val)}`);
   }
+  if (process.env.REDIS_URL) {
+    const v = process.env.REDIS_URL;
+    const masked = v.length <= 10 ? '***' : v.slice(0,5)+'***'+v.slice(-3);
+    console.log(`- REDIS_URL=${masked}`);
+  }
 }
 function mask(v){
   if (!v) return 'unset';

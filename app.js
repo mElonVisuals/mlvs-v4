@@ -14,6 +14,8 @@ import dashboardRoutes from './routes/dashboard.js';
 import { attachUserLocals } from './middleware/auth.js';
 import { validateEnv, printEnvSummary } from './config/envCheck.js';
 import expressLayouts from 'express-ejs-layouts';
+import { createLogger } from './config/logger.js';
+import { sessionStore } from './config/sessionStore.js';
 
 dotenv.config();
 
@@ -21,6 +23,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const logger = createLogger();
 app.set('trust proxy', 1); // behind Dokploy / reverse proxy
 
 // Validate required env vars
@@ -32,22 +35,35 @@ if (!validateEnv(REQUIRED)) {
 printEnvSummary(REQUIRED);
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(process.cwd()));
-app.use(expressLayouts); // we'll specify layout per-render for dashboard pages only
+// Primary views directory now centralized under /views
+app.set('views', [path.join(process.cwd(), 'views'), path.join(process.cwd())]);
+app.use(expressLayouts);
+app.set('layout', 'layout');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// Request logging
+app.use((req,res,next)=>{
+  const start = process.hrtime.bigint();
+  res.on('finish', ()=>{
+    const durMs = Number(process.hrtime.bigint() - start)/1_000_000;
+    logger.info({ method:req.method, url:req.originalUrl, status:res.statusCode, ms:durMs.toFixed(1) }, 'req');
+  });
+  next();
+});
 app.use(compression());
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(',') || '*', credentials: true }));
 
-// Sessions (MemoryStore not for production)
+// Sessions (Redis in production, fallback MemoryStore in dev)
 app.use(session({
+  store: sessionStore,
   secret: process.env.SESSION_SECRET,
   resave: false,
+  rolling: true,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24,
+    maxAge: 1000 * 60 * 30, // 30m idle
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production'
@@ -78,9 +94,24 @@ app.use(dashboardRoutes);
 // Health (public, lightweight)
 app.get('/healthz', (req,res)=>res.json({ ok:true, uptime:process.uptime(), ts:Date.now() }));
 
-// 404
+// 404 handler
 app.use((req, res) => {
-  res.status(404).send('Not Found');
+  res.status(404);
+  if (req.accepts('html')) return res.render('error-404', { layout: 'layout', title: 'Not Found' });
+  if (req.accepts('json')) return res.json({ error: 'Not Found' });
+  res.type('txt').send('Not Found');
+});
+
+// Error handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  logger.error({ err }, 'unhandled');
+  const status = err.status || 500;
+  res.status(status);
+  const view = status === 401 ? 'error-401' : status === 403 ? 'error-403' : status === 404 ? 'error-404' : 'error-500';
+  if (req.accepts('html')) return res.render(view, { layout: 'layout', title: 'Error', error: err });
+  if (req.accepts('json')) return res.json({ error: err.message || 'Server Error' });
+  res.type('txt').send(err.message || 'Server Error');
 });
 
 const PORT = process.env.PORT || 3005;
