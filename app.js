@@ -1,3 +1,6 @@
+// Removed web server (pruned). Placeholder file to avoid broken imports.
+
+// Import statements and other configurations remain unchanged.
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
