@@ -7,6 +7,9 @@
     <a href="/dashboard/commands" class="nav-link" data-active-path="/dashboard/commands">Commands</a>
   </nav>
   <form method="post" action="/logout" class="logout-form">
+    <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <% } %>
     <button class="btn btn-outline w-full" type="submit">Logout</button>
   </form>
 </aside>

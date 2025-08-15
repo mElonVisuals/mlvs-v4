@@ -17,6 +17,8 @@ import { validateEnv, printEnvSummary } from './config/envCheck.js';
 import expressLayouts from 'express-ejs-layouts';
 import { createLogger } from './config/logger.js';
 import { sessionStore } from './config/sessionStore.js';
+import client from 'prom-client';
+import { protectMetricsScrape, metricsRateLimit } from './middleware/metrics.js';
 
 dotenv.config();
 
@@ -49,6 +51,8 @@ app.use((req,res,next)=>{
   res.on('finish', ()=>{
     const durMs = Number(process.hrtime.bigint() - start)/1_000_000;
     logger.info({ method:req.method, url:req.originalUrl, status:res.statusCode, ms:durMs.toFixed(1) }, 'req');
+  httpRequestsTotal.inc({ method: req.method, status: res.statusCode });
+  httpRequestDuration.observe(durMs/1000);
   });
   next();
 });
@@ -155,4 +159,50 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3005;
-app.listen(PORT, () => console.log(`[web] listening on ${PORT}`));
+// Wrap server to attach Socket.IO
+import { createServer } from 'http';
+import { Server as IOServer } from 'socket.io';
+const httpServer = createServer(app);
+const io = new IOServer(httpServer, { cors: { origin: process.env.CORS_ORIGIN?.split(',') || '*'} });
+app.set('io', io);
+io.on('connection', (socket)=>{
+  socket.emit('hello', { ts: Date.now() });
+});
+httpServer.listen(PORT, () => console.log(`[web] listening on ${PORT}`));
+
+// Periodic metrics emission (status + system) leveraging existing status.json + os module
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+const statusPath = path.join(process.cwd(), 'data', 'status.json');
+setInterval(()=>{
+  try {
+    let status = {};
+    if (fs.existsSync(statusPath)) status = JSON.parse(fs.readFileSync(statusPath,'utf8'));
+    const payload = {
+      type: 'metrics',
+      ts: Date.now(),
+      status,
+      system: {
+        load: os.loadavg?.()[0] || 0,
+        memUsed: os.totalmem() - os.freemem(),
+        memTotal: os.totalmem(),
+        uptime: os.uptime()
+      }
+    };
+    io.emit('metrics', payload);
+  } catch {}
+}, Number(process.env.LIVE_METRICS_INTERVAL_MS || 10000));
+
+// Prometheus metrics setup
+client.collectDefaultMetrics();
+const httpRequestsTotal = new client.Counter({ name:'http_requests_total', help:'Total HTTP requests', labelNames:['method','status'] });
+const httpRequestDuration = new client.Histogram({ name:'http_request_duration_seconds', help:'Request duration', buckets:[0.01,0.05,0.1,0.3,0.5,1,2,5] });
+app.get('/metrics', metricsRateLimit, protectMetricsScrape, async (req,res)=>{
+  try {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+  } catch (e) {
+    res.status(500).end();
+  }
+});
