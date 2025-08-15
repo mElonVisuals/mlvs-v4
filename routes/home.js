@@ -14,15 +14,15 @@ function readPublicStatus(){
 
 router.get(['/','/home'], (req, res) => {
   const stats = readPublicStatus();
-  res.render('home/index', { stats });
+  res.render('home/index', { stats, pageContext: 'home' });
 });
 
 router.get('/home/features', (req, res) => {
-  res.render('home/features');
+  res.render('home/features', { pageContext: 'home' });
 });
 
 router.get('/home/invite', (req, res) => {
-  res.render('home/invite');
+  res.render('home/invite', { pageContext: 'home' });
 });
 
 export default router;

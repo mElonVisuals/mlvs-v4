@@ -1,0 +1,26 @@
+<section class="landing-root">
+  <div class="hero glass-pane">
+    <div class="hero-content">
+      <h1 class="brand-title"><span class="accent-gradient">MLVS</span> BOT</h1>
+      <p class="tagline">A powerful multi-purpose Discord companion with real-time insight.</p>
+      <div class="status-row">
+        <div class="status-indicator"><span class="status-dot <%= stats && stats.guilds ? 'status-online' : '' %>"></span><span class="status-text"><%= stats && stats.guilds ? 'Online' : 'Offline' %></span></div>
+        <div class="metrics-inline"><span data-metric="guilds"><%= stats.guilds %></span> guilds · <span data-metric="users"><%= stats.users %></span> users</div>
+      </div>
+      <div class="cta-row">
+        <% if (user) { %>
+          <a href="/dashboard" class="btn btn-primary btn-glow">Open Dashboard</a>
+          <form method="post" action="/logout" class="inline-form">
+            <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <% } %>
+            <button class="btn btn-outline btn-glow" type="submit">Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/login" class="btn btn-primary btn-glow">Access Dashboard</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <canvas id="bg-canvas"></canvas>
+</section>
