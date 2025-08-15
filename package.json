@@ -5,10 +5,11 @@
   "main": "src/bot.js",
   "type": "module",
   "scripts": {
-    "test": "node src/bot.js && node app.js",
-    "start": "node src/bot.js",
-    "web": "node app.js",
-    "dev:web": "nodemon app.js"
+  "test": "node src/bot.js && node app.js",
+  "start": "node src/bot.js",
+  "web": "node app.js",
+  "dev:web": "nodemon app.js",
+  "start:all": "node src/bot.js & node app.js"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
