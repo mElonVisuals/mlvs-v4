@@ -1,7 +1,7 @@
 <header class="dash-header glass">
   <div class="left">
     <button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
-    <h1 class="page-title"><%= title || '' %></h1>
+  <h1 class="page-title"><%= (typeof title !== 'undefined' && title) ? title : '' %></h1>
   </div>
   <div class="right user-info">
     <% if (user) { %>
