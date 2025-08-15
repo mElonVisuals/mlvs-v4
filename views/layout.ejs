@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title><%= (typeof title !== 'undefined' && title) ? (title + ' - MLVS') : 'MLVS Dashboard' %></title>
-  <link rel="stylesheet" href="/dashboard/css/dashboard.css" />
+  <link rel="stylesheet" href="/dashboard/css/dashboard-v2.css?v=1" />
   <link rel="manifest" href="/public/manifest.webmanifest" />
   <% if (typeof pageContext !== 'undefined' && pageContext === 'home') { %>
     <link rel="stylesheet" href="/home/css/landing.css" />
   <% } %>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script defer src="/dashboard/js/dashboard.js"></script>
+  <script defer src="/dashboard/js/theme.js"></script>
   <script defer src="/dashboard/js/cache.js"></script>
   <script defer src="/dashboard/js/spa-router.js"></script>
   <script defer src="/dashboard/js/pwa.js"></script>

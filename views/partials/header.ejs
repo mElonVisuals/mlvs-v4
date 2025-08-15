@@ -4,6 +4,7 @@
   <h1 class="page-title"><%= (typeof title !== 'undefined' && title) ? title : '' %></h1>
   </div>
   <div class="right user-info">
+  <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle theme">🌗 Theme</button>
     <% if (user) { %>
       <div class="user-avatar">
         <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=64" alt="avatar" />
