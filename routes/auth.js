@@ -76,21 +76,22 @@ router.get('/auth/failure', (req, res) => {
 router.post('/logout', (req, res, next) => {
   const sidCookieName = (req.session?.cookieName) || (req.session?.name) || 'connect.sid';
   const startTs = Date.now();
-  const debug = (...m)=> console.log('[auth][logout]', ...m);
-  debug('init', { sidCookieName, sessionId: req.sessionID, hasSession: !!req.session, user: !!req.user });
+  const debug = (...m)=> { if (process.env.DEBUG_LOGOUT === '1') console.log('[auth][logout]', ...m); };
+  debug('init', { sidCookieName, sessionId: req.sessionID });
   // Ensure CSRF token present if middleware applied (will 403 before here if invalid)
   // Null user early (Passport 0.7+ logout sync optional but we guard)
-  if (req.user) { req.user = null; debug('user nulled early'); }
+  if (req.user) { req.user = null; }
   function clearCookies(){
-    try { res.clearCookie(sidCookieName, { path: '/' }); debug('clearCookie primary', sidCookieName); } catch(e){ debug('clearCookie primary fail', e.message); }
-    try { res.clearCookie('connect.sid', { path: '/' }); debug('clearCookie fallback connect.sid'); } catch{}
-    try { res.clearCookie(sidCookieName, { path: '/', sameSite:'lax' }); } catch{}
+  const baseOpts = { path:'/', httpOnly:true, sameSite:'lax', secure: process.env.NODE_ENV==='production' };
+  if (process.env.SESSION_COOKIE_DOMAIN) baseOpts.domain = process.env.SESSION_COOKIE_DOMAIN;
+  try { res.clearCookie(sidCookieName, baseOpts); } catch{}
+  try { res.clearCookie('connect.sid', baseOpts); } catch{}
+  try { res.clearCookie(sidCookieName, { ...baseOpts, sameSite:'none' }); } catch{}
   }
   // Passport logout
   try {
     req.logout?.(err => {
-      if (err) { debug('passport logout error', err); return next(err); }
-      debug('passport logout callback');
+  if (err) { debug('error', err); return next(err); }
       if (!req.session) {
         debug('no session object; clearing cookies and redirect');
         clearCookies();
@@ -102,20 +103,15 @@ router.post('/logout', (req, res, next) => {
       // Clear cookies early to instruct browser to drop session id
       clearCookies();
       const destroyFn = () => req.session.destroy(destroyErr => {
-        if (destroyErr) debug('session destroy error', destroyErr.message);
-        else debug('session destroyed', { oldId });
+  if (destroyErr) debug('destroy_err', destroyErr.message);
         // Regenerate fresh session id BEFORE redirect to avoid browser caching of previous cookie
         try {
           store?.generate?.(req); // create empty session
-          debug('session regenerated newId', req.sessionID);
-        } catch(e){ debug('session regenerate failed', e.message); }
-        debug('redirecting', { elapsedMs: Date.now()-startTs });
+  } catch{}
         return res.redirect('/home');
       });
       // Attempt explicit store destroy if available
-      try {
-        store?.destroy?.(oldId, (e)=>{ if (e) debug('store.destroy error', e.message); destroyFn(); });
-      } catch { destroyFn(); }
+      try { store?.destroy?.(oldId, ()=> destroyFn()); } catch { destroyFn(); }
     });
   } catch (e) {
     debug('exception', e.message);

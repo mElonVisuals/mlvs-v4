@@ -21,6 +21,7 @@ import { createLogger } from './config/logger.js';
 import { sessionStore } from './config/sessionStore.js';
 import client from 'prom-client';
 import { protectMetricsScrape, metricsRateLimit } from './middleware/metrics.js';
+import { getRecent, addEvent } from './lib/activity.js';
 
 dotenv.config();
 
@@ -174,6 +175,8 @@ const io = new IOServer(httpServer, { cors: { origin: process.env.CORS_ORIGIN?.s
 app.set('io', io);
 io.on('connection', (socket)=>{
   socket.emit('hello', { ts: Date.now() });
+  // Send initial recent activity snapshot
+  try { socket.emit('activity', getRecent(25)); } catch {}
 });
 httpServer.listen(PORT, () => console.log(`[web] listening on ${PORT}`));
 

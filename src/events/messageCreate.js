@@ -26,6 +26,15 @@ export async function execute(message, client) {
   try {
     await command.execute(message, args, client);
     if (!isAdmin) client.cooldowns?.set(key, now + cooldownMs);
+    // Emit command activity event (fire-and-forget)
+    try {
+      client._emitCommandActivity?.({
+        command: command.name,
+        user: message.author?.tag || message.author?.username || message.author?.id,
+        guild: message.guild?.name || 'DM',
+        timestamp: Date.now()
+      });
+    } catch {}
   } catch (error) {
     console.error('Command error:', error);
     await message.reply({ content: 'There was an error executing that command.' }).catch(() => {});

@@ -34,6 +34,12 @@
     <div class="panel-header">
       <h2 class="panel-title">Recent Activity</h2>
     </div>
+    <div class="activity-filters" role="tablist" aria-label="Activity filters">
+      <button class="chip chip-active" role="tab" aria-selected="true" data-activity-filter="all">All</button>
+      <button class="chip" role="tab" aria-selected="false" data-activity-filter="system">System</button>
+      <button class="chip" role="tab" aria-selected="false" data-activity-filter="heartbeat">Heartbeat</button>
+      <button class="chip" role="tab" aria-selected="false" data-activity-filter="command">Commands</button>
+    </div>
     <div class="activity-stream" id="recent-activity"></div>
   </div>
   <div class="panel system-panel">

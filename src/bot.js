@@ -5,6 +5,20 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { logger } from './utils/logger.js';
+
+// Activity feed integration: POST command events to dashboard (fire-and-forget)
+async function emitCommandActivity({ command, user, guild, timestamp }){
+  try {
+    const urlBase = process.env.DASHBOARD_URL || `http://localhost:${process.env.PORT || 3001}`;
+    const secret = process.env.METRICS_SECRET || process.env.API_TOKEN || '';
+    const headers = { 'Content-Type': 'application/json' };
+    if (secret) headers['Authorization'] = `Bearer ${secret}`;
+    const payload = { type:'command', command, user, guild, timestamp: timestamp || Date.now() };
+    await fetch(`${urlBase}/api/activity/ingest`, { method:'POST', headers, body: JSON.stringify(payload) });
+  } catch (e) {
+    // Silently ignore to avoid impacting bot command flow
+  }
+}
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,6 +45,9 @@ const handlersPath = path.join(__dirname, 'handlers');
 const loadHandler = async (file) => (await import(pathToFileURL(path.join(handlersPath, file)).href)).default(client);
 await loadHandler('commandHandler.js');
 await loadHandler('eventHandler.js');
+
+// Expose helper for message event to call after successful command
+client._emitCommandActivity = emitCommandActivity;
 
 // Shared status file for dashboard
 const statusFile = path.join(process.cwd(), 'data', 'status.json');

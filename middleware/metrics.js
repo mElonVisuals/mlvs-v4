@@ -55,3 +55,38 @@ export function protectMetricsScrape(req, res, next){
 }
 
 export const metricsRateLimit = rateLimit({ windowMs: 60_000, max: 20, standardHeaders: true, legacyHeaders: false });
+
+// Higher ceiling for activity ingest (command events). Configurable via ACTIVITY_INGEST_MAX_PER_MIN
+export const activityIngestRateLimit = rateLimit({
+  windowMs: 60_000,
+  max: Number(process.env.ACTIVITY_INGEST_MAX_PER_MIN || 120),
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Basic validator for activity events (currently command-focused)
+export function validateActivityEvent(req, res, next){
+  const p = req.body || {};
+  const errors = [];
+  if (!p.type) errors.push('missing_type');
+  const type = String(p.type || '').toLowerCase();
+  if (type !== 'command') {
+    // Allow only command events for now (extend later as needed)
+    errors.push('unsupported_type');
+  }
+  if (type === 'command') {
+    if (!p.command) errors.push('missing_command');
+    if (!p.user) errors.push('missing_user');
+  }
+  if (errors.length) return res.status(400).json({ error:'invalid_event', details: errors });
+  // Normalize + sanitize
+  const ev = {
+    type,
+    command: p.command ? String(p.command).slice(0,100) : undefined,
+    user: p.user ? String(p.user).slice(0,100) : undefined,
+    guild: p.guild ? String(p.guild).slice(0,150) : undefined,
+    timestamp: (Number(p.timestamp) && Number(p.timestamp) > 0) ? Number(p.timestamp) : Date.now()
+  };
+  req.activityEventNormalized = ev;
+  next();
+}

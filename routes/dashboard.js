@@ -4,7 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import url from 'url';
-import { verifyMetricsSecret, validateHeartbeatPayload } from '../middleware/metrics.js';
+import { verifyMetricsSecret, validateHeartbeatPayload, activityIngestRateLimit, validateActivityEvent } from '../middleware/metrics.js';
+import { addEvent, getRecent } from '../lib/activity.js';
 
 const router = Router();
 
@@ -65,7 +66,7 @@ router.get('/api/status', ensureApiAuth, (req, res) => {
   res.json(readStatus());
 });
 
-router.post('/api/metrics', verifyMetricsSecret, validateHeartbeatPayload, (req, res) => {
+router.post('/api/metrics', verifyMetricsSecret, validateHeartbeatPayload, async (req, res) => {
   try {
     const body = req.body || {};
     const statusPath = path.join(process.cwd(), 'data', 'status.json');
@@ -73,7 +74,10 @@ router.post('/api/metrics', verifyMetricsSecret, validateHeartbeatPayload, (req,
   const merged = { ...current, ...body, ...req.metricsSanitized, updatedAt: new Date().toISOString() };
     fs.writeFileSync(statusPath, JSON.stringify(merged, null, 2));
     // Emit via socket if available
-    try { req.app.get('io')?.emit('metrics', { type:'metrics', ts:Date.now(), status: merged }); } catch {}
+  try { req.app.get('io')?.emit('metrics', { type:'metrics', ts:Date.now(), status: merged }); } catch {}
+  // Add activity event (lightweight)
+  await addEvent({ type:'heartbeat', message:`Heartbeat latency=${merged.latencyMs ?? 'n/a'}ms guilds=${merged.guilds ?? '?'}`, meta:{ guilds: merged.guilds, latency: merged.latencyMs } });
+  try { req.app.get('io')?.emit('activity', await getRecent(1)); } catch {}
     return res.json({ ok:true });
   } catch (e) {
     return res.status(500).json({ error: 'metrics_update_failed' });
@@ -141,6 +145,29 @@ router.get('/api/system', ensureApiAuth, (req, res) => {
     cpus: os.cpus().slice(0,4).map(c=>({ model: c.model, speed: c.speed })),
     timestamp: Date.now()
   });
+});
+
+// Recent activity API
+router.get('/api/activity', ensureApiAuth, async (req,res)=>{
+  res.json(await getRecent(50));
+});
+
+// External activity ingest (bot sends command events here) protected by metrics secret or API token
+router.post('/api/activity/ingest', verifyMetricsSecret, activityIngestRateLimit, validateActivityEvent, async (req,res)=>{
+  try {
+    const evNorm = req.activityEventNormalized; // from validator
+    // Compose human-readable message
+    let message = '';
+    if (evNorm.type === 'command') {
+      message = `/${evNorm.command} by ${evNorm.user}${evNorm.guild ? ' in '+evNorm.guild : ''}`;
+    }
+    const meta = { command: evNorm.command, user: evNorm.user, guild: evNorm.guild, ts: evNorm.timestamp };
+    const stored = await addEvent({ type: evNorm.type, message: message.slice(0,300), meta });
+    try { req.app.get('io')?.emit('activity', [stored]); } catch {}
+    res.json({ ok:true });
+  } catch (e) {
+    res.status(500).json({ error:'ingest_failed' });
+  }
 });
 
 export default router;
